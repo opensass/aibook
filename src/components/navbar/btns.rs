@@ -1,3 +1,4 @@
+use crate::router::Route;
 use crate::theme::Theme;
 use crate::theme::THEME;
 use dioxus::prelude::*;
@@ -18,8 +19,8 @@ pub fn AuthButtons(props: AuthButtonsProps) -> Element {
 
     rsx! {
         div { class: "{button_class}",
-            a {
-                href: "/singup",
+            Link {
+                to: Route::Register {},
                 class: format!(
                     "border px-5 py-2 text-lg hover:bg-gray-100 {}",
 
@@ -27,10 +28,10 @@ pub fn AuthButtons(props: AuthButtonsProps) -> Element {
                 ),
                 "Register"
             }
-            a {
-                href: "/join",
+            Link {
+                to: Route::Login {},
                 class: "bg-gray-600 text-white px-5 py-2 text-lg rounded hover:bg-gray-700",
-                "Join"
+                "Login"
             }
         }
     }

@@ -1,3 +1,4 @@
+use crate::components::features::Features;
 use crate::components::hero::Hero;
 use dioxus::prelude::*;
 
@@ -7,6 +8,7 @@ pub fn Home() -> Element {
         div {
             class: "font-sans",
             Hero {}
+            Features {}
         }
     }
 }
