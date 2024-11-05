@@ -1,0 +1,31 @@
+@keyframes glow {
+	0%,
+	100% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+}
+
+.animate-glow {
+	animation: glow 3s ease infinite;
+	background-size: 200% 200%;
+}
+
+.active-underline {
+	position: relative;
+}
+
+.active-underline::after {
+	content: "";
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background-color: #000;
+	transform: scaleX(1);
+	transform-origin: bottom left;
+	transition: transform 0.3s ease-in-out;
+}

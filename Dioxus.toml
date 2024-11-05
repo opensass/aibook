@@ -1,0 +1,47 @@
+[application]
+
+# App (Project) Name
+name = "aibook"
+
+# Dioxus App Default Platform
+# web, desktop, fullstack
+default_platform = "fullstack"
+
+# `build` & `serve` dist path
+out_dir = "dist"
+
+# resource (assets) file folder
+asset_dir = "assets"
+
+[web.app]
+
+# HTML title tag content
+title = "aibook"
+
+[web.watcher]
+
+# when watcher trigger, regenerate the `index.html`
+reload_html = true
+
+# which files or dirs will be watcher monitoring
+watch_path = ["src", "assets"]
+
+# include `assets` in web platform
+[web.resource]
+
+# CSS style file
+style = [
+   # Include from public_dir.
+   "./main.css",
+   # online cdn. TODO: Use Railwind and file a feature request to add `post_cmd` in this toml file
+   "https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"
+]
+
+# Javascript code file
+script = []
+
+[web.resource.dev]
+
+# Javascript code file
+# serve: [dev-server] only
+script = []
