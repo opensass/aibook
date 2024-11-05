@@ -12,7 +12,7 @@ use crate::theme::THEME;
 use dioxus::prelude::*;
 
 #[component]
-pub fn NavBar() -> Element {
+fn NavBar(show_items: bool) -> Element {
     let dark_mode = *THEME.read();
     let mut is_menu_open = use_signal(|| false);
 
@@ -23,7 +23,10 @@ pub fn NavBar() -> Element {
     rsx! {
         nav {
             class: "fixed top-0 w-full z-50 flex items-center justify-between px-8 py-4 transition-colors duration-300",
-            Logo {}
+            a {
+                href: "/",
+                Logo {}
+            }
 
             div {
                 class: format!(
@@ -31,7 +34,7 @@ pub fn NavBar() -> Element {
 
                 if dark_mode == Theme::Dark { "bg-white text-black" } else { "bg-gray-900 text-white" }
                 ),
-                NavLinks {},
+                NavLinks {show_items},
                 AuthButtons { is_vertical: false }
             }
 
@@ -53,10 +56,24 @@ pub fn NavBar() -> Element {
                     if is_menu_open() { "translate-x-0 opacity-100" } else { "-translate-x-full opacity-0" },
                     if dark_mode == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-black" }
                 ),
-                NavLinks {}
+                NavLinks {show_items}
                 AuthButtons { is_vertical: true }
             }
         }
         Outlet::<Route> {}
+    }
+}
+
+#[component]
+pub fn HomeNavBar() -> Element {
+    rsx! {
+        NavBar {show_items: true}
+    }
+}
+
+#[component]
+pub fn LoginNavBar() -> Element {
+    rsx! {
+        NavBar {show_items: false}
     }
 }
