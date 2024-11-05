@@ -23,8 +23,8 @@ fn NavBar(show_items: bool) -> Element {
     rsx! {
         nav {
             class: "fixed top-0 w-full z-50 flex items-center justify-between px-8 py-4 transition-colors duration-300",
-            a {
-                href: "/",
+            Link {
+                to: "/",
                 Logo {}
             }
 

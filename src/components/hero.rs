@@ -15,7 +15,7 @@ pub fn Hero() -> Element {
             div {
                 class: "text-center space-y-6",
                 p {
-                    class: "text-sm uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600 animate-glow",
+                    class: "text-lg uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600 animate-glow",
                     "New"
                 }
                 h1 {
