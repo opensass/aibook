@@ -6,7 +6,6 @@ pub enum NavLink {
     Features,
     Pricing,
     Testimonials,
-    Blog,
 }
 
 #[component]
@@ -25,8 +24,7 @@ pub fn NavLinks(show_items: bool) -> Element {
         (NavLink::HomePage, "#home", "Home"),
         (NavLink::Features, "#features", "Features"),
         (NavLink::Pricing, "#pricing", "Pricing"),
-        (NavLink::Testimonials, "#testimonials", "Testimonials"),
-        (NavLink::Blog, "#blog", "Blog"),
+        (NavLink::Testimonials, "#testimonial", "Testimonial"),
     ];
     if show_items {
         return {
