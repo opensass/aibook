@@ -74,8 +74,9 @@ pub fn Testimonial() -> Element {
     }
 
     rsx! {
-        section { class: "flex flex-col items-center justify-center min-h-screen p-8",
-            class: format!("{}",
+        section {
+            id: "testimonial",
+            class: format!("flex flex-col items-center justify-center min-h-screen p-8 {}",
             if dark_mode == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-black" }),
 
             div { class: "flex flex-col items-center mb-8",

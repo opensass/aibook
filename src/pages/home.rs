@@ -1,6 +1,7 @@
 use crate::components::features::Features;
 use crate::components::footer::Footer;
 use crate::components::hero::Hero;
+use crate::components::pricing::Pricing;
 use crate::components::testimonial::Testimonial;
 use dioxus::prelude::*;
 
@@ -11,6 +12,7 @@ pub fn Home() -> Element {
             class: "font-sans",
             Hero {}
             Features {}
+            Pricing {}
             Testimonial {}
             Footer {}
         }
