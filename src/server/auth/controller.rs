@@ -10,8 +10,9 @@ use dioxus::prelude::*;
 
 use crate::server::auth::model::{TokenClaims, User};
 use crate::server::auth::response::{
-    AuthResponse, LoginUserSchema, RegisterUserSchema, UserResponse,
+    AuthResponse, DashboardResponse, LoginUserSchema, RegisterUserSchema, UserResponse,
 };
+use crate::server::book::model::Book;
 use crate::server::common::response::SuccessResponse;
 
 #[cfg(feature = "server")]
@@ -214,5 +215,29 @@ pub async fn get_user_info(user_id: ObjectId) -> Result<SuccessResponse<User>, S
     Ok(SuccessResponse {
         status: "success".into(),
         data: user,
+    })
+}
+
+#[server]
+pub async fn dashboard_overview() -> Result<SuccessResponse<DashboardResponse>, ServerFnError> {
+    let client = get_client().await;
+    let db =
+        client.database(&std::env::var("MONGODB_DB_NAME").expect("MONGODB_DB_NAME must be set."));
+    let user_collection = db.collection::<User>("users");
+    let book_collection = db.collection::<Book>("books");
+
+    let users = user_collection.estimated_document_count().await?;
+    let books = book_collection.estimated_document_count().await?;
+    let paid_users = user_collection
+        .count_documents(doc! { "role": { "$ne": "free" } })
+        .await?;
+
+    Ok(SuccessResponse {
+        status: "success".into(),
+        data: DashboardResponse {
+            users,
+            books,
+            paid_users,
+        },
     })
 }

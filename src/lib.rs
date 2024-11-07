@@ -1,3 +1,5 @@
+#[cfg(feature = "server")]
+pub(crate) mod ai;
 pub(crate) mod components;
 #[cfg(feature = "server")]
 pub(crate) mod db;
