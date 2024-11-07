@@ -25,14 +25,16 @@ rand_core = { version = "0.6.4", features = ["std"], optional = true }
 anyhow = "1.0.92"
 time = "0.3.36"
 regex = "1.11.1"
+getrandom = { version = "0.2.15", features = ["js"] }
+gems = { version = "0.0.7", optional = true }
+gloo-storage = "0.3.0"
 
 # Debug
 dioxus-logger = "0.5.1"
-getrandom = { version = "0.2.15", features = ["js"] }
-gloo-storage = "0.3.0"
+dioxus-free-icons = { version = "0.8.6", features = ["font-awesome-regular", "font-awesome-brands", "font-awesome-solid"] }
 
 [features]
 default = []
-server = ["dioxus/axum", "tokio", "mongodb", "jsonwebtoken", "argon2", "uuid", "rand", "axum-extra", "rand_core"]
+server = ["dioxus/axum", "tokio", "mongodb", "jsonwebtoken", "argon2", "uuid", "rand", "axum-extra", "rand_core", "gems"]
 web = ["dioxus/web"]
 axum-extra = ["dep:axum-extra"]

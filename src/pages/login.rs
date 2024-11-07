@@ -5,6 +5,8 @@ use crate::server::auth::response::LoginUserSchema;
 use crate::theme::Theme;
 use crate::theme::THEME;
 use dioxus::prelude::*;
+use dioxus_free_icons::icons::fa_regular_icons::{FaEye, FaEyeSlash};
+use dioxus_free_icons::Icon;
 use gloo_storage::SessionStorage;
 use gloo_storage::Storage;
 use regex::Regex;
@@ -119,7 +121,7 @@ pub fn Login() -> Element {
                             button {
                                 class: "flex items-center justify-center w-full py-2 border rounded-md border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed",
                                 disabled: "true",
-                                "Login with Facebook"
+                                "Login with Github"
                             }
                         }
                     }
@@ -129,7 +131,11 @@ pub fn Login() -> Element {
                     }
                     div { class: "mb-4",
                         input {
-                            class: format!("w-full px-4 py-2 border rounded-md {}", if !email_valid() { "border-red-500" } else { "border-gray-300" }),
+                            class: format!(
+                                "mt-1 block w-full p-2 border rounded-md shadow-sm {} {}",
+                                if dark_mode == Theme::Dark { "bg-gray-900" } else { "" },
+                                if email_valid() { "border-gray-300" } else { "border-red-500"
+                            }),
                             r#type: "text",
                             placeholder: "Email Address",
                             value: "{email}",
@@ -146,7 +152,11 @@ pub fn Login() -> Element {
                     div { class: "mb-4",
                         div { class: "relative",
                             input {
-                                class: format!("w-full px-4 py-2 border rounded-md {}", if !password_valid() { "border-red-500" } else { "border-gray-300" }),
+                                class: format!(
+                                    "mt-1 block w-full p-2 border rounded-md shadow-sm {} {}",
+                                    if dark_mode == Theme::Dark { "bg-gray-900" } else { "" },
+                                    if password_valid() { "border-gray-300" } else { "border-red-500"
+                                }),
                                 r#type: if show_password() { "text" } else { "password" },
                                 placeholder: "Password",
                                 value: "{password}",
@@ -159,7 +169,19 @@ pub fn Login() -> Element {
                             button {
                                 onclick: move |_| show_password.set(!show_password()),
                                 class: "absolute inset-y-0 right-0 pr-3 text-gray-500",
-                                if show_password() { "Hide" } else { "Show" }
+                                if show_password() {
+                                    Icon {
+                                        width: 30,
+                                        height: 30,
+                                        icon: FaEye,
+                                    }
+                                } else {
+                                    Icon {
+                                        width: 30,
+                                        height: 30,
+                                        icon: FaEyeSlash,
+                                    }
+                                }
                             }
                         }
                         if !password_valid() {

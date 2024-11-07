@@ -1,4 +1,5 @@
 pub(crate) mod common;
+pub(crate) mod dashboard;
 pub(crate) mod features;
 pub(crate) mod footer;
 pub(crate) mod hero;

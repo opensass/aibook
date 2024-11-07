@@ -1,4 +1,4 @@
-pub(crate) mod blog;
+pub(crate) mod book;
 pub(crate) mod dashboard;
 pub(crate) mod home;
 pub(crate) mod login;

@@ -23,3 +23,10 @@ pub struct AuthResponse {
 pub struct UserResponse {
     pub user: User,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct DashboardResponse {
+    pub users: u64,
+    pub books: u64,
+    pub paid_users: u64,
+}

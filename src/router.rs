@@ -2,7 +2,8 @@
 
 use crate::components::navbar::HomeNavBar;
 use crate::components::navbar::LoginNavBar;
-use crate::pages::blog::Blog;
+use crate::pages::book::ReadBook;
+use crate::pages::dashboard::Dashboard;
 use crate::pages::home::Home;
 use crate::pages::login::Login;
 use crate::pages::signup::Register;
@@ -21,6 +22,8 @@ pub enum Route {
     #[route("/signup")]
     Register {},
     #[end_layout]
-    #[route("/blog/:id")]
-    Blog { id: i32 },
+    #[route("/dashboard/:id")]
+    ReadBook { id: String },
+    #[route("/dashboard")]
+    Dashboard {},
 }
