@@ -1,5 +1,6 @@
 #![allow(non_snake_case)]
 
+use aibook::components::toast::provider::ToastProvider;
 use aibook::router::Route;
 use dioxus::prelude::*;
 use dioxus_logger::tracing;
@@ -14,6 +15,8 @@ fn main() {
 
 fn App() -> Element {
     rsx! {
-        Router::<Route> {}
+        ToastProvider {
+            Router::<Route> {}
+        }
     }
 }
