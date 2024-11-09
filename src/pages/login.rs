@@ -1,9 +1,13 @@
 // use crate::components::common::server::JWT_TOKEN;
+use crate::components::toast::manager::Toast;
+use crate::components::toast::manager::ToastManager;
+use crate::components::toast::manager::ToastType;
 use crate::router::Route;
 use crate::server::auth::controller::{about_me, login_user};
 use crate::server::auth::response::LoginUserSchema;
 use crate::theme::Theme;
 use crate::theme::THEME;
+use chrono::Duration;
 use dioxus::prelude::*;
 use dioxus_free_icons::icons::fa_regular_icons::{FaEye, FaEyeSlash};
 use dioxus_free_icons::Icon;
@@ -20,6 +24,7 @@ fn extract_token(cookie_str: &str) -> Option<String> {
 pub fn Login() -> Element {
     let navigator = use_navigator();
     let dark_mode = *THEME.read();
+    let mut toasts_manager = use_context::<Signal<ToastManager>>();
 
     let mut email = use_signal(|| "".to_string());
     let mut password = use_signal(|| "".to_string());
@@ -68,7 +73,7 @@ pub fn Login() -> Element {
 
         spawn({
             let navigator = navigator.clone();
-            let mut error_message = error_message.clone();
+            // let mut error_message = error_message.clone();
             let email = email_value.clone();
             let password = password_value.clone();
             async move {
@@ -81,12 +86,69 @@ pub fn Login() -> Element {
                                     .expect("Failed to store JWT in session storage");
                                 // *JWT_TOKEN.write() = token.clone();
                                 navigator.push("/dashboard");
+                                toasts_manager.set(
+                                    toasts_manager()
+                                        .add_toast(
+                                            "Success".into(),
+                                            "Welcome back!".into(),
+                                            ToastType::Success,
+                                            Some(Duration::seconds(5)),
+                                        )
+                                        .clone(),
+                                );
                             }
-                            Err(e) => error_message.set(Some(e.to_string())),
+                            Err(e) => {
+                                // error_message.set(Some(e.to_string()));
+                                let msg = e.to_string();
+                                let error_message = msg
+                                    .splitn(2, "error running server function:")
+                                    .nth(1)
+                                    .unwrap_or("")
+                                    .trim();
+                                toasts_manager.set(
+                                    toasts_manager()
+                                        .add_toast(
+                                            "Error".into(),
+                                            error_message.into(),
+                                            ToastType::Error,
+                                            Some(Duration::seconds(5)),
+                                        )
+                                        .clone(),
+                                );
+                            }
                         },
-                        None => println!("Token not found"),
+                        None => {
+                            toasts_manager.set(
+                                toasts_manager()
+                                    .add_toast(
+                                        "Error".into(),
+                                        "Token not found".into(),
+                                        ToastType::Error,
+                                        Some(Duration::seconds(5)),
+                                    )
+                                    .clone(),
+                            );
+                        }
                     },
-                    Err(e) => error_message.set(Some(e.to_string())),
+                    Err(e) => {
+                        // error_message.set(Some(e.to_string()));
+                        let msg = e.to_string();
+                        let error_message = msg
+                            .splitn(2, "error running server function:")
+                            .nth(1)
+                            .unwrap_or("")
+                            .trim();
+                        toasts_manager.set(
+                            toasts_manager()
+                                .add_toast(
+                                    "Error".into(),
+                                    error_message.into(),
+                                    ToastType::Error,
+                                    Some(Duration::seconds(5)),
+                                )
+                                .clone(),
+                        );
+                    }
                 }
             }
         });
@@ -126,9 +188,9 @@ pub fn Login() -> Element {
                         }
                     }
                     div { class: "text-center text-gray-500 mb-6", "or" }
-                    if let Some(error) = &error_message() {
-                        p { class: "text-red-600 mb-4", "{error}" }
-                    }
+                    // if let Some(error) = &error_message() {
+                    //     p { class: "text-red-600 mb-4", "{error}" }
+                    // }
                     div { class: "mb-4",
                         input {
                             class: format!(

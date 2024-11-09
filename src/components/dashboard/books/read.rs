@@ -1,74 +1,85 @@
-use crate::server::auth::controller::about_me;
-use crate::server::book::controller::get_book_for_user;
-use crate::server::book::model::Book;
-use crate::server::book::request::GetBookForUserRequest;
+use crate::router::Route;
+use crate::server::book::controller::get_chapters_for_book;
+use crate::server::book::model::{Book, Chapter};
+use crate::server::book::request::GetChaptersContentRequest;
 use crate::theme::Theme;
 use crate::theme::THEME;
 use dioxus::prelude::*;
 use gloo_storage::SessionStorage;
-use gloo_storage::Storage;
 
 #[component]
 pub fn ReadBookPanel(book_id: String) -> Element {
     let dark_mode = *THEME.read() == Theme::Dark;
-    let navigator = use_navigator();
+    let mut selected_chapter = use_signal(|| None::<Chapter>);
+    let mut chapters = use_signal(Vec::<Chapter>::new);
 
-    let mut book = use_signal(|| Option::<Book>::None);
-    let mut user_token = use_signal(|| "".to_string());
     use_effect(move || {
+        let value = book_id.clone();
         spawn(async move {
-            let token: String = SessionStorage::get("jwt").unwrap_or_default();
-            if token.is_empty() {
-                navigator.push("/login");
-            } else {
-                match about_me(token.clone()).await {
-                    Ok(data) => {
-                        let _user = data.data.user;
-                        user_token.set(token.clone());
-                    }
-                    Err(_) => {
-                        navigator.push("/login");
-                    }
+            if let Ok(response) = get_chapters_for_book(GetChaptersContentRequest {
+                book_id: value.clone(),
+            })
+            .await
+            {
+                chapters.set(response.data.clone());
+                if let Some(first_chapter) = response.data.first() {
+                    selected_chapter.set(Some(first_chapter.clone()));
                 }
             }
         });
     });
 
-    let _ = use_resource(move || {
-        let value = book_id.clone();
-        async move {
-            match get_book_for_user(GetBookForUserRequest {
-                token: user_token(),
-                book_id: value.clone(),
-            })
-            .await
-            {
-                Ok(response) => book.set(Some(response.data)),
-                Err(err) => eprintln!("Error fetching book: {:?}", err),
-            }
+    let mut handle_chapter_click = {
+        let mut selected_chapter = selected_chapter.clone();
+        move |chapter: Chapter| {
+            selected_chapter.set(Some(chapter));
         }
-    });
+    };
 
     rsx! {
         div {
-            class: format!("p-4 {}", if dark_mode { "bg-gray-800 text-white" } else { "bg-white text-gray-900" }),
-            h2 { class: "text-xl font-semibold mb-4", "Read Book" }
+            class: format!("flex h-full {}", if dark_mode { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
 
-            if let Some(book) = book() {
-                div {
-                    class: "mt-4",
-                    "Title: {book.main_topic.clone().unwrap_or(\"Untitled\".to_string())}"
-                }
-                div {
-                    class: "mt-2",
-                    h3 { class: "text-lg font-semibold", "Content:" }
-                    div {
-                        class: "book-content mt-2",
-                        dangerous_inner_html: "{book.content}",
+            div {
+                class: "md:w-1/3 lg:w-1/4 sm:w-1/6 p-4 border-r border-blue-300",
+                ul {
+                    class: "space-y-4",
+                    for (index, chapter) in chapters().into_iter().enumerate() {
+                        li {
+                            class: format!("flex items-center p-3 rounded-lg cursor-pointer {}",
+                                if chapter.id == selected_chapter().unwrap().id {
+                                    "bg-gray-500 text-white font-semibold"
+                                } else {
+                                    "hover:bg-gray-200 dark:hover:bg-dark-800"
+                                }),
+                            onclick: move |_| handle_chapter_click(chapter.clone()),
+                            div {
+                                class: "w-8 h-8 flex items-center justify-center rounded-full border-2 border-blue-500 mr-4",
+                                "{index + 1}"
+                            },
+
+                            div {
+                                class: "flex-1 hidden sm:block",
+                                h4 { class: "text-lg", "{chapter.title}" }
+                                p { class: "text-sm text-blue-500", "{chapter.estimated_duration} minutes" }
+                            }
+                        }
                     }
                 }
-            } else {
-                p { "Loading book content..." }
+            }
+
+            div {
+                class: "flex-1 p-6 overflow-y-auto",
+                if let Some(chapter) = selected_chapter() {
+                    h2 { class: "text-2xl font-bold mb-4", "{chapter.title}" }
+                    p { class: "text-sm text-blue-500 mb-6", "{chapter.estimated_duration} minutes" }
+                    div {
+                        class: "prose dark:prose-invert",
+                        dangerous_inner_html: if chapter.html.is_empty() {chapter.markdown} else {chapter.html},
+                    }
+                } else {
+                    p { "Loading chapter content..." }
+                }
             }
         }
     }

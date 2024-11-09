@@ -50,7 +50,7 @@ pub fn BooksPanel(user_token: Signal<String>) -> Element {
                             }
                             p {
                                 class: "text-sm text-gray-500 mb-2",
-                                "{book.created_at.format(\"%B %d, %Y\")} · {book.content.len() / 7000} min read"
+                                "{book.created_at.format(\"%B %d, %Y\")} · {book.title.len() / 7000} min read"
                             }
                             p {
                                 class: format!(
@@ -61,7 +61,7 @@ pub fn BooksPanel(user_token: Signal<String>) -> Element {
                             }
                             p {
                                 class: "mt-2 text-sm text-gray-700",
-                                "{book.content.chars().take(30).collect::<String>()}..."
+                                "{book.title.chars().take(30).collect::<String>()}..."
                             }
                         }
                     }

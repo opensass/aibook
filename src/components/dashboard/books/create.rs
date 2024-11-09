@@ -1,9 +1,11 @@
 use crate::components::dashboard::fields::input::InputField;
 use crate::components::dashboard::fields::number::NumberField;
 use crate::components::dashboard::fields::select::SelectField;
-use crate::server::book::controller::gemini_call;
+use crate::server::book::controller::generate_book_outline;
+use crate::server::book::controller::generate_chapter_content;
 use crate::server::book::controller::store_book;
 use crate::server::book::request::GenerateBookRequest;
+use crate::server::book::request::GenerateChapterContentRequest;
 use crate::server::book::request::StoreBookRequest;
 use crate::theme::Theme;
 use crate::theme::THEME;
@@ -42,8 +44,9 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
         spawn({
             async move {
                 if !user_token().is_empty() {
-                    match gemini_call(GenerateBookRequest {
+                    match generate_book_outline(GenerateBookRequest {
                         title: title(),
+                        token: user_token(),
                         subtitle: subtitle(),
                         model: model(),
                         subtopics: subtopics(),
@@ -53,18 +56,22 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
                     })
                     .await
                     {
-                        Ok(content) => {
-                            match store_book(StoreBookRequest {
-                                token: user_token(),
-                                content: content.data,
-                                book_type: Some(model()),
-                                main_topic: Some(title()),
-                            })
-                            .await
-                            {
-                                Ok(_) => println!("Book created successfully!"),
-                                Err(e) => {
-                                    form_error.set(Some(format!("Failed to store book: {}", e)))
+                        Ok(response) => {
+                            for chapter in response.data {
+                                match generate_chapter_content(GenerateChapterContentRequest {
+                                    chapter_title: chapter.title,
+                                    book_title: title(),
+                                    main_topic: chapter.html,
+                                    language: language(),
+                                    model: model(),
+                                    chapter_id: chapter.id,
+                                })
+                                .await
+                                {
+                                    Ok(_) => println!("Book created successfully!"),
+                                    Err(e) => {
+                                        form_error.set(Some(format!("Failed to store book: {}", e)))
+                                    }
                                 }
                             }
                         }

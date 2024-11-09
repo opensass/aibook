@@ -1,9 +1,13 @@
 // use crate::components::common::server::JWT_TOKEN;
+use crate::components::toast::manager::Toast;
+use crate::components::toast::manager::ToastManager;
+use crate::components::toast::manager::ToastType;
 use crate::router::Route;
 use crate::server::auth::controller::{about_me, register_user};
 use crate::server::auth::response::RegisterUserSchema;
 use crate::theme::Theme;
 use crate::theme::THEME;
+use chrono::Duration;
 use dioxus::prelude::*;
 use dioxus_free_icons::icons::fa_regular_icons::{FaEye, FaEyeSlash};
 use dioxus_free_icons::Icon;
@@ -25,6 +29,8 @@ pub fn Register() -> Element {
     let mut name_valid = use_signal(|| true);
     let mut password_valid = use_signal(|| true);
     let mut show_password = use_signal(|| false);
+
+    let mut toasts_manager = use_context::<Signal<ToastManager>>();
 
     let validate_email = |email: &str| {
         let pattern = Regex::new(r"^[^ ]+@[^ ]+\.[a-z]{2,3}$").unwrap();
@@ -60,6 +66,16 @@ pub fn Register() -> Element {
             error_message.set(Some(
                 "Please provide a valid email and password.".to_string(),
             ));
+            toasts_manager.set(
+                toasts_manager()
+                    .add_toast(
+                        "Error".into(),
+                        "Please provide a valid email and password!".into(),
+                        ToastType::Error,
+                        Some(Duration::seconds(5)),
+                    )
+                    .clone(),
+            );
             return;
         }
 
@@ -72,10 +88,36 @@ pub fn Register() -> Element {
             .await
             {
                 Ok(_) => {
+                    toasts_manager.set(
+                        toasts_manager()
+                            .add_toast(
+                                "Success".into(),
+                                "Now, you can log in!".into(),
+                                ToastType::Success,
+                                Some(Duration::seconds(5)),
+                            )
+                            .clone(),
+                    );
                     navigator.push("/login");
                 }
                 Err(e) => {
-                    error_message.set(Some(e.to_string()));
+                    // error_message.set(Some(e.to_string()));
+                    let msg = e.to_string();
+                    let error_message = msg
+                        .splitn(2, "error running server function:")
+                        .nth(1)
+                        .unwrap_or("")
+                        .trim();
+                    toasts_manager.set(
+                        toasts_manager()
+                            .add_toast(
+                                "Error".into(),
+                                error_message.into(),
+                                ToastType::Error,
+                                Some(Duration::seconds(5)),
+                            )
+                            .clone(),
+                    );
                 }
             }
         });
@@ -118,9 +160,9 @@ pub fn Register() -> Element {
                         }
                     }
                     div { class: "text-center text-gray-500 mb-6", "or" }
-                    if let Some(error) = &error_message() {
-                        p { class: "text-red-600 mb-4", "{error}" }
-                    }
+                    // if let Some(error) = &error_message() {
+                    //     p { class: "text-red-600 mb-4", "{error}" }
+                    // }
                     div { class: "mb-4",
                         input {
                             class: format!(
