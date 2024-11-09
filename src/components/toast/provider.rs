@@ -36,17 +36,16 @@ pub fn ToastProvider(props: ToastProviderProps) -> Element {
     rsx! {
         div {
             class: "relative",
-
-            {props.children}
-
-            div {
-                class: "absolute bottom-4 right-4 space-y-4",
-
-                for (id, toast) in manager().toasts.iter() {
-                    Toast {
-                        key: "{toast.id}",
-                        toast: toast.clone(),
-                        // onclose: move |e: Event<MouseData>| manager.write().remove_toast(toast.id)
+            {props.children},
+            if manager().toasts.len() > 0 {
+                div {
+                    class: "absolute bottom-4 right-4 space-y-4",
+                    for (id, toast) in manager().toasts.iter() {
+                        Toast {
+                            key: "{toast.id}",
+                            toast: toast.clone(),
+                            // onclose: move |e: Event<MouseData>| manager.write().remove_toast(toast.id)
+                        }
                     }
                 }
             }

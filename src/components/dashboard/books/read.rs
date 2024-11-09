@@ -1,3 +1,5 @@
+use crate::components::spinner::Spinner;
+use crate::components::spinner::SpinnerSize;
 use crate::router::Route;
 use crate::server::book::controller::get_chapters_for_book;
 use crate::server::book::model::{Book, Chapter};
@@ -12,6 +14,7 @@ pub fn ReadBookPanel(book_id: String) -> Element {
     let dark_mode = *THEME.read() == Theme::Dark;
     let mut selected_chapter = use_signal(|| None::<Chapter>);
     let mut chapters = use_signal(Vec::<Chapter>::new);
+    let mut loading = use_signal(|| true);
 
     use_effect(move || {
         let value = book_id.clone();
@@ -21,10 +24,13 @@ pub fn ReadBookPanel(book_id: String) -> Element {
             })
             .await
             {
+                loading.set(false);
                 chapters.set(response.data.clone());
                 if let Some(first_chapter) = response.data.first() {
                     selected_chapter.set(Some(first_chapter.clone()));
                 }
+            } else {
+                loading.set(true);
             }
         });
     });
@@ -78,7 +84,24 @@ pub fn ReadBookPanel(book_id: String) -> Element {
                         dangerous_inner_html: if chapter.html.is_empty() {chapter.markdown} else {chapter.html},
                     }
                 } else {
-                    p { "Loading chapter content..." }
+                    p {
+                        class: "flex items-center space-x-2 px-4 py-2 rounded",
+                        if loading() {
+                            Spinner {
+                                aria_label: "Loading spinner".to_string(),
+                                size: SpinnerSize::Md,
+                                dark_mode: true,
+                            }
+                            span { "Loading book's chapters..." }
+                        } else {
+                            Spinner {
+                                aria_label: "Loading spinner".to_string(),
+                                size: SpinnerSize::Md,
+                                dark_mode: true,
+                            }
+                            span { "No chapters found! Generating..." }
+                        }
+                    }
                 }
             }
         }

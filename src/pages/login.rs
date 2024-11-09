@@ -1,4 +1,6 @@
 // use crate::components::common::server::JWT_TOKEN;
+use crate::components::spinner::Spinner;
+use crate::components::spinner::SpinnerSize;
 use crate::components::toast::manager::Toast;
 use crate::components::toast::manager::ToastManager;
 use crate::components::toast::manager::ToastType;
@@ -35,6 +37,8 @@ pub fn Login() -> Element {
     let mut show_password = use_signal(|| false);
     let mut remember_me = use_signal(|| false);
 
+    let mut loading = use_signal(|| false);
+
     let validate_email = |email: &str| {
         let pattern = Regex::new(r"^[^ ]+@[^ ]+\.[a-z]{2,3}$").unwrap();
         pattern.is_match(email)
@@ -63,6 +67,7 @@ pub fn Login() -> Element {
     let handle_login = move |_| {
         let email_value = email().clone();
         let password_value = password().clone();
+        loading.set(true);
 
         if !validate_email(&email_value) || password_value.is_empty() {
             error_message.set(Some(
@@ -96,6 +101,7 @@ pub fn Login() -> Element {
                                         )
                                         .clone(),
                                 );
+                                loading.set(false);
                             }
                             Err(e) => {
                                 // error_message.set(Some(e.to_string()));
@@ -115,6 +121,7 @@ pub fn Login() -> Element {
                                         )
                                         .clone(),
                                 );
+                                loading.set(false);
                             }
                         },
                         None => {
@@ -128,6 +135,7 @@ pub fn Login() -> Element {
                                     )
                                     .clone(),
                             );
+                            loading.set(false);
                         }
                     },
                     Err(e) => {
@@ -148,6 +156,7 @@ pub fn Login() -> Element {
                                 )
                                 .clone(),
                         );
+                        loading.set(false);
                     }
                 }
             }
@@ -161,7 +170,8 @@ pub fn Login() -> Element {
 
             div {
                 class: "flex-1 flex items-center justify-center p-8",
-                div {
+                form {
+                    onsubmit: handle_login,
                     class: "w-full max-w-md",
                     Link {
                         to: Route::Home {},
@@ -201,6 +211,7 @@ pub fn Login() -> Element {
                             r#type: "text",
                             placeholder: "Email Address",
                             value: "{email}",
+                            required: true,
                             oninput: move |e| {
                                 let value = e.value().clone();
                                 email.set(value.clone());
@@ -222,6 +233,7 @@ pub fn Login() -> Element {
                                 r#type: if show_password() { "text" } else { "password" },
                                 placeholder: "Password",
                                 value: "{password}",
+                                required: true,
                                 oninput: move |e| {
                                     let value = e.value().clone();
                                     password.set(value.clone());
@@ -262,9 +274,19 @@ pub fn Login() -> Element {
                         a { class: "text-blue-500 text-sm", href: "/forgot-password", "Forgot Password?" }
                     }
                     button {
-                        onclick: handle_login,
-                        class: "w-full py-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md",
-                        "Sign in"
+                        class: "flex items-center text-center justify-center space-x-2 w-full py-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md",
+                        r#type: "submit",
+                        disabled: loading(),
+                        if loading() {
+                            Spinner {
+                                aria_label: "Loading spinner".to_string(),
+                                size: SpinnerSize::Md,
+                                dark_mode: true,
+                            }
+                            span { "Signing In..." }
+                        } else {
+                            span { "Sign In" }
+                        }
                     }
                 }
             }

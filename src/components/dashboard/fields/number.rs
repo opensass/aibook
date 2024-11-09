@@ -3,7 +3,7 @@ use crate::theme::THEME;
 use dioxus::prelude::*;
 
 #[component]
-pub fn NumberField(label: &'static str, value: Signal<u64>) -> Element {
+pub fn NumberField(label: &'static str, value: Signal<u64>, required: bool) -> Element {
     let dark_mode = *THEME.read() == Theme::Dark;
     rsx! {
         div {
@@ -13,6 +13,7 @@ pub fn NumberField(label: &'static str, value: Signal<u64>) -> Element {
                 class: format!("mt-1 block w-full p-2 border rounded-md shadow-sm {}", if dark_mode { "bg-gray-900 border-gray-700" } else { "border-gray-300" }),
                 value: "{value}",
                 oninput: move |e| if let Ok(val) = e.value().parse() { value.set(val); },
+                required: required
             }
         }
     }

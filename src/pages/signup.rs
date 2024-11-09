@@ -1,4 +1,6 @@
 // use crate::components::common::server::JWT_TOKEN;
+use crate::components::spinner::Spinner;
+use crate::components::spinner::SpinnerSize;
 use crate::components::toast::manager::Toast;
 use crate::components::toast::manager::ToastManager;
 use crate::components::toast::manager::ToastType;
@@ -29,6 +31,8 @@ pub fn Register() -> Element {
     let mut name_valid = use_signal(|| true);
     let mut password_valid = use_signal(|| true);
     let mut show_password = use_signal(|| false);
+
+    let mut loading = use_signal(|| false);
 
     let mut toasts_manager = use_context::<Signal<ToastManager>>();
 
@@ -61,6 +65,7 @@ pub fn Register() -> Element {
         let name = name().clone();
         let email = email().clone();
         let password = password().clone();
+        loading.set(true);
 
         if !validate_email(&email) || password.is_empty() {
             error_message.set(Some(
@@ -76,6 +81,7 @@ pub fn Register() -> Element {
                     )
                     .clone(),
             );
+            loading.set(false);
             return;
         }
 
@@ -99,6 +105,7 @@ pub fn Register() -> Element {
                             .clone(),
                     );
                     navigator.push("/login");
+                    loading.set(false);
                 }
                 Err(e) => {
                     // error_message.set(Some(e.to_string()));
@@ -118,6 +125,7 @@ pub fn Register() -> Element {
                             )
                             .clone(),
                     );
+                    loading.set(false);
                 }
             }
         });
@@ -133,8 +141,9 @@ pub fn Register() -> Element {
             }
             div {
                 class: "flex-1 flex items-center justify-center p-8",
-                div {
+                form {
                     class: "w-full max-w-md",
+                    onsubmit: handle_register,
                     Link {
                         to : Route::Home {},
                         class: "text-gray-400 text-sm",
@@ -173,6 +182,7 @@ pub fn Register() -> Element {
                             r#type: "text",
                             placeholder: "Enter your name",
                             value: "{name}",
+                            required: true,
                             oninput: move |e| {
                                 let value = e.value().clone();
                                 name.set(value.clone());
@@ -193,6 +203,7 @@ pub fn Register() -> Element {
                             r#type: "text",
                             placeholder: "Email Address",
                             value: "{email}",
+                            required: true,
                             oninput: move |e| {
                                 let value = e.value().clone();
                                 email.set(value.clone());
@@ -214,6 +225,7 @@ pub fn Register() -> Element {
                                 r#type: if show_password() { "text" } else { "password" },
                                 placeholder: "Password",
                                 value: "{password}",
+                                required: true,
                                 oninput: move |e| {
                                     let value = e.value().clone();
                                     password.set(value.clone());
@@ -243,9 +255,19 @@ pub fn Register() -> Element {
                         }
                     }
                     button {
-                        onclick: handle_register,
-                        class: "w-full py-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md",
-                        "Sign Up"
+                        class: "flex items-center text-center justify-center space-x-2 w-full py-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md",
+                        r#type: "submit",
+                        disabled: loading(),
+                        if loading() {
+                            Spinner {
+                                aria_label: "Loading spinner".to_string(),
+                                size: SpinnerSize::Md,
+                                dark_mode: true,
+                            }
+                            span { "Signing Up..." }
+                        } else {
+                            span { "Sign Up" }
+                        }
                     }
                 }
             }

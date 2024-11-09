@@ -1,14 +1,18 @@
+use crate::components::spinner::Spinner;
+use crate::components::spinner::SpinnerSize;
 use crate::router::Route;
 use crate::server::book::controller::get_books_for_user;
 use crate::server::book::request::GetBooksForUserRequest;
 use crate::theme::Theme;
 use crate::theme::THEME;
+use chrono::Duration;
 use dioxus::prelude::*;
 
 #[component]
 pub fn BooksPanel(user_token: Signal<String>) -> Element {
     let dark_mode = *THEME.read() == Theme::Dark;
     let mut books = use_signal(Vec::new);
+    let mut loading = use_signal(|| true);
 
     let _ = use_resource(move || async move {
         match get_books_for_user(GetBooksForUserRequest {
@@ -16,8 +20,13 @@ pub fn BooksPanel(user_token: Signal<String>) -> Element {
         })
         .await
         {
-            Ok(response) => books.set(response.data),
-            Err(err) => eprintln!("Error fetching books: {:?}", err),
+            Ok(response) => {
+                loading.set(false);
+                books.set(response.data);
+            }
+            Err(err) => {
+                loading.set(false);
+            }
         }
     });
 
@@ -67,7 +76,17 @@ pub fn BooksPanel(user_token: Signal<String>) -> Element {
                     }
                 }
             } else {
-                p { "No books found." }
+                p {
+                    class: "flex items-center space-x-2 px-4 py-2 rounded",
+                    if loading() {
+                        Spinner {
+                            aria_label: "Loading spinner".to_string(),
+                            size: SpinnerSize::Md,
+                            dark_mode: true,
+                        }
+                        span { "Loading books..." }
+                    }
+                }
             }
         }
     }
