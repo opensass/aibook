@@ -8,6 +8,7 @@ pub fn InputField(
     value: Signal<String>,
     is_valid: Signal<bool>,
     validate: fn(&str) -> bool,
+    required: bool,
 ) -> Element {
     let dark_mode = *THEME.read() == Theme::Dark;
 
@@ -31,6 +32,7 @@ pub fn InputField(
                 }),
                 value: "{value}",
                 oninput: handle_input,
+                required: required
             }
             if !is_valid() {
                 p { class: "text-red-500 text-sm mt-1", "Invalid input" }

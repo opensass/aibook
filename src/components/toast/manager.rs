@@ -33,6 +33,7 @@ pub struct ToastManager {
     next_id: usize,
 }
 
+// TODO: Improve API
 impl ToastManager {
     pub fn add_toast(
         &mut self,
