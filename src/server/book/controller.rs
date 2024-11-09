@@ -18,6 +18,7 @@ use crate::server::book::request::GetChaptersContentRequest;
 use crate::server::book::request::StoreBookRequest;
 use crate::server::book::request::UpdateBookContentRequest;
 use crate::server::book::response::BookResponse;
+use crate::server::book::response::GenerateBookOutlineResponse;
 use crate::server::common::response::SuccessResponse;
 use std::env;
 
@@ -214,7 +215,7 @@ pub async fn get_book_for_user(
 #[server]
 pub async fn generate_book_outline(
     req: GenerateBookRequest,
-) -> Result<SuccessResponse<Vec<Chapter>>, ServerFnError> {
+) -> Result<SuccessResponse<GenerateBookOutlineResponse>, ServerFnError> {
     let user = auth(req.token)
         .await
         .map_err(|_| ServerFnError::new("Not Authenticated"))?;
@@ -274,7 +275,10 @@ pub async fn generate_book_outline(
 
     Ok(SuccessResponse {
         status: "success".into(),
-        data: chapters.clone(),
+        data: GenerateBookOutlineResponse {
+            book: book.clone(),
+            chapters: chapters.clone(),
+        },
     })
 }
 

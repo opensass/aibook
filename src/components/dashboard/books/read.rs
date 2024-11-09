@@ -6,8 +6,20 @@ use crate::server::book::model::{Book, Chapter};
 use crate::server::book::request::GetChaptersContentRequest;
 use crate::theme::Theme;
 use crate::theme::THEME;
+use chrono::{Duration as ChronoDuration, Utc};
 use dioxus::prelude::*;
-use gloo_storage::SessionStorage;
+use gloo_storage::{SessionStorage, Storage};
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize)]
+pub struct CachedChaptersData {
+    pub book_id: String,
+    pub data: Vec<Chapter>,
+    pub timestamp: i64,
+}
+
+pub const CHAPTERS_CACHE_KEY: &str = "chapters_cache";
+pub const CHAPTERS_CACHE_TIMEOUT: i64 = 2 * 60 * 60;
 
 #[component]
 pub fn ReadBookPanel(book_id: String) -> Element {
@@ -17,15 +29,38 @@ pub fn ReadBookPanel(book_id: String) -> Element {
     let mut loading = use_signal(|| true);
 
     use_effect(move || {
-        let value = book_id.clone();
+        let book_id_cloned = book_id.clone();
         spawn(async move {
+            let now = Utc::now().timestamp();
+
+            if let Ok(cached_data) = SessionStorage::get::<CachedChaptersData>(CHAPTERS_CACHE_KEY) {
+                if cached_data.book_id == book_id_cloned
+                    && now - cached_data.timestamp < CHAPTERS_CACHE_TIMEOUT
+                {
+                    loading.set(false);
+                    chapters.set(cached_data.data.clone());
+                    if let Some(first_chapter) = cached_data.data.first() {
+                        selected_chapter.set(Some(first_chapter.clone()));
+                    }
+                    return;
+                }
+            }
+
             if let Ok(response) = get_chapters_for_book(GetChaptersContentRequest {
-                book_id: value.clone(),
+                book_id: book_id_cloned.clone(),
             })
             .await
             {
                 loading.set(false);
                 chapters.set(response.data.clone());
+
+                let cached_data = CachedChaptersData {
+                    book_id: book_id_cloned.clone(),
+                    data: response.data.clone(),
+                    timestamp: now,
+                };
+                let _ = SessionStorage::set(CHAPTERS_CACHE_KEY, &cached_data);
+
                 if let Some(first_chapter) = response.data.first() {
                     selected_chapter.set(Some(first_chapter.clone()));
                 }

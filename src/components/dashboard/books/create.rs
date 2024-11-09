@@ -1,3 +1,5 @@
+use crate::components::dashboard::books::list::CachedBooksData;
+use crate::components::dashboard::books::list::CACHE_KEY;
 use crate::components::dashboard::fields::input::InputField;
 use crate::components::dashboard::fields::number::NumberField;
 use crate::components::dashboard::fields::select::SelectField;
@@ -15,7 +17,9 @@ use crate::server::book::request::StoreBookRequest;
 use crate::theme::Theme;
 use crate::theme::THEME;
 use chrono::Duration;
+use chrono::Utc;
 use dioxus::prelude::*;
+use gloo_storage::{LocalStorage, Storage};
 
 #[component]
 pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
@@ -77,6 +81,15 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
                     .await
                     {
                         Ok(response) => {
+                            let mut cached_data = LocalStorage::get::<CachedBooksData>(CACHE_KEY)
+                                .unwrap_or(CachedBooksData {
+                                    data: Vec::new(),
+                                    timestamp: Utc::now().timestamp(),
+                                });
+
+                            cached_data.data.push(response.data.book);
+
+                            let _ = LocalStorage::set(CACHE_KEY, &cached_data);
                             toasts_manager.set(
                                 toasts_manager()
                                     .add_toast(
@@ -97,7 +110,7 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
                                     )
                                     .clone(),
                             );
-                            for chapter in response.data {
+                            for chapter in response.data.chapters {
                                 match generate_chapter_content(GenerateChapterContentRequest {
                                     chapter_title: chapter.title,
                                     book_title: title(),
