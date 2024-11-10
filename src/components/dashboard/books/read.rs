@@ -8,7 +8,7 @@ use crate::theme::Theme;
 use crate::theme::THEME;
 use chrono::{Duration as ChronoDuration, Utc};
 use dioxus::prelude::*;
-use gloo_storage::{SessionStorage, Storage};
+use gloo_storage::{LocalStorage, Storage};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -33,7 +33,7 @@ pub fn ReadBookPanel(book_id: String) -> Element {
         spawn(async move {
             let now = Utc::now().timestamp();
 
-            if let Ok(cached_data) = SessionStorage::get::<CachedChaptersData>(CHAPTERS_CACHE_KEY) {
+            if let Ok(cached_data) = LocalStorage::get::<CachedChaptersData>(CHAPTERS_CACHE_KEY) {
                 if cached_data.book_id == book_id_cloned
                     && now - cached_data.timestamp < CHAPTERS_CACHE_TIMEOUT
                 {
@@ -59,7 +59,7 @@ pub fn ReadBookPanel(book_id: String) -> Element {
                     data: response.data.clone(),
                     timestamp: now,
                 };
-                let _ = SessionStorage::set(CHAPTERS_CACHE_KEY, &cached_data);
+                let _ = LocalStorage::set(CHAPTERS_CACHE_KEY, &cached_data);
 
                 if let Some(first_chapter) = response.data.first() {
                     selected_chapter.set(Some(first_chapter.clone()));

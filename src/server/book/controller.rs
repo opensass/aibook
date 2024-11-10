@@ -19,9 +19,17 @@ use crate::server::book::request::StoreBookRequest;
 use crate::server::book::request::UpdateBookContentRequest;
 use crate::server::book::response::BookResponse;
 use crate::server::book::response::GenerateBookOutlineResponse;
+use crate::server::book::response::{
+    AIUsageStats, AnalyticsData, EngagementStats, PredictiveStats,
+};
 use crate::server::common::response::SuccessResponse;
 use std::env;
 
+use bson::oid::ObjectId;
+use chrono::prelude::*;
+use futures_util::StreamExt;
+use futures_util::TryStreamExt;
+use regex::Regex;
 #[cfg(feature = "server")]
 use {
     crate::ai::get_ai,
@@ -36,11 +44,6 @@ use {
     unsplash_api::objects::pagination::Pagination,
     unsplash_api::objects::rate_limiting::RateLimiting,
 };
-
-use bson::oid::ObjectId;
-use chrono::prelude::*;
-use futures_util::TryStreamExt;
-use regex::Regex;
 
 #[server]
 pub async fn store_book(
@@ -520,4 +523,112 @@ pub async fn extend_text(req: AIRequest) -> Result<SuccessResponse<String>, Serv
         }),
         Err(e) => Err(ServerFnError::new(e.to_string())),
     }
+}
+
+#[server]
+pub async fn fetch_analytics_data() -> Result<SuccessResponse<AnalyticsData>, ServerFnError> {
+    let client = get_client().await;
+    let db =
+        client.database(&std::env::var("MONGODB_DB_NAME").expect("MONGODB_DB_NAME must be set."));
+
+    let books_collection = db.collection::<Book>("books");
+    let chapters_collection = db.collection::<Chapter>("chapters");
+
+    // Engagement Metrics
+    let total_books = books_collection.count_documents(doc! {}).await?;
+    let total_chapters = chapters_collection.count_documents(doc! {}).await?;
+    let avg_chapters_per_book = if total_books > 0 {
+        total_chapters as f64 / total_books as f64
+    } else {
+        0.0
+    };
+
+    // AI Usage Metrics
+    let total_ai_chapters = total_chapters as u64;
+    let total_estimated_duration: u64 = chapters_collection
+        .aggregate(vec![
+            doc! { "$group": { "_id": null, "total_duration": { "$sum": "$estimated_duration" } } },
+        ])
+        .await?
+        .next()
+        .await
+        .and_then(|doc| doc.ok()?.get_i64("total_duration").ok())
+        .unwrap_or(0) as u64;
+
+    let avg_gen_time = if total_ai_chapters > 0 {
+        total_estimated_duration as f64 / total_ai_chapters as f64
+    } else {
+        0.0
+    };
+
+    let success_rate = 100.0;
+
+    // Trending Topic
+    let trending_topic = books_collection
+        .aggregate(vec![
+            doc! { "$group": { "_id": "$main_topic", "count": { "$sum": 1 } } },
+            doc! { "$sort": { "count": -1 } },
+            doc! { "$limit": 1 },
+        ])
+        .await?
+        .next()
+        .await
+        .and_then(|doc| doc.ok()?.get_str("_id").ok().map(|s| s.to_string()))
+        .unwrap_or_else(|| "Unknown".to_string());
+
+    // Projected Growth
+    let monthly_book_growth = books_collection
+        .aggregate(vec![
+            doc! { "$group": {
+                "_id": { "month": { "$month": "$created_at" }, "year": { "$year": "$created_at" } },
+                "count": { "$sum": 1 }
+            }},
+            doc! { "$sort": { "_id.year": 1, "_id.month": 1 } },
+        ])
+        .await?;
+
+    let growth_rates: Vec<f64> = monthly_book_growth
+        .collect::<Vec<_>>()
+        .await
+        .windows(2)
+        .filter_map(|window| {
+            if let (Ok(prev), Ok(curr)) = (window[0].as_ref(), window[1].as_ref()) {
+                let prev_count = prev
+                    .get_document("count")
+                    .unwrap_or(&doc! {})
+                    .get_i32("count")
+                    .unwrap_or(1) as f64;
+                let curr_count = curr
+                    .get_document("count")
+                    .unwrap_or(&doc! {})
+                    .get_i32("count")
+                    .unwrap_or(1) as f64;
+                Some(((curr_count - prev_count) / prev_count) * 100.0)
+            } else {
+                None
+            }
+        })
+        .collect();
+
+    let projected_growth = growth_rates.last().cloned().unwrap_or(0.0);
+
+    Ok(SuccessResponse {
+        status: "success".into(),
+        data: AnalyticsData {
+            engagement: EngagementStats {
+                total_books,
+                total_chapters,
+                avg_chapters_per_book,
+            },
+            ai_usage: AIUsageStats {
+                total_ai_chapters,
+                avg_gen_time,
+                success_rate,
+            },
+            predictions: PredictiveStats {
+                trending_genre: trending_topic,
+                projected_growth,
+            },
+        },
+    })
 }

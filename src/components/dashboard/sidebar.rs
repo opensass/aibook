@@ -73,7 +73,7 @@ pub fn Sidebar(active_tab: Signal<Tab>, navigate: bool) -> Element {
                     height: 30,
                     icon: FaFileLines,
                 },
-                span { class: "hidden md:inline", "Create Book" }
+                span { class: "hidden md:inline", "Generate" }
             }
             div { class: tab_style(Tab::ReadBook),
                 onclick: move |_| active_tab.set(Tab::ReadBook),

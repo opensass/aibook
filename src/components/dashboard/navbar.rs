@@ -21,7 +21,7 @@ pub fn Navbar(dark_mode: bool) -> Element {
 
     rsx! {
         div { class: format!("flex justify-between items-center mb-4 border-b shadow-sm p-2 {}", if dark_mode { "dark:border-gray-700" } else { "" }),
-            h1 { class: "text-2xl font-semibold", "User Dashboard" }
+            h1 { class: "text-2xl font-semibold", "Dashboard" }
 
             div { class: "flex items-center space-x-4",
                 button {
