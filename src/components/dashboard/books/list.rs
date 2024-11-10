@@ -1,3 +1,4 @@
+use crate::components::dashboard::analytics::AnalyticsPage;
 use crate::components::spinner::Spinner;
 use crate::components::spinner::SpinnerSize;
 use crate::router::Route;
@@ -91,6 +92,7 @@ pub fn BooksPanel(user_token: Signal<String>) -> Element {
 
     rsx! {
         div {
+            AnalyticsPage {}
             div {
                 div {
                     class: "w-full md:w-1/3 pb-4 mb-4 md:mb-0 flex flex-col gap-8",
