@@ -7,11 +7,10 @@ use crate::server::book::model::Book;
 use crate::server::book::request::GetBooksForUserRequest;
 use crate::theme::Theme;
 use crate::theme::THEME;
-use chrono::{Duration as ChronoDuration, Utc};
+use chrono::Utc;
 use dioxus::prelude::*;
 use gloo_storage::{LocalStorage, Storage};
 use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
 
 #[derive(Serialize, Deserialize)]
 pub struct CachedBooksData {

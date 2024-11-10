@@ -1,7 +1,6 @@
 // use crate::components::common::server::JWT_TOKEN;
 use crate::components::spinner::Spinner;
 use crate::components::spinner::SpinnerSize;
-use crate::components::toast::manager::Toast;
 use crate::components::toast::manager::ToastManager;
 use crate::components::toast::manager::ToastType;
 use crate::router::Route;

@@ -4,7 +4,7 @@ use bson::{oid::ObjectId, serde_helpers::chrono_datetime_as_bson_datetime};
 use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Default, Clone)]
 pub struct Book {
     #[serde(rename = "_id")]
     pub id: ObjectId,

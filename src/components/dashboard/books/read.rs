@@ -1,12 +1,11 @@
 use crate::components::spinner::Spinner;
 use crate::components::spinner::SpinnerSize;
-use crate::router::Route;
 use crate::server::book::controller::get_chapters_for_book;
-use crate::server::book::model::{Book, Chapter};
+use crate::server::book::model::Chapter;
 use crate::server::book::request::GetChaptersContentRequest;
 use crate::theme::Theme;
 use crate::theme::THEME;
-use chrono::{Duration as ChronoDuration, Utc};
+use chrono::Utc;
 use dioxus::prelude::*;
 use gloo_storage::{LocalStorage, Storage};
 use serde::{Deserialize, Serialize};

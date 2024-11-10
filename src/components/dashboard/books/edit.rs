@@ -1,9 +1,9 @@
 use crate::server::auth::controller::about_me;
 use crate::server::book::controller::{
-    extend_text, get_book_for_user, regenerate_text, summarize_text, update_book_content,
+    extend_text, regenerate_text, summarize_text, update_book_content,
 };
 use crate::server::book::model::Book;
-use crate::server::book::request::{AIRequest, GetBookForUserRequest, UpdateBookContentRequest};
+use crate::server::book::request::{AIRequest, UpdateBookContentRequest};
 use crate::theme::Theme;
 use crate::theme::THEME;
 use dioxus::prelude::*;
@@ -18,10 +18,10 @@ pub fn EditBookContentPanel(book_id: String) -> Element {
     let dark_mode = *THEME.read() == Theme::Dark;
     let navigator = use_navigator();
 
-    let mut book = use_signal(|| Option::<Book>::None);
+    let book = use_signal(|| Option::<Book>::None);
     let book_id = use_signal(|| book_id);
     let mut user_token = use_signal(|| "".to_string());
-    let mut content = use_signal(|| "".to_string());
+    let content = use_signal(|| "".to_string());
     let mut error_message = use_signal(|| None::<String>);
     let mut show_ai_modal = use_signal(|| false);
     let mut selected_text = use_signal(|| "".to_string());
@@ -82,7 +82,7 @@ pub fn EditBookContentPanel(book_id: String) -> Element {
         });
     };
 
-    let handle_text_selection = move |e: Event<MouseData>| {
+    let handle_text_selection = move |_e: Event<MouseData>| {
         let selected = window()
             .expect("Window must exist")
             .get_selection()
