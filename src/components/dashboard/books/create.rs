@@ -5,15 +5,12 @@ use crate::components::dashboard::fields::number::NumberField;
 use crate::components::dashboard::fields::select::SelectField;
 use crate::components::spinner::Spinner;
 use crate::components::spinner::SpinnerSize;
-use crate::components::toast::manager::Toast;
 use crate::components::toast::manager::ToastManager;
 use crate::components::toast::manager::ToastType;
 use crate::server::book::controller::generate_book_outline;
 use crate::server::book::controller::generate_chapter_content;
-use crate::server::book::controller::store_book;
 use crate::server::book::request::GenerateBookRequest;
 use crate::server::book::request::GenerateChapterContentRequest;
-use crate::server::book::request::StoreBookRequest;
 use crate::theme::Theme;
 use crate::theme::THEME;
 use chrono::Duration;
@@ -36,7 +33,7 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
     let subtitle_valid = use_signal(|| true);
     let language_valid = use_signal(|| true);
     let mut loading = use_signal(|| false);
-    let mut form_error = use_signal(|| None::<String>);
+    let _form_error = use_signal(|| None::<String>);
 
     let validate_title = |title: &str| !title.is_empty();
     let validate_subtitle = |subtitle: &str| !subtitle.is_empty();

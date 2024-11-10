@@ -1,6 +1,7 @@
 use crate::components::dashboard::books::create::CreateBookPanel;
 use crate::components::dashboard::books::list::BooksPanel;
 use crate::components::dashboard::books::read::ReadBookPanel;
+use crate::components::dashboard::chat::ChatPanelPage;
 use crate::components::dashboard::navbar::Navbar;
 use crate::components::dashboard::profile::EditProfilePanel;
 use crate::components::dashboard::sidebar::Sidebar;
@@ -31,6 +32,7 @@ pub fn Dashboard() -> Element {
         Tab::CreateBook => rsx! { CreateBookPanel { user_token } },
         Tab::ReadBook => rsx! { ReadBookPanel { book_id: "" } },
         Tab::EditProfile => rsx! { EditProfilePanel {} },
+        Tab::Chat => rsx! { ChatPanelPage { user_token, book_id: ""} },
     };
 
     use_effect(move || {

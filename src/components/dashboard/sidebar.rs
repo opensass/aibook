@@ -3,13 +3,14 @@ use crate::theme::Theme;
 use crate::theme::THEME;
 use dioxus::prelude::*;
 use dioxus_free_icons::icons::fa_regular_icons::{
-    FaAddressBook, FaFileLines, FaFolderOpen, FaPenToSquare,
+    FaAddressBook, FaFileLines, FaFolderOpen, FaMessage, FaPenToSquare,
 };
 use dioxus_free_icons::Icon;
 
 #[derive(PartialEq, Clone)]
 pub enum Tab {
     Books,
+    Chat,
     CreateBook,
     ReadBook,
     EditProfile,
@@ -61,6 +62,22 @@ pub fn Sidebar(active_tab: Signal<Tab>, navigate: bool) -> Element {
                 },
                 span { class: "hidden md:inline", "Books" }
             }
+
+            div { class: tab_style(Tab::Chat),
+                onclick: move |_| {
+                    if navigate {
+                        navigator.push("/dashboard");
+                    }
+                    active_tab.set(Tab::Chat);
+                },
+                Icon {
+                    width: 30,
+                    height: 30,
+                    icon: FaMessage,
+                },
+                span { class: "hidden md:inline", "Chat" }
+            }
+
             div { class: tab_style(Tab::CreateBook),
                 onclick: move |_| {
                     if navigate {

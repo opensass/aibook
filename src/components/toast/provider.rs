@@ -9,6 +9,7 @@ pub struct ToastProviderProps {
 
 #[component]
 pub fn ToastProvider(props: ToastProviderProps) -> Element {
+    #[allow(unused_mut)]
     let mut manager = use_signal(|| ToastManager::default());
 
     client! {
@@ -40,7 +41,7 @@ pub fn ToastProvider(props: ToastProviderProps) -> Element {
             if manager().toasts.len() > 0 {
                 div {
                     class: "absolute bottom-4 right-4 space-y-4",
-                    for (id, toast) in manager().toasts.iter() {
+                    for (_id, toast) in manager().toasts.iter() {
                         Toast {
                             key: "{toast.id}",
                             toast: toast.clone(),

@@ -4,6 +4,7 @@ use crate::components::dashboard::books::create::CreateBookPanel;
 use crate::components::dashboard::books::edit::EditBookContentPanel;
 use crate::components::dashboard::books::list::BooksPanel;
 use crate::components::dashboard::books::read::ReadBookPanel;
+use crate::components::dashboard::chat::ChatPanelPage;
 use crate::components::dashboard::navbar::Navbar;
 use crate::components::dashboard::profile::EditProfilePanel;
 use crate::components::dashboard::sidebar::Sidebar;
@@ -11,6 +12,7 @@ use crate::components::dashboard::sidebar::Tab;
 use crate::server::auth::controller::about_me;
 use crate::theme::Theme;
 use crate::theme::THEME;
+use bson::oid::ObjectId;
 use dioxus::prelude::*;
 use gloo_storage::SessionStorage;
 use gloo_storage::Storage;
@@ -28,6 +30,7 @@ pub fn ReadBook(id: String) -> Element {
             Tab::CreateBook => rsx! { CreateBookPanel { user_token } },
             Tab::ReadBook => rsx! { ReadBookPanel { book_id: id } },
             Tab::EditProfile => rsx! { EditProfilePanel {} },
+            Tab::Chat => rsx! { ChatPanelPage { user_token, book_id: id} },
         };
     } else {
         current_tab = rsx! { ReadBookPanel { book_id: id } };
@@ -80,6 +83,7 @@ pub fn EditBook(id: String) -> Element {
             Tab::CreateBook => rsx! { EditBookContentPanel { book_id: id } },
             Tab::ReadBook => rsx! { ReadBookPanel { book_id: id } },
             Tab::EditProfile => rsx! { EditProfilePanel {} },
+            Tab::Chat => rsx! { ChatPanelPage { user_token, book_id: id} },
         };
     } else {
         current_tab = rsx! { EditBookContentPanel { book_id: id } };
