@@ -37,7 +37,7 @@ pub fn Hero() -> Element {
                     class: "pt-8 max-w-3xl mx-auto text-center bg-clip-text bg-gradient-to-r from-purple-200 to-red-800 animate-glow",
                     p {
                         class: "text-lg md:text-xl text-gray-600 dark:text-gray-400",
-                        "Create blogs, articles, and social posts effortlessly with AIbook."
+                        "Create books and social posts effortlessly with AIbook."
                     }
                 }
             }

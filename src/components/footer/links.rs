@@ -1,5 +1,7 @@
 use crate::components::footer::icon::SocialIcon;
 use dioxus::prelude::*;
+use dioxus_free_icons::icons::fa_brands_icons::{FaGithub, FaLinkedin, FaTwitter};
+use dioxus_free_icons::Icon;
 
 #[component]
 pub fn ContactLink(label: &'static str, href: &'static str, text: &'static str) -> Element {
@@ -42,8 +44,21 @@ pub fn SocialLinks() -> Element {
     rsx! {
         ul {
             class: "flex space-x-4",
-            SocialIcon { href: "#" },
-            SocialIcon { href: "#" },
+            SocialIcon { href: "https://www.linkedin.com/in/opensass", icon: rsx! {Icon {
+                width: 30,
+                height: 30,
+                icon: FaLinkedin,
+            }} },
+            SocialIcon { href: "https://www.x.com/opensassorg", icon: rsx! {Icon {
+                width: 30,
+                height: 30,
+                icon: FaTwitter,
+            }} },
+            SocialIcon { href: "https://www.github.com/opensass", icon: rsx! {Icon {
+                width: 30,
+                height: 30,
+                icon: FaGithub,
+            }} },
         }
     }
 }

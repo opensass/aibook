@@ -7,6 +7,8 @@ use crate::components::testimonial::rating::StarRating;
 use crate::theme::Theme;
 use crate::theme::THEME;
 use dioxus::prelude::*;
+use dioxus_free_icons::icons::fa_regular_icons::FaStar;
+use dioxus_free_icons::Icon;
 
 #[derive(Props, Clone, PartialEq)]
 pub struct TestimonialData {
@@ -15,7 +17,7 @@ pub struct TestimonialData {
     author_title: &'static str,
     author_image: &'static str,
     company_logo: &'static str,
-    star_images: Vec<&'static str>,
+    star_images: Vec<Element>,
 }
 
 #[allow(unused_mut)]
@@ -26,25 +28,37 @@ pub fn Testimonial() -> Element {
             quote: "AIbook writes poetry that would make any bard jealous. And it doesn’t even charge a royal fee!",
             author_name: "William Shakespeare",
             author_title: "Playwright",
-            author_image: "./shakespeare.png",
-            company_logo: "./aibook_logo.png",
-            star_images: vec!["./star.png"; 5],
+            author_image: "./shakespeare.webp",
+            company_logo: "./shakespeare_logo.webp",
+            star_images: vec![rsx! {Icon {
+                width: 30,
+                height: 30,
+                icon: FaStar,
+            }}; 5],
         },
         TestimonialData {
             quote: "I asked AIbook to write a novel. It wrote a sci-fi epic that somehow included me as the protagonist. I might be living in a simulation!",
             author_name: "Neo",
             author_title: "The One",
-            author_image: "./neo.png",
-            company_logo: "./matrix_logo.png",
-            star_images: vec!["./star.png"; 5],
+            author_image: "./neo.webp",
+            company_logo: "./matrix_logo.webp",
+            star_images: vec![rsx! {Icon {
+                width: 30,
+                height: 30,
+                icon: FaStar,
+            }}; 5],
         },
         TestimonialData {
             quote: "AIbook practically writes my memoirs for me! Now I can focus on other pressing matters, like conquering the galaxy.",
             author_name: "Darth Vader",
             author_title: "Dark Lord of the Sith",
-            author_image: "./darth_vader.png",
-            company_logo: "./empire_logo.png",
-            star_images: vec!["./star.png"; 5],
+            author_image: "./darth_vader.webp",
+            company_logo: "./empire_logo.webp",
+            star_images: vec![rsx! {Icon {
+                width: 30,
+                height: 30,
+                icon: FaStar,
+            }}; 5],
         },
     ];
 

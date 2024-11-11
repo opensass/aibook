@@ -14,7 +14,7 @@ pub fn Grid(props: FeatureGridProps) -> Element {
             class: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10",
             for feature in &props.features {
                 FeatureItem {
-                    icon: feature.icon,
+                    icon: feature.icon.clone(),
                     title: feature.title,
                     description: feature.description,
                 }

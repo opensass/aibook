@@ -136,7 +136,7 @@ pub fn Register() -> Element {
                                 if dark_mode == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
             div {
                 class: "md:flex-1 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600",
-                style: "background-image: url('/bg.webp'); background-size: cover; background-position: center;",
+                style: "background-image: url('/signup.webp'); background-size: cover; background-position: center;",
             }
             div {
                 class: "flex-1 flex items-center justify-center p-8",

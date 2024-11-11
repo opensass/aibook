@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 #[derive(Props, Clone, PartialEq)]
 pub struct StarRatingProps {
-    star_images: Vec<&'static str>,
+    star_images: Vec<Element>,
 }
 
 #[component]
@@ -10,7 +10,7 @@ pub fn StarRating(props: StarRatingProps) -> Element {
     rsx! {
         div { class: "flex justify-center mb-4",
             for star in props.star_images {
-                img { src: "{star}", class: "w-5 h-5" }
+                div { class: "w-5 h-5", {star} }
             }
         }
     }
