@@ -7,16 +7,33 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/wiseaidev)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-[![GigaDAO Discord](https://dcbadge.limes.pink/api/server/dGCPR6bq)](https://discord.gg/dGCPR6bq)
+[![Open SASS Discord](https://dcbadge.limes.pink/api/server/dGCPR6bq)](https://discord.gg/dGCPR6bq)
 
-| 🐧 Linux `(Recommended)` |
-| :------: |
-| [ ![Linux Banner](https://github.com/user-attachments/assets/9b895bcf-43f8-4839-842b-4ad51c8c7777)](https://github.com/opensass/aibook/releases/download/v0.0.1/dist.zip) |
-| `./dist/aibook` |
+![Arch](https://github.com/user-attachments/assets/b5af3f0b-1855-4510-853a-f4258e81cccd)
+
+| 🐧 Linux `(Recommended)` | 🪟 Windows |
+| :------: | :------: |
+| [ ![Linux Banner](https://github.com/user-attachments/assets/9b895bcf-43f8-4839-842b-4ad51c8c7777)](https://github.com/opensass/aibook/releases/download/v0.0.1/dist.zip) | [ ![Windows Banner](https://github.com/user-attachments/assets/9b895bcf-43f8-4839-842b-4ad51c8c7777)](https://github.com/opensass/aibook/releases/download/v0.0.1/dist.zip) |
+| `./dist/aibook` | `.\dist\aibook.exe` |
 
 </div>
 
-## 🛠️ Pre-requisites:
+## 🖥️ For the `.exe` Enjoyers
+
+So, you're the kinda person who'd rather download an `.exe` than spend 20 minutes watching code compile? No worries; I gotcha! 🎉 Each release comes with pre-compiled binaries, already set up with my MongoDB, Gemini, and Unsplash credentials. Just download, run a command, and boom.
+
+> **Note** 📝
+> - 📸 **Unsplash API**: Limited to 50 requests per hour (we're all sharing the same quota, so easy on the trigger!).
+> - 💎 **Gemini credits**: Unlimited! So feel free to use as you please.
+> - 🗄️ **MongoDB Storage**: Capped at around ~512MB. Let's keep things tidy and not go overboard.
+
+And please; don't break the internet with my API keys! 😅
+
+## 🤓 For the Hardcore Nerds
+
+Aight, if you're, just like me, one of those brave souls who **wants** to compile everything themself, this section is for you. 🛠️ No shortcuts, just raw code and dedication. Grab your favorite terminal, fire up those dependencies, and let the adventure begin!
+
+### 🛠️ Pre-requisites:
 
 1. Install [`rustup`](https://www.rust-lang.org/tools/install):
 
@@ -30,21 +47,74 @@
     cargo install dioxus-cli
     ```
 
-## 🚀 Building and Running
-
 1. Fork/Clone the GitHub repository.
 
 	```bash
 	git clone https://github.com/opensass/aibook
 	```
 
-1. Run the client:
+## 🔑 Setting Up Env Vars
+
+Before you can start running AIBook, you'll need to configure a few environment variables. These are essential for connecting to external services like MongoDB, Unsplash, and the Gemini AI, so let's get you set up! Here's a quick guide:
+
+### Create an `.env` File
+
+Inside the project root, copy and create a file named `.env` from `.env-example`. This file will securely store all your environment variables.
+
+```bash
+cp .env.example .env
+```
+
+> **Note**: Replace the following values with your actual credentials.
+>
+> ```bash
+> MONGODB_USR=
+> MONGODB_PWD=
+> MONGODB_CLSTR=your-cluster.mongodb.net
+> MONGODB_DB_NAME=aibooks
+> JWT_SECRET=
+> GEMINI_API_KEY=
+> UNSPLASH_API_KEY=
+> ```
+>
+> If you're missing any of these keys, check the service's developer portal to generate them.
+
+### 🥑 Set Up MongoDB
+
+Follow [our quick guide](./MongoDB.md) to set up your MongoDB database and connect it to your project!
+
+### 🔐 Generate JWT Secret Key
+
+Generate a secret key using OpenSSL and update its env var in the `.env` file.
+
+```bash
+openssl rand -hex 128
+
+d8d0b35856c6fa90a8f3f818fa1c71785d63181945077a4c81e28f731de406c94acad5e864fc85604c520cd67e4977a06656eee081d2d0a897415bb42d8dca167662ae53078084ce70feaee104a3428797078c5bb359db277b26182114bb6b6f4e50d34dcce1ab2ed952912f5783ca89138d508f41bc2d56e60ef2480f501819
+```
+
+### ✨ Gemini AI API
+
+To obtain your API key, navigate to [Google AI Studio](https://aistudio.google.com/app/apikey) and generate it there. This key allows aibook to communicate with Gemini API.
+
+### 📸 Unsplash API
+
+AIBook uses Unsplash which provides a powerful API to search for and retrieve high-quality images. To communicate with this api you will need a [Secret key](https://unsplash.com/oauth/applications). If you don't already have one, sign up for a free account at Unsplash, create a new app, and copy the Secret key at the bottom of the page after creating the app.
+
+### 🚀 Building and Running
+
+- Run the client:
 
 	```sh
 	dx serve --port 3000
 	```
 
 Navigate to http://localhost:3000 to explore the landing page.
+
+> **Note** ⚠️  
+> This might take a few minutes (yes, seriously). But hey, good things take time, right?
+
+Happy compiling! 😄
 
 ## ✅ Supported Features
 
@@ -70,20 +140,145 @@ Navigate to http://localhost:3000 to explore the landing page.
 
 ![Sending and receiving text messages.](https://github.com/user-attachments/assets/d3ca3f38-41dc-4815-b7eb-35f8b5d10e36)
 
+## 🗂️ Project Structure
+
+This project is packing 81 files! 😅 But don't worry, it's all organized with love, care, and the principles of SoC and DRY in mind (peak engineering, ngl). Each file has a job to do, and it does it well; like little code ninjas in their own modular worlds.
+
+Here's what the structure looks like:
+
+<details>
+<summary><code>❯ cd src && tree</code></summary>
+
+```sh
+❯ cd src && tree
+.
+├── ai.rs
+├── components
+│   ├── common
+│   │   ├── header.rs
+│   │   ├── logo.rs
+│   │   └── server.rs
+│   ├── common.rs
+│   ├── dashboard
+│   │   ├── analytics.rs
+│   │   ├── books
+│   │   │   ├── create.rs
+│   │   │   ├── edit.rs
+│   │   │   ├── list.rs
+│   │   │   └── read.rs
+│   │   ├── books.rs
+│   │   ├── chat
+│   │   │   ├── panel.rs
+│   │   │   └── sidebar.rs
+│   │   ├── chat.rs
+│   │   ├── fields
+│   │   │   ├── input.rs
+│   │   │   ├── number.rs
+│   │   │   └── select.rs
+│   │   ├── fields.rs
+│   │   ├── navbar.rs
+│   │   ├── profile.rs
+│   │   └── sidebar.rs
+│   ├── dashboard.rs
+│   ├── features
+│   │   ├── grid.rs
+│   │   └── item.rs
+│   ├── features.rs
+│   ├── footer
+│   │   ├── bottom.rs
+│   │   ├── contact.rs
+│   │   ├── icon.rs
+│   │   ├── links.rs
+│   │   ├── logo.rs
+│   │   └── support.rs
+│   ├── footer.rs
+│   ├── hero.rs
+│   ├── navbar
+│   │   ├── btns.rs
+│   │   └── links.rs
+│   ├── navbar.rs
+│   ├── pricing.rs
+│   ├── spinner.rs
+│   ├── testimonial
+│   │   ├── author.rs
+│   │   ├── card.rs
+│   │   └── rating.rs
+│   ├── testimonial.rs
+│   ├── toast
+│   │   ├── manager.rs
+│   │   └── provider.rs
+│   └── toast.rs
+├── components.rs
+├── db.rs
+├── lib.rs
+├── main.rs
+├── pages
+│   ├── book.rs
+│   ├── dashboard.rs
+│   ├── home.rs
+│   ├── login.rs
+│   └── signup.rs
+├── pages.rs
+├── router.rs
+├── server
+│   ├── auth
+│   │   ├── controller.rs
+│   │   ├── model.rs
+│   │   └── response.rs
+│   ├── auth.rs
+│   ├── book
+│   │   ├── controller.rs
+│   │   ├── model.rs
+│   │   ├── request.rs
+│   │   └── response.rs
+│   ├── book.rs
+│   ├── common
+│   │   ├── request.rs
+│   │   └── response.rs
+│   ├── common.rs
+│   ├── conversation
+│   │   ├── controller.rs
+│   │   ├── model.rs
+│   │   ├── request.rs
+│   │   └── response.rs
+│   ├── conversation.rs
+│   ├── subscription
+│   │   ├── controller.rs
+│   │   ├── model.rs
+│   │   ├── request.rs
+│   │   └── response.rs
+│   └── subscription.rs
+├── server.rs
+├── theme.rs
+└── unsplash.rs
+
+19 directories, 81 files
+```
+
+</details>
+
+### 🛠️ What's Inside?
+
+- **Components**: All modular components live here, following the DRY principle. From `navbar` to `footer`, each feature has its own place, making it easy to find and tweak when needed.
+- **Server**: Adheres to the **MVC** pattern, making the backend as clean as a freshly minted Linux distro. You'll find models, controllers, and response handlers for each feature, organized and ready for action.
+- **Pages**: Each page of the app (e.g., `dashboard.rs`, `home.rs`) is set up here, so you know exactly where to go to update views.
+
+With this structure, the project stays manageable and maintainable, despite those 81 files. Let's be honest, though: it's probably going to keep growing. 😅
+
 ## 👨‍💻 Data Models
 
 ![MongDB Models](https://github.com/user-attachments/assets/a2f430c3-3d5a-491d-9fc9-b833a555cbc1)
 
-AIBook is powered by a MongoDB storage. The following a closer look at the data models and how they interconnect:
+AIBook is powered by **MongoDB** storage, with each model carefully structured to keep the app humming along smoothly. Here's a closer look at the data models and how they connect:
 
-- **User**: Manages user information, credentials, and roles, allowing for secure, authenticated access.
-- **Book**: Stores book-specific details, including title, type, and main topics, as well as creation and update timestamps.
-- **Chapter**: Holds chapter content in both markdown and HTML formats.
-- **Conversation**: Logs conversations between users and the Gemini AI.
-- **Message**: Captures individual messages within each conversation.
-- **Subscription**: Manages user subscription plans, payment methods, and active status.
+- **User** 🧑‍💼: Stores user credentials, profiles, and role information. This model ensures each user enjoys secure, authenticated access.
+- **Book** 📚: Contains details like title, type, topics, and handy timestamps for creation and updates, essentially, everything about a book except the content itself!
+- **Chapter** 📖: Houses the content for each chapter, stored in both markdown and HTML formats for flexibility.
+- **Conversation** 💬: Logs chats between users and the Gemini AI, so each interaction has a place in history.
+- **Message** 📝: Tracks individual messages within each conversation, capturing the ebb and flow of the AI interaction.
+- **Subscription** 💳: Manages subscription plans, payment methods, and active status, essentially the gatekeeper for access levels and perks.
 
-## 🤖 Gemini AI Integration
+> **Note**: MongoDB allows us to embed entire documents within another document, bypassing the need for an `ID` relationship (though it does add one more DB call if we want to fetch the data separately). For now, we're not hitting any performance bottlenecks, but this option keeps things flexible as we scale.
 
-The Gemini AI integration is a core part of AIBook’s functionality. When users generate a chapter, the `generate_chapter_content` function utilizes the "gems" crate to send a structured prompt to the Gemini AI, requesting content in markdown format for editor use and HTML format for publishing. The AI’s responses are saved in MongoDB, allowing users to retrieve, update, or regenerate content as needed.
+Each model is designed to keep data tightly organized, minimize dependencies, and allow for easy scaling. So whether it's a quick query for a single user or a deep dive into chat history, these models keep AIBook streamlined and ready to grow! 🚀
 
