@@ -22,7 +22,7 @@
 
 So, you're the kinda person who'd rather download an `.exe` than spend 20 minutes watching code compile? No worries; I gotcha! 🎉 Each release comes with pre-compiled binaries, already set up with my MongoDB, Gemini, and Unsplash credentials. Just download, run a command, and boom.
 
-> **Note** 📝
+> [!NOTE]
 > - 📸 **Unsplash API**: Limited to 50 requests per hour (we're all sharing the same quota, so easy on the trigger!).
 > - 💎 **Gemini credits**: Unlimited! So feel free to use as you please.
 > - 🗄️ **MongoDB Storage**: Capped at around ~512MB. Let's keep things tidy and not go overboard.
@@ -65,7 +65,8 @@ Inside the project root, copy and create a file named `.env` from `.env-example`
 cp .env.example .env
 ```
 
-> **Note**: Replace the following values with your actual credentials.
+> [!NOTE]
+> Replace the following values with your actual credentials.
 >
 > ```bash
 > MONGODB_USR=
@@ -111,7 +112,7 @@ AIBook uses Unsplash which provides a powerful API to search for and retrieve hi
 
 Navigate to http://localhost:3000 to explore the landing page.
 
-> **Note** ⚠️  
+> [!WARNING]
 > This might take a few minutes (yes, seriously). But hey, good things take time, right?
 
 Happy compiling! 😄
@@ -278,7 +279,8 @@ AIBook is powered by **MongoDB** storage, with each model carefully structured t
 - **Message** 📝: Tracks individual messages within each conversation, capturing the ebb and flow of the AI interaction.
 - **Subscription** 💳: Manages subscription plans, payment methods, and active status, essentially the gatekeeper for access levels and perks.
 
-> **Note**: MongoDB allows us to embed entire documents within another document, bypassing the need for an `ID` relationship (though it does add one more DB call if we want to fetch the data separately). For now, we're not hitting any performance bottlenecks, but this option keeps things flexible as we scale.
+> [!NOTE]
+> MongoDB allows us to embed entire documents within another document, bypassing the need for an `ID` relationship (though it does add one more DB call if we want to fetch the data separately). For now, we're not hitting any performance bottlenecks, but this option keeps things flexible as we scale.
 
 Each model is designed to keep data tightly organized, minimize dependencies, and allow for easy scaling. So whether it's a quick query for a single user or a deep dive into chat history, these models keep AIBook streamlined and ready to grow! 🚀
 
