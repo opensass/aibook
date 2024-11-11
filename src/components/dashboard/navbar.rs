@@ -2,8 +2,8 @@ use crate::components::spinner::Spinner;
 use crate::components::spinner::SpinnerSize;
 use crate::pages::dashboard::toggle_theme;
 use dioxus::prelude::*;
-use gloo_storage::SessionStorage;
 use gloo_storage::Storage;
+use gloo_storage::{LocalStorage, SessionStorage};
 
 #[component]
 pub fn Navbar(dark_mode: bool) -> Element {
@@ -16,6 +16,7 @@ pub fn Navbar(dark_mode: bool) -> Element {
         loading.set(false);
 
         SessionStorage::clear();
+        LocalStorage::clear();
         navigator.push("/login");
     };
 
@@ -35,7 +36,7 @@ pub fn Navbar(dark_mode: bool) -> Element {
                         class: format!("p-2 rounded-full flex items-center justify-center {}", if dark_mode { "bg-gray-700" } else { "bg-gray-200" }),
                         onclick: move |_| show_dropdown.set(!show_dropdown()),
                         img {
-                            src: "./features.png",
+                            src: "./features.webp",
                             alt: "User profile image",
                             class: "w-8 h-8 rounded-full"
                         }

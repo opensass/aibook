@@ -526,7 +526,13 @@ pub async fn extend_text(req: AIRequest) -> Result<SuccessResponse<String>, Serv
 }
 
 #[server]
-pub async fn fetch_analytics_data() -> Result<SuccessResponse<AnalyticsData>, ServerFnError> {
+pub async fn fetch_analytics_data(
+    token: String,
+) -> Result<SuccessResponse<AnalyticsData>, ServerFnError> {
+    let user = auth(token)
+        .await
+        .map_err(|_| ServerFnError::new("Not Authenticated"))?;
+
     let client = get_client().await;
     let db =
         client.database(&std::env::var("MONGODB_DB_NAME").expect("MONGODB_DB_NAME must be set."));
@@ -535,25 +541,34 @@ pub async fn fetch_analytics_data() -> Result<SuccessResponse<AnalyticsData>, Se
     let chapters_collection = db.collection::<Chapter>("chapters");
 
     // Engagement Metrics
-    let total_books = books_collection.count_documents(doc! {}).await?;
-    let total_chapters = chapters_collection.count_documents(doc! {}).await?;
+    let total_books = books_collection
+        .count_documents(doc! { "user": user.id })
+        .await?;
+    let mut total_chapters = 0;
+    if total_books > 0 {
+        total_chapters = chapters_collection.count_documents(doc! {}).await?;
+    }
     let avg_chapters_per_book = if total_books > 0 {
         total_chapters as f64 / total_books as f64
     } else {
         0.0
     };
 
-    // AI Usage Metrics
+    let mut total_estimated_duration = 0.0;
     let total_ai_chapters = total_chapters as u64;
-    let total_estimated_duration: u64 = chapters_collection
-        .aggregate(vec![
-            doc! { "$group": { "_id": null, "total_duration": { "$sum": "$estimated_duration" } } },
-        ])
-        .await?
-        .next()
-        .await
-        .and_then(|doc| doc.ok()?.get_i64("total_duration").ok())
-        .unwrap_or(0) as u64;
+
+    // AI Usage Metrics
+    if total_books > 0 {
+        let total_estimated_duration: u64 = chapters_collection
+            .aggregate(vec![
+                doc! { "$group": { "_id": null, "total_duration": { "$sum": "$estimated_duration" } } },
+            ])
+            .await?
+            .next()
+            .await
+            .and_then(|doc| doc.ok()?.get_i64("total_duration").ok())
+            .unwrap_or(0) as u64;
+    }
 
     let avg_gen_time = if total_ai_chapters > 0 {
         total_estimated_duration as f64 / total_ai_chapters as f64
@@ -566,6 +581,7 @@ pub async fn fetch_analytics_data() -> Result<SuccessResponse<AnalyticsData>, Se
     // Trending Topic
     let trending_topic = books_collection
         .aggregate(vec![
+            doc! { "$match": { "user_id": user.id } },
             doc! { "$group": { "_id": "$main_topic", "count": { "$sum": 1 } } },
             doc! { "$sort": { "count": -1 } },
             doc! { "$limit": 1 },
@@ -579,6 +595,7 @@ pub async fn fetch_analytics_data() -> Result<SuccessResponse<AnalyticsData>, Se
     // Projected Growth
     let monthly_book_growth = books_collection
         .aggregate(vec![
+            doc! { "$match": { "user_id": user.id } },
             doc! { "$group": {
                 "_id": { "month": { "$month": "$created_at" }, "year": { "$year": "$created_at" } },
                 "count": { "$sum": 1 }

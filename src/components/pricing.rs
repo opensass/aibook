@@ -62,7 +62,7 @@ pub fn Pricing() -> Element {
 
             div { class: "max-w-[1200px] mx-auto text-center",
                 img {
-                    src: "./pricing.png",
+                    src: "./pricing.webp",
                     alt: "AIBook Pricing",
                     class: "w-32 h-32 mx-auto animate-bounce transition-transform duration-300 ease-in-out hover:scale-110 hover:rotate-12"
                 }

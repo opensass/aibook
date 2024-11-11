@@ -292,7 +292,7 @@ pub fn Login() -> Element {
 
             div {
                 class: "md:flex-1 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600",
-                style: "background-image: url('/bg.webp'); background-size: cover; background-position: center;",
+                style: "background-image: url('/signin.webp'); background-size: cover; background-position: center;",
             }
         }
     }
