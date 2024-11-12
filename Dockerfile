@@ -27,6 +27,7 @@ RUN apt-get update && apt install -y openssl
 RUN apt-get install ca-certificates
 WORKDIR /app
 COPY --from=builder /app/dist /user/local/bin
+COPY --from=builder /app/target/release/aibook /user/local/bin/dist
 EXPOSE 80
 EXPOSE 8080
 EXPOSE 443
