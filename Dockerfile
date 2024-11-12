@@ -19,6 +19,7 @@ FROM chef as builder
 COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 RUN dx build --release
+RUN ls dist -lh
 COPY . .
 
 FROM debian:bookworm-slim AS runtime
