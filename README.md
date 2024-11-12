@@ -20,14 +20,14 @@
 
 ## 🖥️ For the `.exe` Enjoyers
 
-So, you're the kinda person who'd rather download an `.exe` than spend 20 minutes watching code compile? No worries; I gotcha! 🎉 Each release comes with pre-compiled binaries, already set up with my MongoDB, Gemini, and Unsplash credentials. Just download, run a command, and boom.
+So, you're the kinda person who'd rather download an `.exe` than spend 20 minutes watching code compile? No worries; I gotcha! 🎉 Each release comes with pre-compiled binaries. Just download, set env vars, run a command, and boom.
 
 > [!NOTE]
 > - 📸 **Unsplash API**: Limited to 50 requests per hour (we're all sharing the same quota, so easy on the trigger!).
 > - 💎 **Gemini credits**: Unlimited! So feel free to use as you please.
 > - 🗄️ **MongoDB Storage**: Capped at around ~512MB. Let's keep things tidy and not go overboard.
 
-And please; don't break the internet with my API keys! 😅
+Now, navigate to the [🔑 Setting Up Env Vars](https://github.com/opensass/aibook#-setting-up-env-vars) section.
 
 ## 🤓 For the Hardcore Nerds
 
