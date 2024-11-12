@@ -25,7 +25,7 @@ FROM debian:bookworm-slim AS runtime
 RUN apt-get update && apt install -y openssl
 RUN apt-get install ca-certificates
 WORKDIR /app
-COPY --from=builder /dist /user/local/bin/dist
+COPY --from=builder /app/dist /user/local/bin
 EXPOSE 80
 EXPOSE 8080
 EXPOSE 443
