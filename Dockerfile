@@ -1,6 +1,13 @@
 # install cargo chef
-FROM rust:1.74.1 AS chef
-RUN cargo install cargo-chef dioxus-cli
+FROM rust:1.80 AS chef
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libssl-dev \
+    build-essential \
+    curl \
+    git
+RUN cargo install cargo-chef
+RUN cargo install dioxus-cli
 WORKDIR /app
 
 # copy in source files, cd into target create and prepare recipe
