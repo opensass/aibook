@@ -1,4 +1,4 @@
-# install cargo chef
+# install cargo chef & dioxus cli
 FROM rust:1.80 AS chef
 RUN apt-get update && apt-get install -y \
     pkg-config \
@@ -25,17 +25,24 @@ COPY . .
 
 # runtime stage
 FROM debian:bookworm-slim AS runtime
-RUN apt-get update && apt install -y openssl ca-certificates
+RUN apt-get update && apt install -y openssl ca-certificates libssl-dev libstdc++6
 WORKDIR /app
 
-# Copy the `dist` directory and the built binary to /usr/local/bin
+# Copy the `dist` directory and the built binary to /usr/local/bin/dist
 COPY --from=builder /app/dist /usr/local/bin/dist
-COPY --from=builder /app/target/release/aibook /usr/local/bin/aibook
+COPY --from=builder /app/target/release/aibook /usr/local/bin/dist/aibook
 
-# Expose necessary ports
-EXPOSE 80
+# Make binary executable
+RUN chmod +x /usr/local/bin/dist/aibook
+
+# Expose ports
 EXPOSE 8080
 EXPOSE 443
+EXPOSE 80
 
-ENTRYPOINT ["/usr/local/bin/aibook"]
+# Set PORT
+ENV PORT=8080
+RUN ls /usr/local/bin/dist -lh
+
+ENTRYPOINT ["/usr/local/bin/dist/aibook"]
 
