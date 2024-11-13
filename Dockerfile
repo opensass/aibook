@@ -15,6 +15,7 @@ FROM chef AS planner
 COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
 
+# build stage
 FROM chef as builder
 COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
@@ -22,15 +23,19 @@ RUN dx build --release
 RUN ls dist -lh
 COPY . .
 
+# runtime stage
 FROM debian:bookworm-slim AS runtime
-RUN apt-get update && apt install -y openssl
-RUN apt-get install ca-certificates
+RUN apt-get update && apt install -y openssl ca-certificates
 WORKDIR /app
-COPY --from=builder /app/dist /user/local/bin
-COPY --from=builder /app/target/release/aibook /user/local/bin/dist
+
+# Copy the `dist` directory and the built binary to /usr/local/bin
+COPY --from=builder /app/dist /usr/local/bin/dist
+COPY --from=builder /app/target/release/aibook /usr/local/bin/aibook
+
+# Expose necessary ports
 EXPOSE 80
 EXPOSE 8080
 EXPOSE 443
 
-ENTRYPOINT ["/user/local/bin/dist/aibook"]
+ENTRYPOINT ["/usr/local/bin/aibook"]
 
