@@ -9,23 +9,28 @@
 
 [![Open SASS Discord](https://dcbadge.limes.pink/api/server/dGCPR6bq)](https://discord.gg/dGCPR6bq)
 
-![Arch](https://github.com/user-attachments/assets/b5af3f0b-1855-4510-853a-f4258e81cccd)
-
 | 🐧 Linux `(Recommended)` | 🪟 Windows |
 | :------: | :------: |
-| [ ![Linux Banner](https://github.com/user-attachments/assets/9b895bcf-43f8-4839-842b-4ad51c8c7777)](https://github.com/opensass/aibook/releases/download/v0.0.1/dist.zip) | [ ![Windows Banner](https://github.com/user-attachments/assets/9b895bcf-43f8-4839-842b-4ad51c8c7777)](https://github.com/opensass/aibook/releases/download/v0.0.1/dist.zip) |
-| `./dist/aibook` | `.\dist\aibook.exe` |
+| <video src="https://github.com/user-attachments/assets/aaa3b858-8f81-4c92-9cdc-c18e6300b48d"></video> | <video src="https://github.com/user-attachments/assets/9b593e2b-6c22-406e-93b7-d620448f82e7"></video> |
+| [**Download Executable**](https://github.com/opensass/aibook/releases/download/v0.0.1/dist.zip) | [**Download Executable**](https://github.com/opensass/aibook/releases/download/v0.0.1/dist.rar) |
+| [**Set Environment Variables**](https://github.com/opensass/aibook#-setting-up-env-vars) | [**Set Environment Variables**](https://github.com/opensass/aibook#-setting-up-env-vars) |
+| unzip files | unzip files |
+| execute `./dist/aibook` | execute `.\dist\aibook.exe` |
 
 </div>
+
+## 📐 Architecture
+
+![Arch](https://github.com/user-attachments/assets/b5af3f0b-1855-4510-853a-f4258e81cccd)
 
 ## 🖥️ For the `.exe` Enjoyers
 
 So, you're the kinda person who'd rather download an `.exe` than spend 20 minutes watching code compile? No worries; I gotcha! 🎉 Each release comes with pre-compiled binaries. Just download, set env vars, run a command, and boom.
 
 > [!NOTE]
-> - 📸 **Unsplash API**: Limited to 50 requests per hour (we're all sharing the same quota, so easy on the trigger!).
-> - 💎 **Gemini credits**: Unlimited! So feel free to use as you please.
-> - 🗄️ **MongoDB Storage**: Capped at around ~512MB. Let's keep things tidy and not go overboard.
+> - 📸 **Unsplash API**: Limited to 50 requests per hour.
+> - 💎 **Gemini credits**: Unlimited!
+> - 🗄️ **MongoDB Storage**: Capped at around ~512MB.
 
 Now, navigate to the [🔑 Setting Up Env Vars](https://github.com/opensass/aibook#-setting-up-env-vars) section.
 
