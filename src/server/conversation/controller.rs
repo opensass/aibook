@@ -198,30 +198,13 @@ pub async fn send_query_to_gemini(req: SendQueryRequest) -> Result<MessageRespon
         user_query = req.query
     );
 
-    let content = client
-        .generate_content(&system_prompt)
+    let response = client
+        .stream_generate_content(&system_prompt)
         .await
-        .map_err(ServerFnError::new)?
-        .trim_start_matches("```html")
-        .trim_end_matches("```")
-        .trim()
-        .to_string();
-
-    let response_message = Message {
-        id: ObjectId::new(),
-        conversation: req.conversation_id,
-        sender: "gemini".to_string(),
-        content: content,
-        timestamp: Utc::now(),
-    };
-
-    messages_collection
-        .insert_one(response_message.clone())
-        .await
-        .map_err(|e| ServerFnError::new(&e.to_string()))?;
+        .map_err(ServerFnError::new)?;
 
     Ok(MessageResponse {
         status: "success".to_string(),
-        data: response_message,
+        data: Some(Box::pin(response.bytes_stream())),
     })
 }

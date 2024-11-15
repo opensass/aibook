@@ -14,7 +14,7 @@ mongodb = { version = "3.1.0", optional = true }
 dotenv = { version = "0.15.0" }
 chrono = { version = "0.4.38", features = ["serde"] }
 bson = { version = "2.13.0", features = ["chrono-0_4"] }
-futures-util = { version = "0.3.31" }
+futures-util = "0.3.31"
 jsonwebtoken = { version = "9.3.0", optional = true }
 argon2 = { version = "0.5.3", optional = true }
 tokio = { version = "1.41.1", optional = true }
@@ -26,19 +26,23 @@ anyhow = "1.0.93"
 time = "0.3.36"
 regex = "1.11.1"
 getrandom = { version = "0.2.15", features = ["js"] }
-gems = { version = "0.0.7", optional = true }
+gems = { version = "0.0.8", optional = true }
 http-api-isahc-client = { version = "0.2.2", optional = true }
 axum = { version = "0.7.7", optional = true }
 unsplash-api = { version = "0.1.0", optional = true }
 gloo-storage = "0.3.0"
-
-# Debug
-dioxus-logger = "0.5.1"
 dioxus-free-icons = { version = "0.8.6", features = ["font-awesome-regular", "font-awesome-brands", "font-awesome-solid"] }
 web-sys = { version = "0.3.72", features = ["Selection", "Window"] }
 dioxus-web = { version = "0.5.6", features = ["hydrate"], optional = true }
+tower-http = { version = "0.6.1", features = ["cors"], optional = true }
+
+# Debug
+dioxus-logger = "0.5.1"
+reqwest = "0.12.9"
+quote = "1.0.37"
+bytes = "1.8.0"
 
 [features]
 default = []
-server = ["dioxus/axum", "axum", "unsplash-api", "http-api-isahc-client", "tokio", "mongodb", "jsonwebtoken", "argon2", "uuid", "rand", "axum-extra", "rand_core", "gems"]
+server = ["dioxus/axum", "axum", "unsplash-api", "tower-http", "http-api-isahc-client", "tokio", "mongodb", "jsonwebtoken", "argon2", "uuid", "rand", "axum-extra", "rand_core", "gems"]
 web = ["dioxus/web", "dioxus-web"]
