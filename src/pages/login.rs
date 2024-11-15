@@ -7,7 +7,6 @@ use crate::router::Route;
 use crate::server::auth::controller::{about_me, login_user};
 use crate::server::auth::response::LoginUserSchema;
 use crate::theme::Theme;
-use crate::theme::THEME;
 use chrono::Duration;
 use dioxus::prelude::*;
 use dioxus_free_icons::icons::fa_regular_icons::{FaEye, FaEyeSlash};
@@ -24,7 +23,7 @@ fn extract_token(cookie_str: &str) -> Option<String> {
 #[component]
 pub fn Login() -> Element {
     let navigator = use_navigator();
-    let dark_mode = *THEME.read();
+    let dark_mode = use_context::<Signal<Theme>>();
     let mut toasts_manager = use_context::<Signal<ToastManager>>();
 
     let mut email = use_signal(|| "".to_string());
@@ -165,7 +164,7 @@ pub fn Login() -> Element {
     rsx! {
         div {
             class: format!("min-h-screen flex {}",
-                                if dark_mode == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
+                                if dark_mode() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
 
             div {
                 class: "flex-1 flex items-center justify-center p-8",
@@ -204,7 +203,7 @@ pub fn Login() -> Element {
                         input {
                             class: format!(
                                 "mt-1 block w-full p-2 border rounded-md shadow-sm {} {}",
-                                if dark_mode == Theme::Dark { "bg-gray-900" } else { "" },
+                                if dark_mode() == Theme::Dark { "bg-gray-900" } else { "" },
                                 if email_valid() { "border-gray-300" } else { "border-red-500"
                             }),
                             r#type: "text",
@@ -226,7 +225,7 @@ pub fn Login() -> Element {
                             input {
                                 class: format!(
                                     "mt-1 block w-full p-2 border rounded-md shadow-sm {} {}",
-                                    if dark_mode == Theme::Dark { "bg-gray-900" } else { "" },
+                                    if dark_mode() == Theme::Dark { "bg-gray-900" } else { "" },
                                     if password_valid() { "border-gray-300" } else { "border-red-500"
                                 }),
                                 r#type: if show_password() { "text" } else { "password" },

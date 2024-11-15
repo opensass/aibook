@@ -6,7 +6,6 @@ use crate::server::book::controller::get_books_for_user;
 use crate::server::book::model::Book;
 use crate::server::book::request::GetBooksForUserRequest;
 use crate::theme::Theme;
-use crate::theme::THEME;
 use chrono::Utc;
 use dioxus::prelude::*;
 use gloo_storage::{LocalStorage, Storage};
@@ -23,7 +22,8 @@ pub const CACHE_TIMEOUT: i64 = 2 * 60 * 60;
 
 #[component]
 pub fn BooksPanel(user_token: Signal<String>) -> Element {
-    let dark_mode = *THEME.read() == Theme::Dark;
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
     let mut books = use_signal(Vec::new);
     let mut displayed_books = use_signal(Vec::new);
     let mut loading = use_signal(|| true);

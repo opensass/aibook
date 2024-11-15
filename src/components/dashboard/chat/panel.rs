@@ -19,7 +19,6 @@ use crate::server::conversation::request::SendQueryRequest;
 use gloo_storage::Storage;
 
 use crate::theme::Theme;
-use crate::theme::THEME;
 use bson::oid::ObjectId;
 use chrono::Utc;
 use dioxus::prelude::*;
@@ -47,6 +46,7 @@ fn truncate(text: String, max_length: usize) -> String {
 #[component]
 pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) -> Element {
     let mut messages = use_signal(Vec::<Message>::new);
+    let theme = use_context::<Signal<Theme>>();
     let mut input_query = use_signal(|| "".to_string());
     let mut selected_book = use_signal(|| None::<Book>);
     let mut selected_chapter = use_signal(|| None::<Chapter>);
@@ -254,7 +254,7 @@ pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) 
         div {
             class: format!(
                 "flex flex-col h-full {}",
-                if *THEME.read() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }
+                if theme() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }
             ),
 
             div {
@@ -263,7 +263,7 @@ pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) 
                 select {
                     class: format!(
                         "p-2 rounded-lg mb-2 md:mb-0 flex-grow w-full md:w-auto truncate {}",
-                        if *THEME.read() == Theme::Dark { "bg-gray-700 text-white" } else { "bg-gray-100 text-black" }
+                        if theme() == Theme::Dark { "bg-gray-700 text-white" } else { "bg-gray-100 text-black" }
                     ),
                     onchange: move |evt| handle_book_change(evt.value()),
                     option { value: "", "Select a book" },
@@ -275,7 +275,7 @@ pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) 
                 select {
                     class: format!(
                         "p-2 rounded-lg flex-grow w-full md:w-auto truncate {}",
-                        if *THEME.read() == Theme::Dark { "bg-gray-700 text-white" } else { "bg-gray-100 text-black" }
+                        if theme() == Theme::Dark { "bg-gray-700 text-white" } else { "bg-gray-100 text-black" }
                     ),
                     onchange: move |evt| selected_chapter.set(
                         chapters().iter().find(|chapter| chapter.id.to_string() == evt.value()).cloned()
@@ -293,7 +293,7 @@ pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) 
                 input {
                     class: format!(
                         "flex-1 p-2 rounded-lg border w-full {}",
-                        if *THEME.read() == Theme::Dark { "bg-gray-700 text-white border-gray-600" } else { "border-gray-300" }
+                        if theme() == Theme::Dark { "bg-gray-700 text-white border-gray-600" } else { "border-gray-300" }
                     ),
                     r#type: "text",
                     placeholder: "Type your query here...",

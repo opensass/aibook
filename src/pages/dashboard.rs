@@ -7,24 +7,16 @@ use crate::components::dashboard::profile::EditProfilePanel;
 use crate::components::dashboard::sidebar::Sidebar;
 use crate::components::dashboard::sidebar::Tab;
 use crate::server::auth::controller::about_me;
-use crate::theme::{Theme, THEME};
+use crate::theme::Theme;
 use dioxus::prelude::*;
 use gloo_storage::SessionStorage;
 use gloo_storage::Storage;
 
-pub fn toggle_theme() {
-    let current_theme = *THEME.read();
-    let new_theme = match current_theme {
-        Theme::Light => Theme::Dark,
-        Theme::Dark => Theme::Light,
-    };
-    *THEME.write() = new_theme;
-}
-
 #[component]
 pub fn Dashboard() -> Element {
     let active_tab = use_signal(|| Tab::Books);
-    let dark_mode = *THEME.read() == Theme::Dark;
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
     let mut user_token = use_signal(|| "".to_string());
     let navigator = use_navigator();
     let current_tab = match active_tab() {
@@ -59,7 +51,7 @@ pub fn Dashboard() -> Element {
             Sidebar { navigate: false, active_tab: active_tab.clone() }
 
             div { class: "flex-1 p-4 md:p-8",
-                Navbar { dark_mode }
+                Navbar {}
 
                 div { class: format!("p-4 shadow rounded-lg {}", if dark_mode { "bg-gray-800" } else { "bg-white" }),
                     {current_tab}

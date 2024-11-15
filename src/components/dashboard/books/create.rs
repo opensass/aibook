@@ -12,7 +12,6 @@ use crate::server::book::controller::generate_chapter_content;
 use crate::server::book::request::GenerateBookRequest;
 use crate::server::book::request::GenerateChapterContentRequest;
 use crate::theme::Theme;
-use crate::theme::THEME;
 use chrono::Duration;
 use chrono::Utc;
 use dioxus::prelude::*;
@@ -20,7 +19,8 @@ use gloo_storage::{LocalStorage, Storage};
 
 #[component]
 pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
-    let dark_mode = *THEME.read() == Theme::Dark;
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
     let title = use_signal(|| "".to_string());
     let subtitle = use_signal(|| "".to_string());
     let model = use_signal(|| "gemini-1.5-flash".to_string());

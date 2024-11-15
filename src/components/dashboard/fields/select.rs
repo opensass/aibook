@@ -1,5 +1,4 @@
 use crate::theme::Theme;
-use crate::theme::THEME;
 use dioxus::prelude::*;
 
 #[component]
@@ -8,7 +7,8 @@ pub fn SelectField(
     options: Vec<&'static str>,
     selected: Signal<String>,
 ) -> Element {
-    let dark_mode = *THEME.read() == Theme::Dark;
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
     rsx! {
         div {
             label { class: format!("block text-sm font-medium {}", if dark_mode { "text-gray-300" } else { "text-gray-700" }), "{label}" }

@@ -1,14 +1,17 @@
 use crate::components::spinner::Spinner;
 use crate::components::spinner::SpinnerSize;
-use crate::pages::dashboard::toggle_theme;
+use crate::theme::Theme;
+use crate::theme::ThemeToggle;
 use dioxus::prelude::*;
 use gloo_storage::Storage;
 use gloo_storage::{LocalStorage, SessionStorage};
 
 #[component]
-pub fn Navbar(dark_mode: bool) -> Element {
+pub fn Navbar() -> Element {
     let mut show_dropdown = use_signal(|| false);
     let mut loading = use_signal(|| false);
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
     let navigator = use_navigator();
 
     let handle_logout = move |e: Event<MouseData>| {
@@ -25,11 +28,7 @@ pub fn Navbar(dark_mode: bool) -> Element {
             h1 { class: "text-2xl font-semibold", "Dashboard" }
 
             div { class: "flex items-center space-x-4",
-                button {
-                    onclick: |_| toggle_theme(),
-                    class: "p-2 rounded-full text-lg",
-                    if dark_mode { "🌙" } else { "🌞" }
-                }
+                ThemeToggle {}
 
                 div { class: "relative",
                     button {

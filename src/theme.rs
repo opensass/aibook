@@ -1,20 +1,31 @@
 use dioxus::prelude::*;
 
-#[derive(PartialEq, Clone, Copy, Debug)]
+#[derive(PartialEq, Clone, Copy, Default, Debug)]
 pub enum Theme {
-    Light,
+    #[default]
     Dark,
+    Light,
 }
 
-pub static THEME: GlobalSignal<Theme> = GlobalSignal::new(|| Theme::Dark);
+#[derive(Props, PartialEq, Clone)]
+pub struct ThemeProviderProps {
+    pub children: Element,
+}
+
+#[component]
+pub fn ThemeProvider(props: ThemeProviderProps) -> Element {
+    let theme = use_signal(|| Theme::default());
+
+    use_context_provider(|| theme);
+
+    rsx! {
+        {props.children}
+    }
+}
 
 #[component]
 pub fn ThemeToggle() -> Element {
-    use_effect(|| {
-        *THEME.write() = Theme::Dark;
-    });
-
-    let mut theme = use_signal(|| Theme::Dark);
+    let mut theme = use_context::<Signal<Theme>>();
 
     let toggle_theme = move |_| {
         let new_theme = if theme() == Theme::Light {
@@ -23,7 +34,6 @@ pub fn ThemeToggle() -> Element {
             Theme::Light
         };
         theme.set(new_theme);
-        *THEME.write() = new_theme;
     };
 
     rsx! {

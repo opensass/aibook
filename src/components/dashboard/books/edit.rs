@@ -5,7 +5,6 @@ use crate::server::book::controller::{
 use crate::server::book::model::Book;
 use crate::server::book::request::{AIRequest, UpdateBookContentRequest};
 use crate::theme::Theme;
-use crate::theme::THEME;
 use dioxus::prelude::*;
 use dioxus_logger::tracing;
 use gloo_storage::SessionStorage;
@@ -15,7 +14,8 @@ use web_sys::window;
 
 #[component]
 pub fn EditBookContentPanel(book_id: String) -> Element {
-    let dark_mode = *THEME.read() == Theme::Dark;
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
     let navigator = use_navigator();
 
     let book = use_signal(|| Option::<Book>::None);

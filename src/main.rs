@@ -2,6 +2,7 @@
 
 use aibook::components::toast::provider::ToastProvider;
 use aibook::router::Route;
+use aibook::theme::ThemeProvider;
 use dioxus::prelude::*;
 use dioxus_logger::tracing;
 use dotenv::dotenv;
@@ -15,8 +16,10 @@ fn main() {
 
 fn App() -> Element {
     rsx! {
-        ToastProvider {
-            Router::<Route> {}
+        ThemeProvider {
+            ToastProvider {
+                Router::<Route> {}
+            }
         }
     }
 }

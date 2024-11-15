@@ -1,5 +1,4 @@
 use crate::theme::Theme;
-use crate::theme::THEME;
 use dioxus::prelude::*;
 
 #[component]
@@ -10,7 +9,8 @@ pub fn InputField(
     validate: fn(&str) -> bool,
     required: bool,
 ) -> Element {
-    let dark_mode = *THEME.read() == Theme::Dark;
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
 
     let handle_input = move |e: Event<FormData>| {
         let input_value = e.value().clone();
