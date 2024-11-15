@@ -1,6 +1,5 @@
 use crate::components::common::logo::Logo;
 use crate::theme::Theme;
-use crate::theme::THEME;
 use dioxus::prelude::*;
 use dioxus_free_icons::icons::fa_regular_icons::{
     FaAddressBook, FaFileLines, FaFolderOpen, FaMessage, FaPenToSquare,
@@ -18,7 +17,8 @@ pub enum Tab {
 
 #[component]
 pub fn Sidebar(active_tab: Signal<Tab>, navigate: bool) -> Element {
-    let dark_mode = *THEME.read() == Theme::Dark;
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
     let navigator = use_navigator();
 
     let tab_style = |tab: Tab| -> String {

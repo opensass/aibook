@@ -5,7 +5,6 @@ pub(crate) mod rating;
 use crate::components::testimonial::author::AuthorInfo;
 use crate::components::testimonial::rating::StarRating;
 use crate::theme::Theme;
-use crate::theme::THEME;
 use dioxus::prelude::*;
 use dioxus_free_icons::icons::fa_regular_icons::FaStar;
 use dioxus_free_icons::Icon;
@@ -62,7 +61,7 @@ pub fn Testimonial() -> Element {
         },
     ];
 
-    let dark_mode = *THEME.read();
+    let dark_mode = use_context::<Signal<Theme>>();
     let mut current_index = use_signal(|| 0);
 
     client! {
@@ -91,7 +90,7 @@ pub fn Testimonial() -> Element {
         section {
             id: "testimonial",
             class: format!("flex flex-col items-center justify-center min-h-screen p-8 {}",
-            if dark_mode == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-black" }),
+            if dark_mode() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-black" }),
 
             div { class: "flex flex-col items-center mb-8",
                 h2 { class: "text-4xl font-bold text-center",
@@ -99,14 +98,14 @@ pub fn Testimonial() -> Element {
                     span { class: "bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent animate-pulse", "Millions" }
                 }
 
-                p { class: format!("mt-2 text-lg {}", if dark_mode == Theme::Dark { "text-gray-300" } else { "text-gray-700" }), "Real Reviews from Real Users" }
+                p { class: format!("mt-2 text-lg {}", if dark_mode() == Theme::Dark { "text-gray-300" } else { "text-gray-700" }), "Real Reviews from Real Users" }
             }
 
             div { class: "flex items-center overflow-x-auto space-x-8 p-4",
                 for (i, testimonial) in testimonials.iter().enumerate() {
                     div { class: format!("transition-transform duration-500 transform {}", if current_index() == i { "opacity-100 scale-100" } else { "opacity-50 scale-75 blur-sm" }),
                         div { class: format!("{} p-8 rounded-lg shadow-lg text-center max-w-sm border",
-                                        if dark_mode == Theme::Dark { "border-gray-700 bg-gray-800" } else { "bg-white border-gray-300" }),
+                                        if dark_mode() == Theme::Dark { "border-gray-700 bg-gray-800" } else { "bg-white border-gray-300" }),
                             StarRating { star_images: testimonial.star_images.clone() }
                             blockquote { class: "text-lg font-semibold", "{testimonial.quote}" }
                             AuthorInfo {

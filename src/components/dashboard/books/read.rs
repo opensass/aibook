@@ -4,7 +4,6 @@ use crate::server::book::controller::get_chapters_for_book;
 use crate::server::book::model::Chapter;
 use crate::server::book::request::GetChaptersContentRequest;
 use crate::theme::Theme;
-use crate::theme::THEME;
 use chrono::Utc;
 use dioxus::prelude::*;
 use gloo_storage::{LocalStorage, Storage};
@@ -22,7 +21,8 @@ pub const CHAPTERS_CACHE_TIMEOUT: i64 = 2 * 60 * 60;
 
 #[component]
 pub fn ReadBookPanel(book_id: String) -> Element {
-    let dark_mode = *THEME.read() == Theme::Dark;
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
     let mut selected_chapter = use_signal(|| None::<Chapter>);
     let mut chapters = use_signal(Vec::<Chapter>::new);
     let mut loading = use_signal(|| true);

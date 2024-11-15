@@ -11,7 +11,6 @@ use crate::components::dashboard::sidebar::Sidebar;
 use crate::components::dashboard::sidebar::Tab;
 use crate::server::auth::controller::about_me;
 use crate::theme::Theme;
-use crate::theme::THEME;
 use bson::oid::ObjectId;
 use dioxus::prelude::*;
 use gloo_storage::SessionStorage;
@@ -20,7 +19,8 @@ use gloo_storage::Storage;
 #[component]
 pub fn ReadBook(id: String) -> Element {
     let active_tab = use_signal(|| Tab::ReadBook);
-    let dark_mode = *THEME.read() == Theme::Dark;
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
     let mut user_token = use_signal(|| "".to_string());
     let navigator = use_navigator();
     let mut current_tab = rsx! { BooksPanel { user_token } };
@@ -60,7 +60,7 @@ pub fn ReadBook(id: String) -> Element {
             Sidebar { navigate: true, active_tab: active_tab.clone() }
 
             div { class: "flex-1 p-4 md:p-8",
-                Navbar { dark_mode }
+                Navbar {}
 
                 div { class: format!("p-4 shadow rounded-lg {}", if dark_mode { "bg-gray-800" } else { "bg-white" }),
                     {current_tab}
@@ -73,7 +73,8 @@ pub fn ReadBook(id: String) -> Element {
 #[component]
 pub fn EditBook(id: String) -> Element {
     let active_tab = use_signal(|| Tab::ReadBook);
-    let dark_mode = *THEME.read() == Theme::Dark;
+    let theme = use_context::<Signal<Theme>>();
+    let dark_mode = theme() == Theme::Dark;
     let mut user_token = use_signal(|| "".to_string());
     let navigator = use_navigator();
     let mut current_tab = rsx! { BooksPanel { user_token } };
@@ -113,7 +114,7 @@ pub fn EditBook(id: String) -> Element {
             Sidebar { navigate: true, active_tab: active_tab.clone() }
 
             div { class: "flex-1 p-4 md:p-8",
-                Navbar { dark_mode }
+                Navbar {}
 
                 div { class: format!("p-4 shadow rounded-lg {}", if dark_mode { "bg-gray-800" } else { "bg-white" }),
                     {current_tab}

@@ -4,7 +4,6 @@ pub(crate) mod item;
 use crate::components::common::header::Header;
 use crate::components::features::grid::Grid;
 use crate::theme::Theme;
-use crate::theme::THEME;
 use dioxus::prelude::*;
 use dioxus_free_icons::icons::fa_brands_icons::{FaGoogle, FaRust};
 use dioxus_free_icons::icons::fa_regular_icons::{FaChartBar, FaCompass, FaKeyboard, FaStar};
@@ -19,7 +18,7 @@ struct Feature {
 
 #[component]
 pub fn Features() -> Element {
-    let dark_mode = *THEME.read();
+    let dark_mode = use_context::<Signal<Theme>>();
 
     let features = vec![
         Feature {
@@ -82,7 +81,7 @@ pub fn Features() -> Element {
         section {
             id: "features",
             class: format!("py-20 px-8 md:px-4 font-roboto flex min-h-screen justify-center {}",
-                if dark_mode == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
+                if dark_mode() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
 
             div { class: "max-w-[1000px] mx-auto text-center",
 

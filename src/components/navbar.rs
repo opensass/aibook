@@ -7,13 +7,12 @@ use crate::components::navbar::links::NavLinks;
 use crate::router::Route;
 use crate::theme::Theme;
 use crate::theme::ThemeToggle;
-use crate::theme::THEME;
 
 use dioxus::prelude::*;
 
 #[component]
 fn NavBar(show_items: bool) -> Element {
-    let dark_mode = *THEME.read();
+    let dark_mode = use_context::<Signal<Theme>>();
     let mut is_menu_open = use_signal(|| false);
 
     let toggle_menu = move |_| {
@@ -32,7 +31,7 @@ fn NavBar(show_items: bool) -> Element {
                 class: format!(
                     "items-center justify-between px-8 py-4 shadow-md hidden md:flex rounded-lg {}",
 
-                if dark_mode == Theme::Dark { "bg-white text-black" } else { "bg-gray-900 text-white" }
+                if dark_mode() == Theme::Dark { "bg-white text-black" } else { "bg-gray-900 text-white" }
                 ),
                 NavLinks {show_items},
                 AuthButtons { is_vertical: false }
@@ -43,7 +42,7 @@ fn NavBar(show_items: bool) -> Element {
             button {
                 class: format!("text-3xl md:hidden transform duration-300 {} {}",
                     if is_menu_open() { "rotate-90" } else { "rotate-0" },
-                    if dark_mode == Theme::Dark { "text-white" } else { "text-black" },
+                    if dark_mode() == Theme::Dark { "text-white" } else { "text-black" },
                 ),
 
                 onclick: toggle_menu,
@@ -54,7 +53,7 @@ fn NavBar(show_items: bool) -> Element {
                 class: format!(
                     "fixed top-0 left-0 w-2/5 md:w-auto h-auto p-4 z-50 md:hidden transition-transform transform duration-500 ease-in-out {} {}",
                     if is_menu_open() { "translate-x-0 opacity-100" } else { "-translate-x-full opacity-0" },
-                    if dark_mode == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-black" }
+                    if dark_mode() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-black" }
                 ),
                 NavLinks {show_items}
                 AuthButtons { is_vertical: true }

@@ -1,5 +1,5 @@
 use crate::components::common::header::Header;
-use crate::theme::{Theme, THEME};
+use crate::theme::Theme;
 use dioxus::prelude::*;
 
 #[derive(Props, Clone, PartialEq)]
@@ -13,7 +13,7 @@ struct PricingOption {
 
 #[component]
 pub fn Pricing() -> Element {
-    let dark_mode = *THEME.read();
+    let dark_mode = use_context::<Signal<Theme>>();
     let pricing_options = vec![
         PricingOption {
             title: "Free",
@@ -58,7 +58,7 @@ pub fn Pricing() -> Element {
         section {
             id: "pricing",
             class: format!("py-20 px-8 md:px-4 font-roboto flex min-h-screen justify-center {}",
-                if dark_mode == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
+                if dark_mode() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
 
             div { class: "max-w-[1200px] mx-auto text-center",
                 img {
