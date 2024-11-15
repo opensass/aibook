@@ -15,8 +15,6 @@ fn main() {
     #[cfg(feature = "web")]
     {
         let config = dioxus_web::Config::new().hydrate(true);
-
-        #[cfg(feature = "web")]
         LaunchBuilder::new().with_cfg(config).launch(App);
     }
 
@@ -25,6 +23,7 @@ fn main() {
         use aibook::db::get_client;
         use axum::{Extension, Router};
         use std::sync::Arc;
+        use tower_http::cors::CorsLayer;
 
         #[derive(Clone)]
         #[allow(dead_code)]
@@ -42,11 +41,12 @@ fn main() {
                 });
 
                 let app = Router::new()
+                    .layer(CorsLayer::permissive())
+                    .layer(Extension(state))
                     .serve_dioxus_application(ServeConfig::builder().build(), || {
                         VirtualDom::new(App)
                     })
-                    .await
-                    .layer(Extension(state));
+                    .await;
 
                 let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 3000));
                 let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();

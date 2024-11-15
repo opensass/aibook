@@ -16,6 +16,7 @@ use crate::server::conversation::controller::send_query_to_gemini;
 use crate::server::conversation::model::Message;
 use crate::server::conversation::request::GetMessagesRequest;
 use crate::server::conversation::request::SendQueryRequest;
+use futures_util::StreamExt;
 use gloo_storage::Storage;
 
 use crate::theme::Theme;
@@ -41,6 +42,17 @@ fn truncate(text: String, max_length: usize) -> String {
     } else {
         text.to_string()
     }
+}
+
+pub fn extract_text_from_partial_json(partial_json: &str) -> Option<String> {
+    if let Some(start_index) = partial_json.find("\"text\": \"") {
+        if let Some(end_index) = partial_json[start_index + "\"text\": \"".len()..].find('\"') {
+            let text_value = &partial_json[start_index + "\"text\": \"".len()
+                ..start_index + "\"text\": \"".len() + end_index];
+            return Some(text_value.to_owned());
+        }
+    }
+    None
 }
 
 #[component]
@@ -206,11 +218,67 @@ pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) 
                     .await;
 
                     match response {
-                        Ok(resp_message) => {
-                            let mut current_messages = messages();
-                            current_messages.push(resp_message.data);
-                            thinking.set(false);
-                            messages.set(current_messages);
+                        Ok(mut resp_stream) => {
+                            let mut current_messages = messages().clone();
+                            let mut message: String = Default::default();
+                            let message_id = ObjectId::new();
+
+                            let response_message = Message {
+                                id: message_id,
+                                conversation: conversation_id(),
+                                sender: "gemini".to_string(),
+                                content: message.clone(),
+                                timestamp: Utc::now(),
+                            };
+                            current_messages.push(response_message);
+                            messages.set(current_messages.clone());
+
+                            while let Some(mut chunk) = resp_stream
+                                .data
+                                .as_mut()
+                                .expect("stream object")
+                                .next()
+                                .await
+                            {
+                                if let Ok(parsed_json) =
+                                    std::str::from_utf8(chunk.as_mut().unwrap())
+                                {
+                                    if let Some(text_value) =
+                                        extract_text_from_partial_json(parsed_json)
+                                    {
+                                        let lines: Vec<&str> = text_value
+                                            .split("\\n")
+                                            .flat_map(|s| s.split('\n'))
+                                            .collect();
+
+                                        for line in lines {
+                                            message.push_str(&line.replace('\\', ""));
+
+                                            if let Some(existing_message) = current_messages
+                                                .clone()
+                                                .iter_mut()
+                                                .find(|m| m.id == message_id)
+                                            {
+                                                existing_message.content = message.clone();
+                                            }
+
+                                            thinking.set(false);
+                                            messages.set(current_messages.clone());
+                                        }
+                                    }
+                                } else {
+                                    // eprintln!("Failed to parse chunk: {:?}", chunk.as_ref().unwrap());
+                                }
+                            }
+
+                            let response_message = Message {
+                                id: ObjectId::new(),
+                                conversation: conversation_id(),
+                                sender: "gemini".to_string(),
+                                content: message,
+                                timestamp: Utc::now(),
+                            };
+                            let _ = save_message_to_db(response_message).await;
                         }
                         Err(err) => {
                             dioxus_logger::tracing::error!("{:?}", err);
