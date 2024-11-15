@@ -28,6 +28,7 @@ regex = "1.11.1"
 getrandom = { version = "0.2.15", features = ["js"] }
 gems = { version = "0.0.7", optional = true }
 http-api-isahc-client = { version = "0.2.2", optional = true }
+axum = { version = "0.7.7", optional = true }
 unsplash-api = { version = "0.1.0", optional = true }
 gloo-storage = "0.3.0"
 
@@ -35,10 +36,9 @@ gloo-storage = "0.3.0"
 dioxus-logger = "0.5.1"
 dioxus-free-icons = { version = "0.8.6", features = ["font-awesome-regular", "font-awesome-brands", "font-awesome-solid"] }
 web-sys = { version = "0.3.72", features = ["Selection", "Window"] }
-
+dioxus-web = { version = "0.5.6", features = ["hydrate"], optional = true }
 
 [features]
 default = []
-server = ["dioxus/axum", "unsplash-api", "http-api-isahc-client", "tokio", "mongodb", "jsonwebtoken", "argon2", "uuid", "rand", "axum-extra", "rand_core", "gems"]
-web = ["dioxus/web"]
-axum-extra = ["dep:axum-extra"]
+server = ["dioxus/axum", "axum", "unsplash-api", "http-api-isahc-client", "tokio", "mongodb", "jsonwebtoken", "argon2", "uuid", "rand", "axum-extra", "rand_core", "gems"]
+web = ["dioxus/web", "dioxus-web"]

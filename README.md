@@ -64,7 +64,7 @@ Before you can start running AIBook, you'll need to configure a few environment 
 
 ### Create an `.env` File
 
-Inside the project root, copy and create a file named `.env` from `.env-example`. This file will securely store all your environment variables.
+Inside the project root, copy and create a file named `.env` from `.env.example`. This file will securely store all your environment variables.
 
 ```bash
 cp .env.example .env

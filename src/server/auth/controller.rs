@@ -28,6 +28,7 @@ use {
 pub async fn register_user(
     body: RegisterUserSchema,
 ) -> Result<SuccessResponse<UserResponse>, ServerFnError> {
+    // TODO: get this from Extension(state): Extension<Arc<AppState>>,
     let client = get_client().await;
     let db =
         client.database(&std::env::var("MONGODB_DB_NAME").expect("MONGODB_DB_NAME must be set."));

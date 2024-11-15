@@ -36,12 +36,9 @@ COPY --from=builder /app/target/release/aibook /usr/local/bin/dist/aibook
 RUN chmod +x /usr/local/bin/dist/aibook
 
 # Expose ports
-EXPOSE 8080
 EXPOSE 443
 EXPOSE 80
 
-# Set PORT
-ENV PORT=8080
 RUN ls /usr/local/bin/dist -lh
 
 ENTRYPOINT ["/usr/local/bin/dist/aibook"]
