@@ -7,7 +7,7 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/wiseaidev)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-[![Open SASS Discord](https://dcbadge.limes.pink/api/server/dGCPR6bq)](https://discord.gg/dGCPR6bq)
+[![Open SASS Discord](https://dcbadge.limes.pink/api/server/b5JbvHW5nv)](https://discord.gg/b5JbvHW5nv)
 
 | 🐧 Linux `(Recommended)` | 🪟 Windows |
 | :------: | :------: |
@@ -28,6 +28,7 @@
 So, you're the kinda person who'd rather download an `.exe` than spend 20 minutes watching code compile? No worries; I gotcha! 🎉 Each release comes with pre-compiled binaries. Just download, set env vars, run a command, and boom.
 
 > [!NOTE]
+>
 > - 📸 **Unsplash API**: Limited to 50 requests per hour.
 > - 💎 **Gemini credits**: Unlimited!
 > - 🗄️ **MongoDB Storage**: Capped at around ~512MB.
@@ -42,21 +43,21 @@ Aight, if you're, just like me, one of those brave souls who **wants** to compil
 
 1. Install [`rustup`](https://www.rust-lang.org/tools/install):
 
-    ```bash
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    ```
+   ```bash
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   ```
 
 1. Install [`Dioxus CLI`](https://dioxuslabs.com/learn/0.5/getting_started):
 
-    ```bash
-    cargo install dioxus-cli
-    ```
+   ```bash
+   cargo install dioxus-cli
+   ```
 
 1. Fork/Clone the GitHub repository.
 
-	```bash
-	git clone https://github.com/opensass/aibook
-	```
+   ```bash
+   git clone https://github.com/opensass/aibook
+   ```
 
 ## 🔑 Setting Up Env Vars
 
@@ -111,9 +112,9 @@ AIBook uses Unsplash which provides a powerful API to search for and retrieve hi
 
 - Run the client:
 
-	```sh
-	dx serve --port 3000
-	```
+  ```sh
+  dx serve --port 3000
+  ```
 
 Navigate to http://localhost:3000 to explore the landing page.
 
@@ -288,4 +289,3 @@ AIBook is powered by **MongoDB** storage, with each model carefully structured t
 > MongoDB allows us to embed entire documents within another document, bypassing the need for an `ID` relationship (though it does add one more DB call if we want to fetch the data separately). For now, we're not hitting any performance bottlenecks, but this option keeps things flexible as we scale.
 
 Each model is designed to keep data tightly organized, minimize dependencies, and allow for easy scaling. So whether it's a quick query for a single user or a deep dive into chat history, these models keep AIBook streamlined and ready to grow! 🚀
-
