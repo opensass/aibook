@@ -15,3 +15,8 @@ pub struct UpdateSubscriptionRequest {
 pub struct StripePaymentRequest {
     pub plan_id: String,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct StripeCancelRequest {
+    pub id: String,
+}

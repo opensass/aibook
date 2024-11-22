@@ -26,8 +26,8 @@ pub fn Login() -> Element {
     let dark_mode = use_context::<Signal<Theme>>();
     let mut toasts_manager = use_context::<Signal<ToastManager>>();
 
-    let mut email = use_signal(|| "".to_string());
-    let mut password = use_signal(|| "".to_string());
+    let mut email = use_signal(|| "oss@wiseai.dev".to_string());
+    let mut password = use_signal(|| "pass".to_string());
 
     let mut error_message = use_signal(|| None::<String>);
     let mut email_valid = use_signal(|| true);

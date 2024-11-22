@@ -12,3 +12,6 @@
 **/*.rs.bk
 
 .env
+
+# Sus files
+**/*.br

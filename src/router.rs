@@ -8,6 +8,7 @@ use crate::pages::dashboard::Dashboard;
 use crate::pages::home::Home;
 use crate::pages::login::Login;
 use crate::pages::signup::Register;
+use crate::pages::success::SuccessPage;
 use dioxus::prelude::*;
 
 #[derive(Clone, Routable, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
@@ -16,7 +17,6 @@ pub enum Route {
     #[route("/")]
     Home {},
     #[end_layout]
-    // TODO: file an issue cz of ordering layout and router macros
     #[layout(LoginNavBar)]
     #[route("/login")]
     Login {},
@@ -29,4 +29,6 @@ pub enum Route {
     EditBook { id: String },
     #[route("/dashboard")]
     Dashboard {},
+    #[route("/success")]
+    SuccessPage {},
 }
