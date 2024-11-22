@@ -4,6 +4,8 @@ pub mod components;
 #[cfg(feature = "server")]
 pub mod db;
 pub(crate) mod pages;
+#[cfg(feature = "server")]
+pub mod pay;
 pub mod router;
 pub(crate) mod server;
 pub mod theme;

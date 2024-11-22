@@ -27,7 +27,8 @@ pub fn Hero() -> Element {
                 },
                 div {
                     class: "flex justify-center space-x-4",
-                    button {
+                    Link {
+                        to: "/login",
                         class: "bg-gray-500 text-white py-2 px-4 rounded-lg shadow hover:bg-gray-600 focus:outline-none",
                         "Get Started"
                     }

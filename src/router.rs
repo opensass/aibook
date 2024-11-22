@@ -16,7 +16,6 @@ pub enum Route {
     #[route("/")]
     Home {},
     #[end_layout]
-    // TODO: file an issue cz of ordering layout and router macros
     #[layout(LoginNavBar)]
     #[route("/login")]
     Login {},
