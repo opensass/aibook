@@ -1,6 +1,15 @@
 use crate::components::common::header::Header;
+use crate::components::toast::manager::ToastManager;
+use crate::components::toast::manager::ToastType;
+use crate::server::subscription::controller::start_stripe_payment;
+use crate::server::subscription::request::StripePaymentRequest;
 use crate::theme::Theme;
+use chrono::Duration;
 use dioxus::prelude::*;
+use dioxus_logger::tracing;
+use gloo_storage::SessionStorage;
+use gloo_storage::Storage;
+use std::env;
 
 #[derive(Props, Clone, PartialEq)]
 struct PricingOption {
@@ -9,11 +18,15 @@ struct PricingOption {
     description: &'static str,
     features: Vec<&'static str>,
     highlight: bool,
+    plan_id: Option<&'static str>,
 }
 
 #[component]
 pub fn Pricing() -> Element {
     let dark_mode = use_context::<Signal<Theme>>();
+    let navigator = use_navigator();
+    let mut toasts_manager = use_context::<Signal<ToastManager>>();
+
     let pricing_options = vec![
         PricingOption {
             title: "Free",
@@ -25,6 +38,7 @@ pub fn Pricing() -> Element {
                 "Google Gemini Pro (limited features)",
             ],
             highlight: false,
+            plan_id: None,
         },
         PricingOption {
             title: "Monthly",
@@ -37,6 +51,7 @@ pub fn Pricing() -> Element {
                 "Priority customer support",
             ],
             highlight: true,
+            plan_id: Some(env::var("STRIPE_PRICE_ONE").expect("STRIPE_PRICE_ONE must be set.")),
         },
         PricingOption {
             title: "Yearly",
@@ -51,8 +66,49 @@ pub fn Pricing() -> Element {
                 "Priority support",
             ],
             highlight: false,
+            plan_id: Some(env::var("STRIPE_PRICE_TWO").expect("STRIPE_PRICE_TWO must be set.")),
         },
     ];
+    let handle_plan_selection = move |plan: (Option<&'static str>, &'static str)| {
+        if let Some(plan_id) = plan.0 {
+            spawn({
+                let plan_title = plan.1.to_string();
+                async move {
+                    match start_stripe_payment(StripePaymentRequest {
+                        plan_id: plan_id.to_string(),
+                    })
+                    .await
+                    {
+                        Ok(response) => {
+                            SessionStorage::set("stripe", response.data.clone())
+                                .expect("Session storage failed");
+                            SessionStorage::set("method", "stripe")
+                                .expect("Session storage failed");
+                            SessionStorage::set("plan", &plan_title)
+                                .expect("Session storage failed");
+                            toasts_manager.set(
+                                toasts_manager()
+                                    .add_toast(
+                                        "Info".into(),
+                                        "Stripe payment initiation success!".into(),
+                                        ToastType::Info,
+                                        Some(Duration::seconds(5)),
+                                    )
+                                    .clone(),
+                            );
+                            navigator.push(response.data);
+                        }
+                        Err(err) => {
+                            tracing::error!("Stripe payment initiation failed: {:?}", err);
+                        }
+                    }
+                }
+            });
+        } else {
+            navigator.push("/login");
+            tracing::info!("Free plan selected.");
+        }
+    };
 
     rsx! {
         section {
@@ -95,8 +151,13 @@ pub fn Pricing() -> Element {
                                 }
                             },
 
-                            button { class: format!("mt-6 w-full py-2 rounded-md font-semibold {}",
-                                if option.highlight { "bg-blue-500 ttext-gray-700 hover:bg-blue-600" } else { "bg-gray-300 text-gray-700 hover:bg-gray-400" }),
+                            button {
+                                class: format!("mt-6 w-full py-2 rounded-md font-semibold {}",
+                                    if option.highlight { "bg-blue-500 text-white hover:bg-blue-600" } else { "bg-gray-300 text-gray-700 hover:bg-gray-400" }),
+                                onclick: move |e: Event<MouseData>| {
+                                    e.stop_propagation();
+                                    handle_plan_selection((option.plan_id, option.title));
+                                },
                                 "Select Plan"
                             }
                         }

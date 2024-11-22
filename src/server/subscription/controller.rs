@@ -95,7 +95,7 @@ pub async fn update_subscription(
 }
 
 #[server]
-pub async fn stripe_payment(
+pub async fn start_stripe_payment(
     req: StripePaymentRequest,
 ) -> Result<SuccessResponse<String>, ServerFnError> {
     let stripe_client = get_stripe().await.lock().await;
