@@ -82,6 +82,10 @@ cp .env.example .env
 > JWT_SECRET=
 > GEMINI_API_KEY=
 > UNSPLASH_API_KEY=
+> STRIPE_SECRET_KEY=
+> WEBSITE_URL=https://opensass.org
+> STRIPE_PRICE_ONE=price_1...
+> STRIPE_PRICE_TWO=price_1...
 > ```
 >
 > If you're missing any of these keys, check the service's developer portal to generate them.
@@ -108,6 +112,10 @@ To obtain your API key, navigate to [Google AI Studio](https://aistudio.google.c
 
 AIBook uses Unsplash which provides a powerful API to search for and retrieve high-quality images. To communicate with this api you will need a [Secret key](https://unsplash.com/oauth/applications). If you don't already have one, sign up for a free account at Unsplash, create a new app, and copy the Secret key at the bottom of the page after creating the app.
 
+### 💳 Stripe API
+
+Follow [our quick guide](./Stripe.md) to set up your stripe account and connect it to your project!
+
 ### 🚀 Building and Running
 
 - Run the client:
@@ -128,6 +136,10 @@ Happy compiling! 😄
 - Support for all Gemini models (e.g. Gemini Pro 1.5, Flash 1.5).
 
 ![Gemini Models](https://github.com/user-attachments/assets/58f531d0-c352-40eb-8bb2-aed7359fccbc)
+
+- Stripe support.
+
+![Stripe Demo](https://github.com/user-attachments/assets/2bbeacb0-ad01-4477-96b6-3e3d7f8c4bed)
 
 - Built-in Dark and Light themes.
 

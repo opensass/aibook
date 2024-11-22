@@ -9,7 +9,6 @@ use dioxus::prelude::*;
 use dioxus_logger::tracing;
 use gloo_storage::SessionStorage;
 use gloo_storage::Storage;
-use std::env;
 
 #[derive(Props, Clone, PartialEq)]
 struct PricingOption {
@@ -18,7 +17,7 @@ struct PricingOption {
     description: &'static str,
     features: Vec<&'static str>,
     highlight: bool,
-    plan_id: Option<String>,
+    plan_id: Option<&'static str>,
 }
 
 #[component]
@@ -51,7 +50,8 @@ pub fn Pricing() -> Element {
                 "Priority customer support",
             ],
             highlight: true,
-            plan_id: Some(env::var("STRIPE_PRICE_ONE").expect("STRIPE_PRICE_ONE must be set.")),
+            // TODO: Change to env var
+            plan_id: Some("price_1QO1"),
         },
         PricingOption {
             title: "Yearly",
@@ -66,10 +66,11 @@ pub fn Pricing() -> Element {
                 "Priority support",
             ],
             highlight: false,
-            plan_id: Some(env::var("STRIPE_PRICE_TWO").expect("STRIPE_PRICE_TWO must be set.")),
+            // TODO: Change to env var
+            plan_id: Some("price_1QO1"),
         },
     ];
-    let handle_plan_selection = move |plan: (Option<String>, &'static str)| {
+    let handle_plan_selection = move |plan: (Option<&'static str>, &'static str)| {
         if let Some(plan_id) = plan.0 {
             spawn({
                 let plan_title = plan.1.to_string();
@@ -156,7 +157,7 @@ pub fn Pricing() -> Element {
                                     if option.highlight { "bg-blue-500 text-white hover:bg-blue-600" } else { "bg-gray-300 text-gray-700 hover:bg-gray-400" }),
                                 onclick: move |e: Event<MouseData>| {
                                     e.stop_propagation();
-                                    handle_plan_selection((option.plan_id.clone(), option.title));
+                                    handle_plan_selection((option.plan_id, option.title));
                                 },
                                 "Select Plan"
                             }
