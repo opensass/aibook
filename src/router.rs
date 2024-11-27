@@ -7,6 +7,7 @@ use crate::pages::book::ReadBook;
 use crate::pages::dashboard::Dashboard;
 use crate::pages::home::Home;
 use crate::pages::login::Login;
+use crate::pages::profile::UserProfile;
 use crate::pages::signup::Register;
 use crate::pages::success::SuccessPage;
 use dioxus::prelude::*;
@@ -31,4 +32,6 @@ pub enum Route {
     Dashboard {},
     #[route("/success")]
     SuccessPage {},
+    #[route("/dashboard/profile/:id")]
+    UserProfile { id: String },
 }

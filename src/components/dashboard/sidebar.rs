@@ -113,7 +113,7 @@ pub fn Sidebar(active_tab: Signal<Tab>, navigate: bool) -> Element {
                     height: 30,
                     icon: FaPenToSquare,
                 },
-                span { class: "hidden md:inline", "Edit Profile" }
+                span { class: "hidden md:inline", "Profile" }
             }
         }
     }

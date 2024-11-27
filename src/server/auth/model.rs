@@ -3,7 +3,7 @@ use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[allow(non_snake_case)]
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub struct User {
     #[serde(rename = "_id")]
     pub id: ObjectId,
