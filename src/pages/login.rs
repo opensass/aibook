@@ -27,7 +27,7 @@ pub fn Login() -> Element {
     let mut toasts_manager = use_context::<Signal<ToastManager>>();
 
     let mut email = use_signal(|| "oss@wiseai.dev".to_string());
-    let mut password = use_signal(|| "pass".to_string());
+    let mut password = use_signal(|| "password".to_string());
 
     let mut error_message = use_signal(|| None::<String>);
     let mut email_valid = use_signal(|| true);
@@ -240,6 +240,7 @@ pub fn Login() -> Element {
                             }
                             button {
                                 onclick: move |_| show_password.set(!show_password()),
+                                r#type: "button",
                                 class: "absolute inset-y-0 right-0 pr-3 text-gray-500",
                                 if show_password() {
                                     Icon {

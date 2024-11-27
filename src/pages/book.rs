@@ -6,7 +6,7 @@ use crate::components::dashboard::books::list::BooksPanel;
 use crate::components::dashboard::books::read::ReadBookPanel;
 use crate::components::dashboard::chat::ChatPanelPage;
 use crate::components::dashboard::navbar::Navbar;
-use crate::components::dashboard::profile::EditProfilePanel;
+use crate::components::dashboard::profile::ProfilePagePanel;
 use crate::components::dashboard::sidebar::Sidebar;
 use crate::components::dashboard::sidebar::Tab;
 use crate::server::auth::controller::about_me;
@@ -29,7 +29,7 @@ pub fn ReadBook(id: String) -> Element {
             Tab::Books => rsx! { BooksPanel { user_token } },
             Tab::CreateBook => rsx! { CreateBookPanel { user_token } },
             Tab::ReadBook => rsx! { ReadBookPanel { book_id: id } },
-            Tab::EditProfile => rsx! { EditProfilePanel {} },
+            Tab::EditProfile => rsx! { ProfilePagePanel {} },
             Tab::Chat => rsx! { ChatPanelPage { user_token, book_id: id} },
         };
     } else {
@@ -83,7 +83,7 @@ pub fn EditBook(id: String) -> Element {
             Tab::Books => rsx! { BooksPanel { user_token } },
             Tab::CreateBook => rsx! { EditBookContentPanel { book_id: id } },
             Tab::ReadBook => rsx! { ReadBookPanel { book_id: id } },
-            Tab::EditProfile => rsx! { EditProfilePanel {} },
+            Tab::EditProfile => rsx! { ProfilePagePanel {} },
             Tab::Chat => rsx! { ChatPanelPage { user_token, book_id: id} },
         };
     } else {

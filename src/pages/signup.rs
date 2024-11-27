@@ -232,6 +232,7 @@ pub fn Register() -> Element {
                             }
                             button {
                                 onclick: move |_| show_password.set(!show_password()),
+                                r#type: "button",
                                 class: "absolute inset-y-0 right-0 pr-3 text-gray-500",
                                 if show_password() {
                                     Icon {
