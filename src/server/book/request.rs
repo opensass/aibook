@@ -34,10 +34,10 @@ pub struct GenerateBookRequest {
     pub subtitle: String,
     pub token: String,
     pub model: String,
-    pub subtopics: u64,
-    pub chapters: u64,
+    pub subtopics: String,
+    pub chapters: String,
     pub language: String,
-    pub max_length: u64,
+    pub max_length: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

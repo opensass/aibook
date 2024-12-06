@@ -37,6 +37,7 @@ anyhow = "1.0.93"
 time = "0.3.36"
 regex = "1.11.1"
 gloo-storage = "0.3.0"
+input-rs = { version = "0.2.2", features = ["dio"] }
 
 # Debug
 dioxus-logger = "0.5.1"

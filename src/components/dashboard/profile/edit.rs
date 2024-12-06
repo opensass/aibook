@@ -1,10 +1,34 @@
-use crate::components::dashboard::fields::input::InputField;
 use crate::components::dashboard::profile::view::ProfileDetailsProps;
 use crate::components::toast::manager::{ToastManager, ToastType};
 use crate::server::auth::controller::edit_profile;
 use crate::server::auth::request::EditUserSchema;
 use chrono::Duration;
 use dioxus::prelude::*;
+use input_rs::dioxus::Input;
+
+fn validate_name(name: String) -> bool {
+    !name.is_empty()
+}
+
+fn validate_email(email: String) -> bool {
+    email.contains('@') && email.contains('.')
+}
+
+fn validate_photo(photo: String) -> bool {
+    !photo.is_empty()
+}
+
+fn validate_old_password(password: String) -> bool {
+    !password.is_empty()
+}
+
+fn validate_new_password(password: String) -> bool {
+    password.len() >= 8
+}
+
+fn validate_confirm_password(confirm: String, new: String) -> bool {
+    confirm == new
+}
 
 #[component]
 pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
@@ -22,19 +46,13 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
     let confirm_password = use_signal(|| String::new());
 
     let mut name_valid = use_signal(|| true);
-    let validate_name = |name: &str| !name.is_empty();
     let mut email_valid = use_signal(|| true);
-    let validate_email = |email: &str| email.contains("@") && email.contains(".");
 
     let photo_valid = use_signal(|| true);
-    let validate_photo = |photo: &str| !photo.is_empty();
 
     let mut old_password_valid = use_signal(|| true);
-    let validate_old_password = |password: &str| !password.is_empty();
     let mut new_password_valid = use_signal(|| true);
-    let validate_new_password = |password: &str| password.len() >= 8;
     let mut confirm_password_valid = use_signal(|| true);
-    let validate_confirm_password = |confirm: &str, new: &str| confirm == new;
 
     let navigator = use_navigator();
     let mut toasts_manager = use_context::<Signal<ToastManager>>();
@@ -45,35 +63,35 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
 
         let mut all_valid = true;
 
-        if !validate_name(&name()) {
+        if !validate_name(name()) {
             name_valid.set(false);
             all_valid = false;
         } else {
             name_valid.set(true);
         }
 
-        if !validate_email(&email()) {
+        if !validate_email(email()) {
             email_valid.set(false);
             all_valid = false;
         } else {
             email_valid.set(true);
         }
 
-        if !validate_old_password(&old_password()) {
+        if !validate_old_password(old_password()) {
             old_password_valid.set(false);
             all_valid = false;
         } else {
             old_password_valid.set(true);
         }
 
-        if !validate_new_password(&new_password()) {
+        if !validate_new_password(new_password()) {
             new_password_valid.set(false);
             all_valid = false;
         } else {
             new_password_valid.set(true);
         }
 
-        if !validate_confirm_password(&confirm_password(), &new_password()) {
+        if !validate_confirm_password(confirm_password(), new_password()) {
             confirm_password_valid.set(false);
             all_valid = false;
         } else {
@@ -145,48 +163,124 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
     rsx!(
         form { class: "space-y-4",
             onsubmit: handle_submit,
-            InputField {
+            Input {
+                r#type: "text",
                 label: "Name",
-                value: name,
-                is_valid: name_valid,
-                validate: validate_name,
-                required: true
-            },
-            InputField {
+                handle: name,
+                placeholder: "Name",
+                error_message: "Name can't be blank!",
+                required: true,
+                valid_handle: name_valid,
+                validate_function: validate_name,
+                class: "field mb-6",
+                field_class: "validate-input mb-6",
+                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                input_class: if dark_mode && name_valid() {
+                    "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                } else {
+                    "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                },
+                error_class: "text-red-500 text-sm mt-1",
+            }
+            ,
+            Input {
+                r#type: "text",
                 label: "Image",
-                value: photo,
-                is_valid: photo_valid,
-                validate: validate_photo,
-                required: true
-            },
-            InputField {
+                handle: photo,
+                placeholder: "Image URL",
+                error_message: "Image can't be blank!",
+                required: true,
+                valid_handle: photo_valid,
+                validate_function: validate_photo,
+                class: "field mb-6",
+                field_class: "validate-input mb-6",
+                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                input_class: if dark_mode && photo_valid() {
+                    "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                } else {
+                    "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                },
+                error_class: "text-red-500 text-sm mt-1",
+            }
+            ,
+            Input {
+                r#type: "email",
                 label: "Email",
-                value: email,
-                is_valid: email_valid,
-                validate: validate_email,
-                required: true
-            },
-            InputField {
+                handle: email,
+                placeholder: "Email",
+                error_message: "Enter a valid email address!",
+                required: true,
+                valid_handle: email_valid,
+                validate_function: validate_email,
+                class: "field mb-6",
+                field_class: "validate-input mb-6",
+                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                input_class: if dark_mode && email_valid() {
+                    "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                } else {
+                    "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                },
+                error_class: "text-red-500 text-sm mt-1",
+            }
+            ,
+            Input {
+                r#type: "password",
                 label: "Old Password",
-                value: old_password,
-                is_valid: old_password_valid,
-                validate: validate_old_password,
-                required: true
-            },
-            InputField {
+                handle: old_password,
+                placeholder: "Old Password",
+                error_message: "Old password can't be blank!",
+                required: true,
+                valid_handle: old_password_valid,
+                validate_function: validate_old_password,
+                class: "field mb-6",
+                field_class: "validate-input mb-6",
+                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                input_class: if dark_mode && old_password_valid() {
+                    "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                } else {
+                    "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                },
+                error_class: "text-red-500 text-sm mt-1",
+            }
+            ,
+            Input {
+                r#type: "password",
                 label: "New Password",
-                value: new_password,
-                is_valid: new_password_valid,
-                validate: validate_new_password,
-                required: true
+                handle: new_password,
+                placeholder: "New Password",
+                error_message: "Password must be at least 8 characters!",
+                required: true,
+                valid_handle: new_password_valid,
+                validate_function: validate_new_password,
+                class: "field mb-6",
+                field_class: "validate-input mb-6",
+                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                input_class: if dark_mode && new_password_valid() {
+                    "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                } else {
+                    "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                },
+                error_class: "text-red-500 text-sm mt-1",
             },
-            InputField {
+            Input {
+                r#type: "password",
                 label: "Confirm Password",
-                value: confirm_password,
-                is_valid: confirm_password_valid,
-                validate: validate_new_password,
-                required: true
-            },
+                handle: confirm_password,
+                placeholder: "Confirm Password",
+                error_message: "Passwords do not match!",
+                required: true,
+                valid_handle: confirm_password_valid,
+                validate_function: validate_new_password,
+                class: "field mb-6",
+                field_class: "validate-input mb-6",
+                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                input_class: if dark_mode && confirm_password_valid() {
+                    "border-gray-300 bg-gray-900 mt-1 block w/full p-2 border rounded-md shadow-sm"
+                } else {
+                    "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                },
+                error_class: "text-red-500 text-sm mt-1",
+            }
             button {
                 class: format!("py-2 px-4 rounded-md {}", if dark_mode { "bg-blue-600" } else { "bg-blue-500 text-white" }),
                 r#type: "submit",
