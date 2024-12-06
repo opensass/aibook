@@ -1,7 +1,5 @@
 use crate::components::dashboard::books::list::CachedBooksData;
 use crate::components::dashboard::books::list::CACHE_KEY;
-use crate::components::dashboard::fields::input::InputField;
-use crate::components::dashboard::fields::number::NumberField;
 use crate::components::dashboard::fields::select::SelectField;
 use crate::components::spinner::Spinner;
 use crate::components::spinner::SpinnerSize;
@@ -16,6 +14,11 @@ use chrono::Duration;
 use chrono::Utc;
 use dioxus::prelude::*;
 use gloo_storage::{LocalStorage, Storage};
+use input_rs::dioxus::Input;
+
+pub fn validate_input(field: String) -> bool {
+    !&field.is_empty()
+}
 
 #[component]
 pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
@@ -24,20 +27,19 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
     let title = use_signal(|| "".to_string());
     let subtitle = use_signal(|| "".to_string());
     let model = use_signal(|| "gemini-1.5-flash".to_string());
-    let subtopics = use_signal(|| 3);
-    let chapters = use_signal(|| 5);
+    let subtopics = use_signal(|| "3".to_string());
+    let chapters = use_signal(|| "5".to_string());
     let language = use_signal(|| "English".to_string());
-    let max_length = use_signal(|| 1000);
+    let max_length = use_signal(|| "1000".to_string());
 
     let title_valid = use_signal(|| true);
     let subtitle_valid = use_signal(|| true);
+    let subtopics_valid = use_signal(|| true);
     let language_valid = use_signal(|| true);
+    let maxlen_valid = use_signal(|| true);
+    let chapters_valid = use_signal(|| true);
     let mut loading = use_signal(|| false);
     let _form_error = use_signal(|| None::<String>);
-
-    let validate_title = |title: &str| !title.is_empty();
-    let validate_subtitle = |subtitle: &str| !subtitle.is_empty();
-    let validate_language = |language: &str| !language.is_empty();
 
     let mut toasts_manager = use_context::<Signal<ToastManager>>();
 
@@ -47,7 +49,7 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
         let subtitle_value = subtitle().clone();
         loading.set(true);
 
-        if !validate_title(&title_value) || !validate_subtitle(&subtitle_value) {
+        if !validate_input(title_value) || !validate_input(subtitle_value) {
             // form_error.set(Some("Title and subtitle are required.".to_string()));
             toasts_manager.set(
                 toasts_manager()
@@ -185,13 +187,121 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
             h2 { class: "text-xl font-semibold mb-4", "Generate" }
             form { class: "space-y-4",
                 onsubmit: handle_submit,
-                InputField { label: "Title", value: title, is_valid: title_valid, validate: validate_title, required: true }
-                InputField { label: "Subtitle", value: subtitle, is_valid: subtitle_valid, validate: validate_subtitle, required: true }
+                Input {
+                    r#type: "text",
+                    label: "Title",
+                    handle: title,
+                    placeholder: "Title",
+                    error_message: "Title can't be blank!",
+                    required: true,
+                    valid_handle: title_valid,
+                    validate_function: validate_input,
+                    class: "field mb-6",
+                    field_class: "validate-input mb-6",
+                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                    input_class: if dark_mode && title_valid() {
+                        "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    } else {
+                        "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    },
+                    error_class: "text-red-500 text-sm mt-1",
+                }
+                Input {
+                    r#type: "text",
+                    label: "Subtitle",
+                    handle: subtitle,
+                    placeholder: "Subtitle",
+                    error_message: "Subtitle can't be blank!",
+                    required: true,
+                    valid_handle: subtitle_valid,
+                    validate_function: validate_input,
+                    class: "field mb-6",
+                    field_class: "validate-input mb-6",
+                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                    input_class: if dark_mode && subtitle_valid() {
+                        "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    } else {
+                        "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    },
+                    error_class: "text-red-500 text-sm mt-1",
+                }
                 SelectField { label: "Model", options: vec!["gemini-pro", "gemini-1.0-pro", "gemini-1.5-pro", "gemini-1.5-flash"], selected: model }
-                NumberField { label: "Subtopics per Chapter", value: subtopics, required: true }
-                NumberField { label: "Chapters", value: chapters, required: true }
-                InputField { label: "Language", value: language, is_valid: language_valid, validate: validate_language, required: true }
-                NumberField { label: "Max Length", value: max_length, required: true }
+                Input {
+                    r#type: "number",
+                    label: "Subtopics per Chapter",
+                    handle: subtopics,
+                    placeholder: "Subtopics",
+                    error_message: "Subtopics can't be blank!",
+                    required: true,
+                    valid_handle: subtopics_valid,
+                    validate_function: validate_input,
+                    class: "field mb-6",
+                    field_class: "validate-input mb-6",
+                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                    input_class: if dark_mode && subtopics_valid() {
+                        "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    } else {
+                        "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    },
+                    error_class: "text-red-500 text-sm mt-1",
+                }
+                Input {
+                    r#type: "number",
+                    label: "Chapters",
+                    handle: chapters,
+                    placeholder: "Chapters",
+                    error_message: "Chapters can't be blank!",
+                    required: true,
+                    valid_handle: chapters_valid,
+                    validate_function: validate_input,
+                    class: "field mb-6",
+                    field_class: "validate-input mb-6",
+                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                    input_class: if dark_mode && chapters_valid() {
+                        "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    } else {
+                        "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    },
+                    error_class: "text-red-500 text-sm mt-1",
+                }
+                Input {
+                    r#type: "text",
+                    label: "Language",
+                    handle: language,
+                    placeholder: "Language",
+                    error_message: "Language can't be blank!",
+                    required: true,
+                    valid_handle: language_valid,
+                    validate_function: validate_input,
+                    class: "field mb-6",
+                    field_class: "validate-input mb-6",
+                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                    input_class: if dark_mode && language_valid() {
+                        "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    } else {
+                        "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    },
+                    error_class: "text-red-500 text-sm mt-1",
+                }
+                Input {
+                    r#type: "number",
+                    label: "Max Length",
+                    handle: max_length,
+                    placeholder: "Max Length",
+                    error_message: "Language can't be blank!",
+                    required: true,
+                    valid_handle: maxlen_valid,
+                    validate_function: validate_input,
+                    class: "field mb-6",
+                    field_class: "validate-input mb-6",
+                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
+                    input_class: if dark_mode && maxlen_valid() {
+                        "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    } else {
+                        "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                    },
+                    error_class: "text-red-500 text-sm mt-1",
+                }
                 // if let Some(error) = &form_error() {
                 //     p { class: "text-red-600", "{error}" }
                 // }

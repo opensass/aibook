@@ -60,6 +60,7 @@ dependencies = [
  "getrandom 0.2.15",
  "gloo-storage 0.3.0",
  "http-api-isahc-client",
+ "input-rs",
  "jsonwebtoken",
  "mongodb",
  "rand 0.8.5",
@@ -2389,6 +2390,16 @@ name = "infer"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "64e9829a50b42bb782c1df523f78d332fe371b10c661e78b7a3c34b0198e9fac"
+
+[[package]]
+name = "input-rs"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ab51dec768b54f00586c58d7e4df9d66a0a54b384e2b2ce8ad7ae9b7bd1ff131"
+dependencies = [
+ "dioxus",
+ "web-sys",
+]
 
 [[package]]
 name = "instant"
