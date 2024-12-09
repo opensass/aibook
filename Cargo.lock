@@ -2393,9 +2393,9 @@ checksum = "64e9829a50b42bb782c1df523f78d332fe371b10c661e78b7a3c34b0198e9fac"
 
 [[package]]
 name = "input-rs"
-version = "0.2.2"
+version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab51dec768b54f00586c58d7e4df9d66a0a54b384e2b2ce8ad7ae9b7bd1ff131"
+checksum = "8727e945f8f9ff948ee2806f371bbb796341f8e261a91b1cf1fd7f2a32642477"
 dependencies = [
  "dioxus",
  "web-sys",
