@@ -50,7 +50,7 @@ Aight, if you're, just like me, one of those brave souls who **wants** to compil
 1. Install [`Dioxus CLI`](https://dioxuslabs.com/learn/0.5/getting_started):
 
    ```bash
-   cargo install dioxus-cli
+   cargo install dioxus-cli@0.5.6
    ```
 
 1. Fork/Clone the GitHub repository.
