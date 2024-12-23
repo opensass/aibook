@@ -40,7 +40,7 @@ gloo-storage = "0.3.0"
 input-rs = { version = "0.2.2", features = ["dio"] }
 
 # Debug
-dioxus-logger = "0.5.1"
+dioxus-logger = "0.6.1"
 
 [features]
 default = []
