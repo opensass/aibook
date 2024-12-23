@@ -869,6 +869,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "dioxus-cli-config"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "36c11a6723d6d0e8cfce29f0ed6d462f296054153c3dd5df0c8783d19477d1e8"
+
+[[package]]
 name = "dioxus-config-macro"
 version = "0.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -938,7 +944,7 @@ dependencies = [
  "base64 0.21.7",
  "bytes",
  "ciborium",
- "dioxus-cli-config",
+ "dioxus-cli-config 0.5.6",
  "dioxus-hot-reload",
  "dioxus-lib",
  "dioxus-ssr",
@@ -1068,7 +1074,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3ada18a8fe0764f492fd4fb169b818877799e887dbb6ffb19289801d924faf18"
 dependencies = [
  "axum",
- "dioxus-cli-config",
+ "dioxus-cli-config 0.5.6",
  "dioxus-core",
  "dioxus-hot-reload",
  "dioxus-html",
@@ -1089,11 +1095,12 @@ dependencies = [
 
 [[package]]
 name = "dioxus-logger"
-version = "0.5.1"
+version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81fe09dc9773dc1f1bb0d38529203d6555d08f67aadca5cf955ac3d1a9e69880"
+checksum = "c0214f450acfdc4265b09790b149bc615bb37cd30c634e0d835b39bc0bcd5223"
 dependencies = [
  "console_error_panic_hook",
+ "dioxus-cli-config 0.6.1",
  "tracing",
  "tracing-subscriber",
  "tracing-wasm",
@@ -1105,7 +1112,7 @@ version = "0.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c235c5dbeb528c0c2b0424763da812e7500df69b82eddac54db6f4975e065c5f"
 dependencies = [
- "dioxus-cli-config",
+ "dioxus-cli-config 0.5.6",
  "dioxus-fullstack",
  "dioxus-lib",
  "dioxus-router-macro",
