@@ -9,7 +9,7 @@ edition = "2021"
 [dependencies]
 serde = { version = "1.0.215", features = ["derive"] }
 
-dioxus = { version = "0.5", features = ["fullstack", "router", "html"] }
+dioxus = { version = "0.6.3", features = ["fullstack", "router", "html"] }
 mongodb = { version = "3.1.0", optional = true }
 chrono = { version = "0.4.38", features = ["serde"] }
 bson = { version = "2.13.0", features = ["chrono-0_4"] }
@@ -26,9 +26,8 @@ http-api-isahc-client = { version = "0.2.2", optional = true }
 axum = { version = "0.7.7", optional = true }
 unsplash-api = { version = "0.1.0", optional = true }
 tower-http = { version = "0.6.1", features = ["cors"], optional = true }
-dioxus-free-icons = { version = "0.8.6", features = ["font-awesome-regular", "font-awesome-brands", "font-awesome-solid"] }
 web-sys = { version = "0.3.72", features = ["Selection", "Window"] }
-dioxus-web = { version = "0.5.6", features = ["hydrate"], optional = true }
+dioxus-web = { version = "0.6.3", features = ["hydrate"], optional = true }
 async-stripe = { version = "0.39.1", default-feature = false, features = ["runtime-tokio-hyper-rustls", "billing"], optional = true }
 futures-util = { version = "0.3.31" }
 dotenv = { version = "0.15.0" }
@@ -37,15 +36,15 @@ anyhow = "1.0.93"
 time = "0.3.36"
 regex = "1.11.1"
 gloo-storage = "0.3.0"
-input-rs = { version = "0.2.2", features = ["dio"] }
+input-rs = { version = "0.2.4", features = ["dio"] }
 
 # Debug
-dioxus-logger = "0.5.1"
+dioxus-logger = "0.6.2"
 
 [features]
 default = []
 server = [
-    "dioxus/axum",
+    "dioxus/server",
     "axum",
     "unsplash-api",
     "tower-http",
@@ -62,3 +61,15 @@ server = [
     "async-stripe"
 ]
 web = ["dioxus/web", "dioxus-web"]
+
+[profile]
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"

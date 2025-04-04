@@ -1,10 +1,6 @@
 use crate::components::common::logo::Logo;
 use crate::theme::Theme;
 use dioxus::prelude::*;
-use dioxus_free_icons::icons::fa_regular_icons::{
-    FaAddressBook, FaFileLines, FaFolderOpen, FaMessage, FaPenToSquare,
-};
-use dioxus_free_icons::Icon;
 
 #[derive(PartialEq, Clone)]
 pub enum Tab {
@@ -55,11 +51,7 @@ pub fn Sidebar(active_tab: Signal<Tab>, navigate: bool) -> Element {
                     }
                     active_tab.set(Tab::Books);
                 },
-                Icon {
-                    width: 30,
-                    height: 30,
-                    icon: FaFolderOpen,
-                },
+                i { class: "fas fa-folder-open text-2xl" },
                 span { class: "hidden md:inline", "Books" }
             }
 
@@ -70,11 +62,7 @@ pub fn Sidebar(active_tab: Signal<Tab>, navigate: bool) -> Element {
                     }
                     active_tab.set(Tab::Chat);
                 },
-                Icon {
-                    width: 30,
-                    height: 30,
-                    icon: FaMessage,
-                },
+                i { class: "fas fa-comment text-2xl" },
                 span { class: "hidden md:inline", "Chat" }
             }
 
@@ -85,22 +73,16 @@ pub fn Sidebar(active_tab: Signal<Tab>, navigate: bool) -> Element {
                     }
                     active_tab.set(Tab::CreateBook);
                 },
-                Icon {
-                    width: 30,
-                    height: 30,
-                    icon: FaFileLines,
-                },
+                i { class: "fas fa-file-alt text-2xl" },
                 span { class: "hidden md:inline", "Generate" }
             }
+
             div { class: tab_style(Tab::ReadBook),
                 onclick: move |_| active_tab.set(Tab::ReadBook),
-                Icon {
-                    width: 30,
-                    height: 30,
-                    icon: FaAddressBook,
-                },
+                i { class: "fas fa-address-book text-2xl" },
                 span { class: "hidden md:inline", "Read Book" }
             }
+
             div { class: tab_style(Tab::EditProfile),
                 onclick: move |_| {
                     if navigate {
@@ -108,11 +90,7 @@ pub fn Sidebar(active_tab: Signal<Tab>, navigate: bool) -> Element {
                     }
                     active_tab.set(Tab::EditProfile);
                 },
-                Icon {
-                    width: 30,
-                    height: 30,
-                    icon: FaPenToSquare,
-                },
+                i { class: "fas fa-user-edit text-2xl" },
                 span { class: "hidden md:inline", "Profile" }
             }
         }

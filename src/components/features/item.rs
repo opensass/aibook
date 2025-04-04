@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 
 #[derive(Props, PartialEq, Clone)]
 pub struct ItemProps {
-    icon: Element,
+    icon: &'static str,
     title: &'static str,
     description: &'static str,
 }
@@ -20,9 +20,8 @@ pub fn FeatureItem(props: ItemProps) -> Element {
                 if dark_mode() == Theme::Dark { "bg-gray-800 hover:bg-gray-700" } else { "bg-white hover:bg-gray-100" },
                 "transform hover:-translate-y-1 hover:shadow-lg"
             ),
-            div {
-                class: "w-12 h-12 mb-4 transform transition-transform duration-300 hover:scale-110",
-                {props.icon}
+            i {
+                class: format!("w-12 h-12 mb-4 transform transition-transform duration-300 hover:scale-110 {}", props.icon),
             }
             h3 {
                 class: format!(

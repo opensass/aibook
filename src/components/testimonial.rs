@@ -6,17 +6,15 @@ use crate::components::testimonial::author::AuthorInfo;
 use crate::components::testimonial::rating::StarRating;
 use crate::theme::Theme;
 use dioxus::prelude::*;
-use dioxus_free_icons::icons::fa_regular_icons::FaStar;
-use dioxus_free_icons::Icon;
 
 #[derive(Props, Clone, PartialEq)]
 pub struct TestimonialData {
     quote: &'static str,
     author_name: &'static str,
     author_title: &'static str,
-    author_image: &'static str,
-    company_logo: &'static str,
-    star_images: Vec<Element>,
+    author_image: Asset,
+    company_logo: Asset,
+    star_images: Vec<&'static str>,
 }
 
 #[allow(unused_mut)]
@@ -27,37 +25,25 @@ pub fn Testimonial() -> Element {
             quote: "AIbook writes poetry that would make any bard jealous. And it doesn’t even charge a royal fee!",
             author_name: "William Shakespeare",
             author_title: "Playwright",
-            author_image: "./shakespeare.webp",
-            company_logo: "./shakespeare_logo.webp",
-            star_images: vec![rsx! {Icon {
-                width: 30,
-                height: 30,
-                icon: FaStar,
-            }}; 5],
+            author_image: asset!("/assets/shakespeare.webp"),
+            company_logo: asset!("/assets/shakespeare_logo.webp"),
+            star_images: vec!["fas fa-star"; 5],
         },
         TestimonialData {
             quote: "I asked AIbook to write a novel. It wrote a sci-fi epic that somehow included me as the protagonist. I might be living in a simulation!",
             author_name: "Neo",
             author_title: "The One",
-            author_image: "./neo.webp",
-            company_logo: "./matrix_logo.webp",
-            star_images: vec![rsx! {Icon {
-                width: 30,
-                height: 30,
-                icon: FaStar,
-            }}; 5],
+            author_image: asset!("/assets/neo.webp"),
+            company_logo: asset!("/assets/matrix_logo.webp"),
+            star_images: vec!["fas fa-star"; 5],
         },
         TestimonialData {
             quote: "AIbook practically writes my memoirs for me! Now I can focus on other pressing matters, like conquering the galaxy.",
             author_name: "Darth Vader",
             author_title: "Dark Lord of the Sith",
-            author_image: "./darth_vader.webp",
-            company_logo: "./empire_logo.webp",
-            star_images: vec![rsx! {Icon {
-                width: 30,
-                height: 30,
-                icon: FaStar,
-            }}; 5],
+            author_image: asset!("/assets/darth_vader.webp"),
+            company_logo: asset!("/assets/empire_logo.webp"),
+            star_images: vec!["fas fa-star"; 5],
         },
     ];
 
@@ -66,20 +52,18 @@ pub fn Testimonial() -> Element {
 
     client! {
         let vec_len = testimonials.len();
-        let mut eval = use_hook(|| {
-            eval(
-                r#"
-                setInterval(() => {
-                    dioxus.send("");
-                }, 5000)
-                "#,
-            )
-        });
+        let mut eval = document::eval(
+            r#"
+            setInterval(() => {
+                dioxus.send("");
+            }, 5000)
+            "#,
+        );
 
         use_hook(|| {
             spawn(async move {
                 loop {
-                    let _ = eval.recv().await;
+                    let _ = eval.recv::<String>().await;
                     current_index.set((current_index() + 1) % vec_len);
                 }
             })

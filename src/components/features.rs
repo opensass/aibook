@@ -5,13 +5,10 @@ use crate::components::common::header::Header;
 use crate::components::features::grid::Grid;
 use crate::theme::Theme;
 use dioxus::prelude::*;
-use dioxus_free_icons::icons::fa_brands_icons::{FaGoogle, FaRust};
-use dioxus_free_icons::icons::fa_regular_icons::{FaChartBar, FaCompass, FaKeyboard, FaStar};
-use dioxus_free_icons::Icon;
 
 #[derive(Props, Clone, PartialEq)]
 struct Feature {
-    icon: Element,
+    icon: &'static str,
     title: &'static str,
     description: &'static str,
 }
@@ -22,56 +19,32 @@ pub fn Features() -> Element {
 
     let features = vec![
         Feature {
-            icon: rsx! {Icon {
-                width: 30,
-                height: 30,
-                icon: FaCompass,
-            }},
+            icon: "text-2xl fas fa-compass",
             title: "Language Support",
             description: "Generate content in any languages, expanding your reach globally.",
         },
         Feature {
-            icon: rsx! {Icon {
-                width: 30,
-                height: 30,
-                icon: FaGoogle,
-            }},
+            icon: "text-2xl fab fa-google",
             title: "Powered by Google Gemini AI",
             description: "Utilize the advanced capabilities of Google Gemini models for high-quality content generation.",
         },
         Feature {
-            icon: rsx! {Icon {
-                width: 30,
-                height: 30,
-                icon: FaRust,
-            }},
+            icon: "text-2xl fab fa-rust",
             title: "Built on Rust for Security",
             description: "Enjoy peace of mind with a Rust-powered frontend and backend ensuring a secure experience.",
         },
         Feature {
-            icon: rsx! {Icon {
-                width: 30,
-                height: 30,
-                icon: FaStar,
-            }},
+            icon: "text-2xl fas fa-star",
             title: "Real-Time Content Generation",
             description: "Get instant results with fast and responsive AI-powered content generation.",
         },
         Feature {
-            icon: rsx! {Icon {
-                width: 30,
-                height: 30,
-                icon: FaChartBar,
-            }},
+            icon: "text-2xl fas fa-chart-bar",
             title: "Advanced Analytics Dashboard",
             description: "Monitor and track the performance of generated content with an in-depth analytics dashboard.",
         },
         Feature {
-            icon: rsx! {Icon {
-                width: 30,
-                height: 30,
-                icon: FaKeyboard,
-            }},
+            icon: "text-2xl fas fa-keyboard",
             title: "Developer-Friendly Platform",
             description: "Designed with developers in mind for easy customization and integration.",
         },
@@ -87,7 +60,7 @@ pub fn Features() -> Element {
 
                 div { class: "relative mb-12",
                     img {
-                        src: "./features.webp",
+                        src: asset!("/assets/features.webp"),
                         alt: "AIBook Icon",
                         class: "w-24 h-24 mx-auto animate-bounce"
                     }
