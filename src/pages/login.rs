@@ -9,8 +9,6 @@ use crate::server::auth::response::LoginUserSchema;
 use crate::theme::Theme;
 use chrono::Duration;
 use dioxus::prelude::*;
-use dioxus_free_icons::icons::fa_regular_icons::{FaEye, FaEyeSlash};
-use dioxus_free_icons::Icon;
 use gloo_storage::SessionStorage;
 use gloo_storage::Storage;
 use regex::Regex;
@@ -243,17 +241,9 @@ pub fn Login() -> Element {
                                 r#type: "button",
                                 class: "absolute inset-y-0 right-0 pr-3 text-gray-500",
                                 if show_password() {
-                                    Icon {
-                                        width: 30,
-                                        height: 30,
-                                        icon: FaEye,
-                                    }
+                                    i { class: "fas fa-eye text-2xl" },
                                 } else {
-                                    Icon {
-                                        width: 30,
-                                        height: 30,
-                                        icon: FaEyeSlash,
-                                    }
+                                    i { class: "fas fa-eye-slash text-2xl" },
                                 }
                             }
                         }

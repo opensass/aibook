@@ -198,12 +198,12 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
                     validate_function: validate_input,
                     class: "field mb-6",
                     field_class: "validate-input mb-6",
-                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                    input_class: if dark_mode && title_valid() {
+                    label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                    input_class: {if dark_mode && title_valid() {
                         "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                     } else {
                         "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                    },
+                    }},
                     error_class: "text-red-500 text-sm mt-1",
                 }
                 Input {
@@ -217,12 +217,12 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
                     validate_function: validate_input,
                     class: "field mb-6",
                     field_class: "validate-input mb-6",
-                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                    input_class: if dark_mode && subtitle_valid() {
+                    label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                    input_class: {if dark_mode && subtitle_valid() {
                         "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                     } else {
                         "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                    },
+                    }},
                     error_class: "text-red-500 text-sm mt-1",
                 }
                 SelectField { label: "Model", options: vec!["gemini-pro", "gemini-1.0-pro", "gemini-1.5-pro", "gemini-1.5-flash"], selected: model }
@@ -237,12 +237,12 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
                     validate_function: validate_input,
                     class: "field mb-6",
                     field_class: "validate-input mb-6",
-                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                    input_class: if dark_mode && subtopics_valid() {
+                    label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                    input_class: {if dark_mode && subtopics_valid() {
                         "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                     } else {
                         "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                    },
+                    }},
                     error_class: "text-red-500 text-sm mt-1",
                 }
                 Input {
@@ -256,12 +256,12 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
                     validate_function: validate_input,
                     class: "field mb-6",
                     field_class: "validate-input mb-6",
-                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                    input_class: if dark_mode && chapters_valid() {
+                    label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                    input_class: {if dark_mode && chapters_valid() {
                         "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                     } else {
                         "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                    },
+                    }},
                     error_class: "text-red-500 text-sm mt-1",
                 }
                 Input {
@@ -275,12 +275,12 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
                     validate_function: validate_input,
                     class: "field mb-6",
                     field_class: "validate-input mb-6",
-                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                    input_class: if dark_mode && language_valid() {
+                    label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                    input_class: {if dark_mode && language_valid() {
                         "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                     } else {
                         "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                    },
+                    }},
                     error_class: "text-red-500 text-sm mt-1",
                 }
                 Input {
@@ -294,12 +294,12 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
                     validate_function: validate_input,
                     class: "field mb-6",
                     field_class: "validate-input mb-6",
-                    label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                    input_class: if dark_mode && maxlen_valid() {
+                    label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                    input_class: {if dark_mode && maxlen_valid() {
                         "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                     } else {
                         "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                    },
+                    }},
                     error_class: "text-red-500 text-sm mt-1",
                 }
                 // if let Some(error) = &form_error() {

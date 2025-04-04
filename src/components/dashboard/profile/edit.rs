@@ -174,12 +174,12 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_name,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                input_class: if dark_mode && name_valid() {
+                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                input_class: {if dark_mode && name_valid() {
                     "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                },
+                }},
                 error_class: "text-red-500 text-sm mt-1",
             }
             ,
@@ -194,12 +194,12 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_photo,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                input_class: if dark_mode && photo_valid() {
+                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                input_class: {if dark_mode && photo_valid() {
                     "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                },
+                }},
                 error_class: "text-red-500 text-sm mt-1",
             }
             ,
@@ -214,12 +214,12 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_email,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                input_class: if dark_mode && email_valid() {
+                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                input_class: {if dark_mode && email_valid() {
                     "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                },
+                }},
                 error_class: "text-red-500 text-sm mt-1",
             }
             ,
@@ -234,12 +234,12 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_old_password,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                input_class: if dark_mode && old_password_valid() {
+                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                input_class: {if dark_mode && old_password_valid() {
                     "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                },
+                }},
                 error_class: "text-red-500 text-sm mt-1",
             }
             ,
@@ -254,12 +254,12 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_new_password,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                input_class: if dark_mode && new_password_valid() {
+                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                input_class: {if dark_mode && new_password_valid() {
                     "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                },
+                }},
                 error_class: "text-red-500 text-sm mt-1",
             },
             Input {
@@ -273,12 +273,12 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_new_password,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" },
-                input_class: if dark_mode && confirm_password_valid() {
+                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
+                input_class: {if dark_mode && confirm_password_valid() {
                     "border-gray-300 bg-gray-900 mt-1 block w/full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                },
+                }},
                 error_class: "text-red-500 text-sm mt-1",
             }
             button {

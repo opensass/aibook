@@ -2,10 +2,10 @@ use dioxus::prelude::*;
 
 #[derive(Props, Clone, PartialEq)]
 pub struct AuthorProps {
-    author_image: &'static str,
+    author_image: Asset,
     author_name: &'static str,
     author_title: &'static str,
-    company_logo: &'static str,
+    company_logo: Asset,
 }
 
 #[component]

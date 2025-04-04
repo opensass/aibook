@@ -13,20 +13,18 @@ pub fn ToastProvider(props: ToastProviderProps) -> Element {
     let mut manager = use_signal(|| ToastManager::default());
 
     client! {
-        let mut eval = use_hook(|| {
-            eval(
-                r#"
-                setInterval(() => {
-                    dioxus.send("");
-                }, 1000)
-                "#,
-            )
-        });
+        let mut eval = document::eval(
+            r#"
+            setInterval(() => {
+                dioxus.send("");
+            }, 1000)
+            "#,
+        );
 
         use_hook(|| {
             spawn(async move {
                 loop {
-                    let _ = eval.recv().await;
+                    let _ = eval.recv::<String>().await;
                     manager.write().cleanup_expired();
                 }
             })

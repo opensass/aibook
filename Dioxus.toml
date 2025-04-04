@@ -7,9 +7,6 @@ name = "aibook"
 # web, desktop, fullstack
 default_platform = "fullstack"
 
-# `build` & `serve` dist path
-out_dir = "dist"
-
 # resource (assets) file folder
 asset_dir = "assets"
 
@@ -30,12 +27,7 @@ watch_path = ["src", "assets"]
 [web.resource]
 
 # CSS style file
-style = [
-   # Include from public_dir.
-   "./main.css",
-   # online cdn. TODO: Use Railwind and file a feature request to add `post_cmd` in this toml file
-   "https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"
-]
+style = []
 
 # Javascript code file
 script = []
