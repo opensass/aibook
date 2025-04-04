@@ -121,7 +121,7 @@ Follow [our quick guide](./Stripe.md) to set up your stripe account and connect 
 - Run the client:
 
   ```sh
-  dx serve --port 3000
+  dx serve
   ```
 
 Navigate to http://localhost:3000 to explore the landing page.
