@@ -1,16 +1,10 @@
-use crate::theme::Theme;
 use dioxus::prelude::*;
 
 #[component]
 pub fn Hero() -> Element {
-    let dark_mode = use_context::<Signal<Theme>>();
-
     rsx! {
         section {
-            class: format!(
-                "min-h-screen flex flex-col items-center justify-center transition-colors duration-300 px-6 {}",
-                if dark_mode() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-black" }
-            ),
+            class: "min-h-screen flex flex-col items-center justify-center transition-colors duration-300 px-6 dark:bg-gray-900 dark:text-white bg-white text-black",
             div {
                 class: "text-center space-y-6",
                 p {

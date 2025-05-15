@@ -3,7 +3,6 @@ use crate::components::spinner::SpinnerSize;
 use crate::server::book::controller::get_chapters_for_book;
 use crate::server::book::model::Chapter;
 use crate::server::book::request::GetChaptersContentRequest;
-use crate::theme::Theme;
 use chrono::Utc;
 use dioxus::prelude::*;
 use gloo_storage::{LocalStorage, Storage};
@@ -21,8 +20,6 @@ pub const CHAPTERS_CACHE_TIMEOUT: i64 = 2 * 60 * 60;
 
 #[component]
 pub fn ReadBookPanel(book_id: String) -> Element {
-    let theme = use_context::<Signal<Theme>>();
-    let dark_mode = theme() == Theme::Dark;
     let mut selected_chapter = use_signal(|| None::<Chapter>);
     let mut chapters = use_signal(Vec::<Chapter>::new);
     let mut loading = use_signal(|| true);
@@ -78,7 +75,7 @@ pub fn ReadBookPanel(book_id: String) -> Element {
 
     rsx! {
         div {
-            class: format!("flex h-full {}", if dark_mode { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
+            class: "flex h-full dark:bg-gray-900 dark:text-white bg-white text-gray-900",
 
             div {
                 class: "md:w-1/3 lg:w-1/4 sm:w-1/6 p-4 border-r border-blue-300",

@@ -46,11 +46,7 @@ pub fn Spinner(props: SpinnerProps) -> Element {
         String::new()
     };
 
-    let color_class = if props.dark_mode {
-        "text-white border-t-white"
-    } else {
-        "text-blue-500 border-t-blue-500"
-    };
+    let color_class = "dark:text-white dark:border-t-white text-blue-500 border-t-blue-500";
 
     rsx! {
         svg {

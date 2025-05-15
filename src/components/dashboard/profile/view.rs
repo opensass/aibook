@@ -4,7 +4,6 @@ use dioxus::prelude::*;
 #[derive(Props, Clone, PartialEq)]
 pub struct ProfileDetailsProps {
     pub user: User,
-    pub dark_mode: bool,
     pub user_token: String,
 }
 

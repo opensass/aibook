@@ -18,7 +18,6 @@ use crate::server::conversation::request::GetMessagesRequest;
 use crate::server::conversation::request::SendQueryRequest;
 use gloo_storage::Storage;
 
-use crate::theme::Theme;
 use bson::oid::ObjectId;
 use chrono::Utc;
 use dioxus::prelude::*;
@@ -46,7 +45,6 @@ fn truncate(text: String, max_length: usize) -> String {
 #[component]
 pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) -> Element {
     let mut messages = use_signal(Vec::<Message>::new);
-    let theme = use_context::<Signal<Theme>>();
     let mut input_query = use_signal(|| "".to_string());
     let mut selected_book = use_signal(|| None::<Book>);
     let mut selected_chapter = use_signal(|| None::<Chapter>);
@@ -252,19 +250,12 @@ pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) 
 
     rsx! {
         div {
-            class: format!(
-                "flex flex-col h-full {}",
-                if theme() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }
-            ),
-
+            class: "flex flex-col h-full dark:bg-gray-900 dark:text-white bg-white text-gray-900",
             div {
                 class: "flex flex-col md:flex-row md:space-x-4 p-4 border-b border-gray-300 dark:border-gray-700",
 
                 select {
-                    class: format!(
-                        "p-2 rounded-lg mb-2 md:mb-0 flex-grow w-full md:w-auto truncate {}",
-                        if theme() == Theme::Dark { "bg-gray-700 text-white" } else { "bg-gray-100 text-black" }
-                    ),
+                    class: "p-2 rounded-lg mb-2 md:mb-0 flex-grow w-full md:w-auto truncate dark:bg-gray-700 dark:text-white bg-gray-100 text-black",
                     onchange: move |evt| handle_book_change(evt.value()),
                     option { value: "", "Select a book" },
                     for book in books().iter() {
@@ -273,10 +264,7 @@ pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) 
                 }
 
                 select {
-                    class: format!(
-                        "p-2 rounded-lg flex-grow w-full md:w-auto truncate {}",
-                        if theme() == Theme::Dark { "bg-gray-700 text-white" } else { "bg-gray-100 text-black" }
-                    ),
+                    class: "p-2 rounded-lg flex-grow w-full md:w-auto truncate dark:bg-gray-700 dark:text-white bg-gray-100 text-black",
                     onchange: move |evt| selected_chapter.set(
                         chapters().iter().find(|chapter| chapter.id.to_string() == evt.value()).cloned()
                     ),
@@ -291,10 +279,7 @@ pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) 
                 class: "flex flex-col sm:flex-row items-center p-4 space-y-3 sm:space-y-0 sm:space-x-3 border-b border-gray-300 dark:border-gray-700",
 
                 input {
-                    class: format!(
-                        "flex-1 p-2 rounded-lg border w-full {}",
-                        if theme() == Theme::Dark { "bg-gray-700 text-white border-gray-600" } else { "border-gray-300" }
-                    ),
+                    class: "flex-1 p-2 rounded-lg border w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 border-gray-300",
                     r#type: "text",
                     placeholder: "Type your query here...",
                     value: "{input_query}",

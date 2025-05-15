@@ -3,7 +3,6 @@ pub(crate) mod item;
 
 use crate::components::common::header::Header;
 use crate::components::features::grid::Grid;
-use crate::theme::Theme;
 use dioxus::prelude::*;
 
 #[derive(Props, Clone, PartialEq)]
@@ -15,8 +14,6 @@ struct Feature {
 
 #[component]
 pub fn Features() -> Element {
-    let dark_mode = use_context::<Signal<Theme>>();
-
     let features = vec![
         Feature {
             icon: "text-2xl fas fa-compass",
@@ -53,8 +50,7 @@ pub fn Features() -> Element {
     rsx! {
         section {
             id: "features",
-            class: format!("py-20 px-8 md:px-4 font-roboto flex min-h-screen justify-center {}",
-                if dark_mode() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
+            class: "py-20 px-8 md:px-4 font-roboto flex min-h-screen justify-center dark:bg-gray-900 dark:text-white bg-white text-gray-900",
 
             div { class: "max-w-[1000px] mx-auto text-center",
 

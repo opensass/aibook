@@ -1,5 +1,4 @@
 use crate::router::Route;
-use crate::theme::Theme;
 use dioxus::prelude::*;
 
 #[derive(Props, Clone, PartialEq)]
@@ -9,7 +8,6 @@ pub struct AuthButtonsProps {
 
 #[component]
 pub fn AuthButtons(props: AuthButtonsProps) -> Element {
-    let dark_mode = use_context::<Signal<Theme>>();
     let button_class = if props.is_vertical {
         "flex flex-col gap-4"
     } else {
@@ -20,11 +18,7 @@ pub fn AuthButtons(props: AuthButtonsProps) -> Element {
         div { class: "{button_class}",
             Link {
                 to: Route::Register {},
-                class: format!(
-                    "border px-5 py-2 text-lg hover:bg-gray-100 {}",
-
-                if dark_mode() == Theme::Dark { "border-gray-700" } else { "border-gray-300" }
-                ),
+                class: "border px-5 py-2 text-lg hover:bg-gray-100 dark:border-gray-700 border-gray-300",
                 "Register"
             }
             Link {

@@ -3,7 +3,6 @@ use crate::server::conversation::controller::get_conversations;
 use crate::server::conversation::model::Conversation;
 use crate::server::conversation::request::CreateConversationRequest;
 use crate::server::conversation::request::GetConversationsRequest;
-use crate::theme::Theme;
 use bson::oid::ObjectId;
 use chrono::Utc;
 
@@ -18,7 +17,6 @@ pub fn ConversationsSidebar(
 ) -> Element {
     let token_clone = token.clone();
     let book_id_clone = book_id.clone();
-    let theme = use_context::<Signal<Theme>>();
 
     use_effect(move || {
         let token = token.clone();
@@ -35,8 +33,7 @@ pub fn ConversationsSidebar(
 
     rsx! {
         div {
-            class: format!("p-4 {}", if theme() == Theme::Dark { "border-gray-600 bg-gray-900" } else { "border-gray-200" }),
-
+            class: "p-4 dark:border-gray-600 dark:bg-gray-900 border-gray-200",
             h3 { class: "text-lg font-semibold mb-4 text-blue-500", "Conversations" }
 
             button {

@@ -2,7 +2,6 @@ use crate::components::spinner::Spinner;
 use crate::components::spinner::SpinnerSize;
 use crate::server::auth::controller::about_me;
 use crate::server::auth::model::User;
-use crate::theme::Theme;
 use crate::theme::ThemeToggle;
 use dioxus::prelude::*;
 use gloo_storage::Storage;
@@ -12,8 +11,6 @@ use gloo_storage::{LocalStorage, SessionStorage};
 pub fn Navbar() -> Element {
     let mut show_dropdown = use_signal(|| false);
     let mut loading = use_signal(|| false);
-    let theme = use_context::<Signal<Theme>>();
-    let dark_mode = theme() == Theme::Dark;
     let navigator = use_navigator();
 
     let mut user_data = use_signal(|| None::<User>);
@@ -55,7 +52,7 @@ pub fn Navbar() -> Element {
     };
 
     rsx! {
-        div { class: format!("flex justify-between items-center mb-4 border-b shadow-sm p-2 {}", if dark_mode { "dark:border-gray-700" } else { "" }),
+        div { class: "flex justify-between items-center mb-4 border-b shadow-sm p-2 dark:border-gray-700",
             h1 { class: "text-2xl font-semibold", "Dashboard" }
 
             div { class: "flex items-center space-x-4",
@@ -63,7 +60,7 @@ pub fn Navbar() -> Element {
 
                 div { class: "relative",
                     button {
-                        class: format!("p-2 rounded-full flex items-center justify-center {}", if dark_mode { "bg-gray-700" } else { "bg-gray-200" }),
+                        class: "p-2 rounded-full flex items-center justify-center dark:bg-gray-700 bg-gray-200",
                         onclick: move |_| show_dropdown.set(!show_dropdown()),
                         img {
                             src: "https://rustacean.net/assets/rustacean-orig-noshadow.svg",
@@ -72,9 +69,9 @@ pub fn Navbar() -> Element {
                         }
                     }
                     if show_dropdown() {
-                        div { class: format!("absolute right-0 mt-2 w-48 shadow-lg rounded-lg {}", if dark_mode { "bg-gray-800" } else { "bg-white" }),
+                        div { class: "absolute right-0 mt-2 w-48 shadow-lg rounded-lg dark:bg-gray-800 bg-white",
                             button {
-                                class: format!("w-full text-left px-4 py-2 hover:bg-gray-100 {}", if dark_mode { "hover:bg-gray-700" } else { "" }),
+                                class: "w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700",
                                 onclick: handle_profile,
                                 "Profile"
                             }

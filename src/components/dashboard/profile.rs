@@ -5,7 +5,6 @@ use crate::components::dashboard::profile::edit::ProfileForm;
 use crate::components::dashboard::profile::view::ProfileDetails;
 use crate::server::auth::controller::about_me;
 use crate::server::auth::model::User;
-use crate::theme::Theme;
 
 use dioxus::prelude::*;
 use gloo_storage::SessionStorage;
@@ -13,8 +12,6 @@ use gloo_storage::Storage;
 
 #[component]
 pub fn ProfilePagePanel() -> Element {
-    let theme = use_context::<Signal<Theme>>();
-    let dark_mode = theme() == Theme::Dark;
     let mut user_token = use_signal(|| "".to_string());
     let mut user_data = use_signal(|| None::<User>);
     let mut edit_mode = use_signal(|| false);
@@ -40,24 +37,24 @@ pub fn ProfilePagePanel() -> Element {
     });
 
     rsx! {
-        div { class: format!("p-4 {}", if dark_mode { "bg-gray-800 text-white" } else { "bg-white text-gray-900" }),
+        div { class: "p-4 dark:bg-gray-800 dark:text-white bg-white text-gray-900",
             h2 { class: "text-xl font-semibold mb-4", "Profile" }
                 div { class: "container mx-auto p-4",
                     div { class: "flex items-center justify-between",
                         button {
-                            class: format!("py-2 px-4 rounded {}", if dark_mode { "bg-blue-600" } else { "bg-blue-500 text-white" }),
+                            class: "py-2 px-4 rounded dark:bg-blue-600 bg-blue-500 text-white",
                             onclick: move |_| edit_mode.set(!edit_mode()),
                             if edit_mode() { "Cancel" } else { "Edit" }
                         }
                     }
 
-                    div { class: format!("mt-6 space-y-4 bg-white shadow-md p-4 rounded-md {}", if dark_mode { "bg-gray-800" } else { "bg-white" }),
+                    div { class: "mt-6 space-y-4 bg-white shadow-md p-4 rounded-md dark:bg-gray-800 bg-white",
                         match user_data.as_ref() {
                             Some(user) => rsx! {
                                 if edit_mode() {
-                                    ProfileForm { user: user.clone(), dark_mode, user_token }
+                                    ProfileForm { user: user.clone(), user_token }
                                 } else {
-                                    ProfileDetails { user: user.clone(), dark_mode, user_token }
+                                    ProfileDetails { user: user.clone(), user_token }
                                 }
                             },
                             None => rsx!(p { "Loading..." })
