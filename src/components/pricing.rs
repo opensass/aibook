@@ -3,7 +3,6 @@ use crate::components::toast::manager::ToastManager;
 use crate::components::toast::manager::ToastType;
 use crate::server::subscription::controller::start_stripe_payment;
 use crate::server::subscription::request::StripePaymentRequest;
-use crate::theme::Theme;
 use chrono::Duration;
 use dioxus::prelude::*;
 use dioxus_logger::tracing;
@@ -22,7 +21,6 @@ struct PricingOption {
 
 #[component]
 pub fn Pricing() -> Element {
-    let dark_mode = use_context::<Signal<Theme>>();
     let navigator = use_navigator();
     let mut toasts_manager = use_context::<Signal<ToastManager>>();
 
@@ -114,8 +112,7 @@ pub fn Pricing() -> Element {
     rsx! {
         section {
             id: "pricing",
-            class: format!("py-20 px-8 md:px-4 font-roboto flex min-h-screen justify-center {}",
-                if dark_mode() == Theme::Dark { "bg-gray-900 text-white" } else { "bg-white text-gray-900" }),
+            class: "py-20 px-8 md:px-4 font-roboto flex min-h-screen justify-center dark:bg-gray-900 dark:text-white bg-white text-gray-900",
 
             div { class: "max-w-[1200px] mx-auto text-center",
                 img {

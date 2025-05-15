@@ -40,6 +40,7 @@ input-rs = { version = "0.2.4", features = ["dio"] }
 
 # Debug
 dioxus-logger = "0.6.2"
+theme = { version = "0.0.3", features = ["dio"] }
 
 [features]
 default = []

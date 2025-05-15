@@ -5,7 +5,6 @@ use crate::router::Route;
 use crate::server::book::controller::get_books_for_user;
 use crate::server::book::model::Book;
 use crate::server::book::request::GetBooksForUserRequest;
-use crate::theme::Theme;
 use chrono::Utc;
 use dioxus::prelude::*;
 use gloo_storage::{LocalStorage, Storage};
@@ -22,8 +21,6 @@ pub const CACHE_TIMEOUT: i64 = 2 * 60 * 60;
 
 #[component]
 pub fn BooksPanel(user_token: Signal<String>) -> Element {
-    let theme = use_context::<Signal<Theme>>();
-    let dark_mode = theme() == Theme::Dark;
     let mut books = use_signal(Vec::new);
     let mut displayed_books = use_signal(Vec::new);
     let mut loading = use_signal(|| true);
@@ -99,10 +96,7 @@ pub fn BooksPanel(user_token: Signal<String>) -> Element {
                     div {
                         h3 { class: "text-2xl font-bold mb-4", "Search" }
                         input {
-                            class: format!(
-                                "mt-1 block w-full p-2 border rounded-md shadow-sm {}",
-                                if dark_mode { "bg-gray-900" } else { "" },
-                            ),
+                            class: "mt-1 block w-full p-2 border rounded-md shadow-sm dark:bg-gray-900",
                             placeholder: "Search by title...",
                             value: "{search_query()}",
                             oninput: move |e| {
@@ -119,10 +113,7 @@ pub fn BooksPanel(user_token: Signal<String>) -> Element {
                         for book in displayed_books() {
                             Link {
                                 to: Route::ReadBook { id: book.id.to_string() },
-                                class: format!(
-                                    "p-4 shadow rounded-lg {}",
-                                    if dark_mode { "bg-gray-700" } else { "bg-gray-100" }
-                                ),
+                                class: "p-4 shadow rounded-lg dark:bg-gray-700 bg-gray-100",
                                 img {
                                     src: book.cover.as_deref().unwrap_or("/path/to/default-cover.jpg"),
                                     alt: "Book cover",

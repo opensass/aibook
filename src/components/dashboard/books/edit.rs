@@ -4,7 +4,6 @@ use crate::server::book::controller::{
 };
 use crate::server::book::model::Book;
 use crate::server::book::request::{AIRequest, UpdateBookContentRequest};
-use crate::theme::Theme;
 use dioxus::prelude::*;
 use dioxus_logger::tracing;
 use gloo_storage::SessionStorage;
@@ -14,8 +13,6 @@ use web_sys::window;
 
 #[component]
 pub fn EditBookContentPanel(book_id: String) -> Element {
-    let theme = use_context::<Signal<Theme>>();
-    let dark_mode = theme() == Theme::Dark;
     let navigator = use_navigator();
 
     let book = use_signal(|| Option::<Book>::None);
@@ -99,7 +96,7 @@ pub fn EditBookContentPanel(book_id: String) -> Element {
 
     rsx! {
         div {
-            class: format!("p-4 {}", if dark_mode { "bg-gray-800 text-white" } else { "bg-white text-gray-900" }),
+            class: "p-4 dark:bg-gray-800 dark:text-white bg-white text-gray-900",
             h2 { class: "text-xl font-semibold mb-4", "Edit Book Content" }
             if let Some(error) = error_message() {
                 p { class: "text-red-600", "{error}" }
@@ -111,7 +108,7 @@ pub fn EditBookContentPanel(book_id: String) -> Element {
                     "Editing: {book.main_topic.clone().unwrap_or(\"Untitled\".to_string())}"
                 }
                 button {
-                    class: format!("mt-4 bg-blue-500 text-white px-4 py-2 rounded {}", if dark_mode { "dark:bg-blue-600" } else { "" }),
+                    class: "mt-4 bg-blue-500 text-white px-4 py-2 rounded dark:bg-blue-600",
                     onclick: handle_save_content,
                     "Save Changes"
                 }

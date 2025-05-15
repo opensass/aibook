@@ -33,7 +33,6 @@ fn validate_confirm_password(confirm: String, new: String) -> bool {
 #[component]
 pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
     let user = &props.user;
-    let dark_mode = props.dark_mode;
     let user_token = props.user_token;
 
     let name = use_signal(|| user.name.clone());
@@ -174,9 +173,9 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_name,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
-                input_class: {if dark_mode && name_valid() {
-                    "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
+                input_class: {if name_valid() {
+                    "dark:border-gray-300 dark:bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 }},
@@ -194,9 +193,9 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_photo,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
-                input_class: {if dark_mode && photo_valid() {
-                    "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                label_class: "block text-sm font-medium dark:text-gray-300 block text-sm font-medium text-gray-700",
+                input_class: {if photo_valid() {
+                    "dark:border-gray-300 dark:bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 }},
@@ -214,9 +213,9 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_email,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
-                input_class: {if dark_mode && email_valid() {
-                    "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
+                input_class: {if email_valid() {
+                    "dark:border-gray-300 dark:bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 }},
@@ -234,9 +233,9 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_old_password,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
-                input_class: {if dark_mode && old_password_valid() {
-                    "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
+                input_class: {if old_password_valid() {
+                    "dark:border-gray-300 dark:bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 }},
@@ -254,9 +253,9 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_new_password,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
-                input_class: {if dark_mode && new_password_valid() {
-                    "border-gray-300 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
+                label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
+                input_class: {if new_password_valid() {
+                    "dark:border-gray-300 dark:bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 }},
@@ -273,16 +272,16 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 validate_function: validate_new_password,
                 class: "field mb-6",
                 field_class: "validate-input mb-6",
-                label_class: {if dark_mode { "block text-sm font-medium text-gray-300" } else { "block text-sm font-medium text-gray-700" }},
-                input_class: {if dark_mode && confirm_password_valid() {
-                    "border-gray-300 bg-gray-900 mt-1 block w/full p-2 border rounded-md shadow-sm"
+                label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
+                input_class: {if confirm_password_valid() {
+                    "dark:border-gray-300 dark:bg-gray-900 mt-1 block w/full p-2 border rounded-md shadow-sm"
                 } else {
                     "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
                 }},
                 error_class: "text-red-500 text-sm mt-1",
             }
             button {
-                class: format!("py-2 px-4 rounded-md {}", if dark_mode { "bg-blue-600" } else { "bg-blue-500 text-white" }),
+                class: "py-2 px-4 rounded-md dark:bg-blue-600 bg-blue-500 text-white",
                 r#type: "submit",
                 "Save"
             }

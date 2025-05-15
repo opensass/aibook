@@ -118,7 +118,13 @@ Follow [our quick guide](./Stripe.md) to set up your stripe account and connect 
 
 ### 🚀 Building and Running
 
-- Run the client:
+1. Run [the Tailwind CLI (v3)](https://v3.tailwindcss.com/docs/installation):
+
+   ```sh
+   npx tailwindcss@v3 -i ./assets/tailwind.css -o ./assets/output.css --watch
+   ```
+
+1. In a new terminal session, run the client:
 
   ```sh
   dx serve
