@@ -12,7 +12,7 @@
 | 🐧 Linux `(Recommended)` | 🪟 Windows |
 | :------: | :------: |
 | <video src="https://github.com/user-attachments/assets/aaa3b858-8f81-4c92-9cdc-c18e6300b48d"></video> | <video src="https://github.com/user-attachments/assets/9b593e2b-6c22-406e-93b7-d620448f82e7"></video> |
-| [**Download Executable**](https://github.com/opensass/aibook/releases/download/v0.0.7/web.zip) | [**Download Executable**](https://github.com/opensass/aibook/releases/download/v0.0.1/dist.rar) |
+| [**Download Executable**](https://github.com/opensass/aibook/releases/download/v0.0.8/web.zip) | [**Download Executable**](https://github.com/opensass/aibook/releases/download/v0.0.1/dist.rar) |
 | [**Set Environment Variables**](https://github.com/opensass/aibook#-setting-up-env-vars) | [**Set Environment Variables**](https://github.com/opensass/aibook#-setting-up-env-vars) |
 | unzip files | unzip files |
 | execute `./web/server` | execute `.\dist\aibook.exe` |
