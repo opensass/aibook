@@ -645,6 +645,10 @@ video {
   top: 0px;
 }
 
+.top-3 {
+  top: 0.75rem;
+}
+
 .top-\[2px\] {
   top: 2px;
 }
