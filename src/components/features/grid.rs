@@ -15,8 +15,8 @@ pub fn Grid(props: FeatureGridProps) -> Element {
             for feature in &props.features {
                 FeatureItem {
                     icon: feature.icon.clone(),
-                    title: feature.title,
-                    description: feature.description,
+                    title: feature.title.clone(),
+                    description: feature.description.clone(),
                 }
             }
         }

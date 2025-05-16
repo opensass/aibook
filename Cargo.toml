@@ -39,6 +39,7 @@ gloo-storage = "0.3.0"
 input-rs = { version = "0.2.4", features = ["dio"] }
 dioxus-logger = "0.6.2"
 theme = { version = "0.0.3", features = ["dio"] }
+i18nrs = { version = "0.1.6", features = ["dio"] }
 
 [features]
 default = []

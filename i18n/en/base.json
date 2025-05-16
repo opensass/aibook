@@ -1,0 +1,134 @@
+{
+  "navbar": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "testimonials": "Testimonials"
+  },
+  "hero": {
+    "new": "New",
+    "title": "Effortless Content Creation",
+    "subtitle": "Empower your creativity with AIbook, the ultimate platform to generate high-quality content in seconds.",
+    "cta": "Get Started",
+    "description": "Create books and social posts effortlessly with AIbook."
+  },
+  "features": {
+    "header": {
+      "title": "Why AIBook?",
+      "subtitle": "AIBook is your secure, Rust-powered SaaS platform for effortless content creation with Google Gemini AI."
+    },
+    "language_support": {
+      "title": "Language Support",
+      "description": "Generate content in any languages, expanding your reach globally."
+    },
+    "gemini": {
+      "title": "Powered by Google Gemini AI",
+      "description": "Utilize the advanced capabilities of Google Gemini models for high-quality content generation."
+    },
+    "rust_security": {
+      "title": "Built on Rust for Security",
+      "description": "Enjoy peace of mind with a Rust-powered frontend and backend ensuring a secure experience."
+    },
+    "real_time": {
+      "title": "Real-Time Content Generation",
+      "description": "Get instant results with fast and responsive AI-powered content generation."
+    },
+    "analytics": {
+      "title": "Advanced Analytics Dashboard",
+      "description": "Monitor and track the performance of generated content with an in-depth analytics dashboard."
+    },
+    "dev_friendly": {
+      "title": "Developer-Friendly Platform",
+      "description": "Designed with developers in mind for easy customization and integration."
+    }
+  },
+  "pricing": {
+    "header": {
+      "title": "Get full access to AIBook",
+      "subtitle": "Choose the plan that suits your content creation needs."
+    },
+    "free": {
+      "title": "Free",
+      "description": "Sign up for free",
+      "features": [
+        "Access to 10 prompts per month",
+        "Basic content generation tools",
+        "Google Gemini Pro (limited features)"
+      ]
+    },
+    "monthly": {
+      "title": "Monthly",
+      "description": "For frequent creators",
+      "features": [
+        "1000 prompts per month",
+        "Full access to Google Gemini Pro",
+        "Vision AI for image descriptions",
+        "Priority customer support"
+      ]
+    },
+    "yearly": {
+      "title": "Yearly",
+      "description": "Unlimited access",
+      "features": [
+        "Unlimited prompts",
+        "All content creation tools",
+        "Google Gemini 1.5 Pro",
+        "Vision AI for image descriptions",
+        "Advanced analytics dashboard",
+        "Priority support"
+      ]
+    },
+    "best": "Best Package",
+    "select": "Select Plan",
+    "toast": {
+      "success": "Stripe payment initiation success!"
+    }
+  },
+  "testimonial": {
+    "title": "Trusted by",
+    "highlighted_word": "Millions",
+    "subtitle": "Real Reviews from Real Users",
+    "0": {
+      "quote": "AIbook writes poetry that would make any bard jealous. And it doesn’t even charge a royal fee!",
+      "author_name": "William Shakespeare",
+      "author_title": "Playwright"
+    },
+    "1": {
+      "quote": "I asked AIbook to write a novel. It wrote a sci-fi epic that somehow included me as the protagonist. I might be living in a simulation!",
+      "author_name": "Neo",
+      "author_title": "The One"
+    },
+    "2": {
+      "quote": "AIbook practically writes my memoirs for me! Now I can focus on other pressing matters, like conquering the galaxy.",
+      "author_name": "Darth Vader",
+      "author_title": "Dark Lord of the Sith"
+    }
+  },
+  "footer": {
+    "logo": {
+      "description": "Your secure, Rust-powered SaaS platform for effortless content creation with Google Gemini AI."
+    },
+    "support": {
+      "title": "Support",
+      "forget_password": "Forget Password",
+      "faq": "FAQs",
+      "contact": "Contact"
+    },
+    "contact": {
+      "title": "Contact us",
+      "address_label": "Address",
+      "address_text": "Planet Earth",
+      "email_label": "Email"
+    },
+    "links": {
+      "title": "Links",
+      "home": "Home",
+      "project": "Project",
+      "blog": "Blog",
+      "team": "Our Team"
+    },
+    "bottom": {
+      "designed_by": "Designed by "
+    }
+  }
+}

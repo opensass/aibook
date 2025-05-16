@@ -3,8 +3,8 @@ use dioxus::prelude::*;
 #[derive(Props, PartialEq, Clone)]
 pub struct ItemProps {
     icon: &'static str,
-    title: &'static str,
-    description: &'static str,
+    title: String,
+    description: String,
 }
 
 #[component]
