@@ -47,10 +47,10 @@ Aight, if you're, just like me, one of those brave souls who **wants** to compil
    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    ```
 
-1. Install [`Dioxus CLI`](https://dioxuslabs.com/learn/0.5/getting_started):
+1. Install [`Dioxus CLI`](https://dioxuslabs.com/learn/0.6/getting_started):
 
    ```bash
-   cargo install dioxus-cli@0.5.6
+   cargo install dioxus-cli
    ```
 
 1. Fork/Clone the GitHub repository.
