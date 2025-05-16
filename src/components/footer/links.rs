@@ -1,8 +1,9 @@
 use crate::components::footer::icon::SocialIcon;
 use dioxus::prelude::*;
+use i18nrs::dioxus::I18nContext;
 
 #[component]
-pub fn ContactLink(label: &'static str, href: &'static str, text: &'static str) -> Element {
+pub fn ContactLink(label: String, href: String, text: String) -> Element {
     rsx! {
         li {
             p { class: "font-semibold text-gray-500", "{label}" }
@@ -13,23 +14,25 @@ pub fn ContactLink(label: &'static str, href: &'static str, text: &'static str) 
 
 #[component]
 pub fn QuickLinks() -> Element {
+    let I18nContext { i18n, .. } = use_context::<I18nContext>();
+
     rsx! {
         div {
             class: "mb-6 lg:mb-0",
-            h5 { class: "text-lg font-semibold mb-4", "Links" }
+            h5 { class: "text-lg font-semibold mb-4", "{i18n().t(\"footer.links.title\")}" }
             ul {
                 class: "space-y-2",
-                FooterLink { href: "/", text: "Home" },
-                FooterLink { href: "/project", text: "Project" },
-                FooterLink { href: "/blog", text: "Blog" },
-                FooterLink { href: "/team", text: "Our Team" },
+                FooterLink { href: "/", text: i18n().t("footer.links.home") },
+                FooterLink { href: "/project", text: i18n().t("footer.links.project") },
+                FooterLink { href: "/blog", text: i18n().t("footer.links.blog") },
+                FooterLink { href: "/team", text: i18n().t("footer.links.team") },
             }
         }
     }
 }
 
 #[component]
-pub fn FooterLink(href: &'static str, text: &'static str) -> Element {
+pub fn FooterLink(href: &'static str, text: String) -> Element {
     rsx! {
         li {
             Link { to: "{href}", class: "text-sm text-gray-400 hover:text-white transition-colors", "{text}" }
@@ -46,7 +49,7 @@ pub fn SocialLinks() -> Element {
                 i { class: "fab fa-linkedin-in text-2xl" }
             }},
             SocialIcon { href: "https://www.x.com/opensassorg", icon: rsx! {
-                i { class: "fab fa-twitter text-2xl" }
+                i { class: "fab fa-x-twitter text-2xl" }
             }},
             SocialIcon { href: "https://www.github.com/opensass", icon: rsx! {
                 i { class: "fab fa-github text-2xl" }

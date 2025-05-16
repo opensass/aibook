@@ -3,6 +3,7 @@ pub(crate) mod ai;
 pub mod components;
 #[cfg(feature = "server")]
 pub mod db;
+pub mod i18n;
 pub(crate) mod pages;
 #[cfg(feature = "server")]
 pub mod pay;

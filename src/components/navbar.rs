@@ -4,6 +4,7 @@ pub(crate) mod links;
 use crate::components::common::logo::Logo;
 use crate::components::navbar::btns::AuthButtons;
 use crate::components::navbar::links::NavLinks;
+use crate::i18n::I18nToggle;
 use crate::router::Route;
 use crate::theme::ThemeToggle;
 
@@ -31,7 +32,11 @@ fn NavBar(show_items: bool) -> Element {
                 AuthButtons { is_vertical: false }
             }
 
-            ThemeToggle {}
+            div {
+                class: "flex space-x-4",
+                ThemeToggle {}
+                I18nToggle {}
+            }
 
             button {
                 class: format!("text-3xl md:hidden transform duration-300 dark:text-white text-black {}",

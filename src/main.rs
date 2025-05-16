@@ -4,6 +4,8 @@ use aibook::components::toast::provider::ToastProvider;
 use aibook::router::Route;
 use dioxus::prelude::*;
 use dioxus_logger::tracing;
+use i18nrs::dioxus::I18nProvider;
+use std::collections::HashMap;
 use theme::dioxus::ThemeProvider;
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
@@ -55,6 +57,13 @@ fn main() {
 }
 
 fn App() -> Element {
+    let translations = HashMap::from([
+        ("en", include_str!("../i18n/en/base.json")),
+        ("es", include_str!("../i18n/es/base.json")),
+        ("fr", include_str!("../i18n/fr/base.json")),
+        ("ar", include_str!("../i18n/ar/base.json")),
+    ]);
+
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
@@ -62,8 +71,13 @@ fn App() -> Element {
         // document::Link { rel: "stylesheet", href: "https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" }
         document::Stylesheet { href: TAILWIND_CSS },
         ThemeProvider {
-            ToastProvider {
-                Router::<Route> {}
+            I18nProvider {
+                translations: translations.clone(),
+                default_language: "en".to_string(),
+                storage_name: "i18nrs".to_string(),
+                ToastProvider {
+                    Router::<Route> {}
+                }
             }
         }
     }

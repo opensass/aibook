@@ -4,46 +4,49 @@ pub(crate) mod item;
 use crate::components::common::header::Header;
 use crate::components::features::grid::Grid;
 use dioxus::prelude::*;
+use i18nrs::dioxus::I18nContext;
 
 #[derive(Props, Clone, PartialEq)]
 struct Feature {
     icon: &'static str,
-    title: &'static str,
-    description: &'static str,
+    title: String,
+    description: String,
 }
 
 #[component]
 pub fn Features() -> Element {
+    let I18nContext { i18n, .. } = use_context::<I18nContext>();
+
     let features = vec![
         Feature {
             icon: "text-2xl fas fa-compass",
-            title: "Language Support",
-            description: "Generate content in any languages, expanding your reach globally.",
+            title: i18n().t("features.language_support.title"),
+            description: i18n().t("features.language_support.description"),
         },
         Feature {
             icon: "text-2xl fab fa-google",
-            title: "Powered by Google Gemini AI",
-            description: "Utilize the advanced capabilities of Google Gemini models for high-quality content generation.",
+            title: i18n().t("features.gemini.title"),
+            description: i18n().t("features.gemini.description"),
         },
         Feature {
             icon: "text-2xl fab fa-rust",
-            title: "Built on Rust for Security",
-            description: "Enjoy peace of mind with a Rust-powered frontend and backend ensuring a secure experience.",
+            title: i18n().t("features.rust_security.title"),
+            description: i18n().t("features.rust_security.description"),
         },
         Feature {
             icon: "text-2xl fas fa-star",
-            title: "Real-Time Content Generation",
-            description: "Get instant results with fast and responsive AI-powered content generation.",
+            title: i18n().t("features.real_time.title"),
+            description: i18n().t("features.real_time.description"),
         },
         Feature {
             icon: "text-2xl fas fa-chart-bar",
-            title: "Advanced Analytics Dashboard",
-            description: "Monitor and track the performance of generated content with an in-depth analytics dashboard.",
+            title: i18n().t("features.analytics.title"),
+            description: i18n().t("features.analytics.description"),
         },
         Feature {
             icon: "text-2xl fas fa-keyboard",
-            title: "Developer-Friendly Platform",
-            description: "Designed with developers in mind for easy customization and integration.",
+            title: i18n().t("features.dev_friendly.title"),
+            description: i18n().t("features.dev_friendly.description"),
         },
     ];
 
@@ -61,8 +64,8 @@ pub fn Features() -> Element {
                         class: "w-24 h-24 mx-auto animate-bounce"
                     }
                     Header {
-                        title: "Why AIBook?",
-                        subtitle: "AIBook is your secure, Rust-powered SaaS platform for effortless content creation with Google Gemini AI."
+                        title: {i18n().t("features.header.title")},
+                        subtitle: {i18n().t("features.header.subtitle")}
                     }
                 }
 

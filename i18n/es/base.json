@@ -1,0 +1,134 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "features": "Características",
+    "pricing": "Precios",
+    "testimonials": "Testimonios"
+  },
+  "hero": {
+    "new": "Nuevo",
+    "title": "Creación de Contenido sin Esfuerzo",
+    "subtitle": "Potencia tu creatividad con AIbook, la plataforma definitiva para generar contenido de alta calidad en segundos.",
+    "cta": "Empezar",
+    "description": "Crea libros y publicaciones sociales sin esfuerzo con AIbook."
+  },
+  "features": {
+    "header": {
+      "title": "¿Por qué AIBook?",
+      "subtitle": "AIBook es tu plataforma SaaS segura, impulsada por Rust, para la creación de contenido sin esfuerzo con Google Gemini AI."
+    },
+    "language_support": {
+      "title": "Soporte de Idiomas",
+      "description": "Genera contenido en cualquier idioma, ampliando tu alcance globalmente."
+    },
+    "gemini": {
+      "title": "Impulsado por Google Gemini AI",
+      "description": "Aprovecha las capacidades avanzadas de los modelos Google Gemini para una generación de contenido de alta calidad."
+    },
+    "rust_security": {
+      "title": "Construido en Rust para Seguridad",
+      "description": "Disfruta de tranquilidad con una plataforma basada en Rust que garantiza una experiencia segura."
+    },
+    "real_time": {
+      "title": "Generación de Contenido en Tiempo Real",
+      "description": "Obtén resultados instantáneos con una generación de contenido rápida y receptiva impulsada por IA."
+    },
+    "analytics": {
+      "title": "Panel de Análisis Avanzado",
+      "description": "Monitorea y rastrea el rendimiento del contenido generado con un panel analítico detallado."
+    },
+    "dev_friendly": {
+      "title": "Plataforma Amigable para Desarrolladores",
+      "description": "Diseñada pensando en los desarrolladores para facilitar la personalización e integración."
+    }
+  },
+  "pricing": {
+    "header": {
+      "title": "Accede completamente a AIBook",
+      "subtitle": "Elige el plan que se adapta a tus necesidades de creación de contenido."
+    },
+    "free": {
+      "title": "Gratis",
+      "description": "Regístrate gratis",
+      "features": [
+        "Acceso a 10 prompts por mes",
+        "Herramientas básicas de generación de contenido",
+        "Google Gemini Pro (funciones limitadas)"
+      ]
+    },
+    "monthly": {
+      "title": "Mensual",
+      "description": "Para creadores frecuentes",
+      "features": [
+        "1000 prompts por mes",
+        "Acceso completo a Google Gemini Pro",
+        "IA visual para descripciones de imágenes",
+        "Soporte prioritario al cliente"
+      ]
+    },
+    "yearly": {
+      "title": "Anual",
+      "description": "Acceso ilimitado",
+      "features": [
+        "Prompts ilimitados",
+        "Todas las herramientas de creación de contenido",
+        "Google Gemini 1.5 Pro",
+        "IA visual para descripciones de imágenes",
+        "Panel de análisis avanzado",
+        "Soporte prioritario"
+      ]
+    },
+    "best": "Mejor Paquete",
+    "select": "Seleccionar Plan",
+    "toast": {
+      "success": "¡Inicio de pago con Stripe exitoso!"
+    }
+  },
+  "testimonial": {
+    "title": "Confiado por",
+    "highlighted_word": "Millones",
+    "subtitle": "Reseñas reales de usuarios reales",
+    "0": {
+      "quote": "AIbook escribe poesía que haría que cualquier bardo se pusiera celoso. ¡Y ni siquiera cobra una tarifa real!",
+      "author_name": "William Shakespeare",
+      "author_title": "Dramaturgo"
+    },
+    "1": {
+      "quote": "Le pedí a AIbook que escribiera una novela. Escribió una epopeya de ciencia ficción que me incluyó como protagonista. ¡Podría estar viviendo en una simulación!",
+      "author_name": "Neo",
+      "author_title": "El Elegido"
+    },
+    "2": {
+      "quote": "¡AIbook prácticamente escribe mis memorias por mí! Ahora puedo concentrarme en otros asuntos urgentes, como conquistar la galaxia.",
+      "author_name": "Darth Vader",
+      "author_title": "Señor Oscuro de los Sith"
+    }
+  },
+  "footer": {
+    "logo": {
+      "description": "Tu plataforma SaaS segura y potenciada por Rust para una creación de contenido sin esfuerzo con Google Gemini AI."
+    },
+    "support": {
+      "title": "Soporte",
+      "forget_password": "Olvidé mi contraseña",
+      "faq": "Preguntas frecuentes",
+      "contact": "Contacto"
+    },
+    "contact": {
+      "title": "Contáctanos",
+      "address_label": "Dirección",
+      "address_text": "Planeta Tierra",
+      "email_label": "Correo electrónico"
+    },
+    "links": {
+      "title": "Enlaces",
+      "home": "Inicio",
+      "project": "Proyecto",
+      "blog": "Blog",
+      "team": "Nuestro equipo"
+    },
+    "bottom": {
+      "designed_by": "Diseñado por "
+    }
+  }
+}

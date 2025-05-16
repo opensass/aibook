@@ -5,41 +5,43 @@ pub(crate) mod rating;
 use crate::components::testimonial::author::AuthorInfo;
 use crate::components::testimonial::rating::StarRating;
 use dioxus::prelude::*;
+use i18nrs::dioxus::I18nContext;
 
 #[derive(Props, Clone, PartialEq)]
 pub struct TestimonialData {
-    quote: &'static str,
-    author_name: &'static str,
-    author_title: &'static str,
+    quote: String,
+    author_name: String,
+    author_title: String,
     author_image: Asset,
     company_logo: Asset,
     star_images: Vec<&'static str>,
 }
 
-#[allow(unused_mut)]
 #[component]
 pub fn Testimonial() -> Element {
+    let I18nContext { i18n, .. } = use_context::<I18nContext>();
+
     let testimonials = vec![
         TestimonialData {
-            quote: "AIbook writes poetry that would make any bard jealous. And it doesn’t even charge a royal fee!",
-            author_name: "William Shakespeare",
-            author_title: "Playwright",
+            quote: i18n().t("testimonial.0.quote"),
+            author_name: i18n().t("testimonial.0.author_name"),
+            author_title: i18n().t("testimonial.0.author_title"),
             author_image: asset!("/assets/shakespeare.webp"),
             company_logo: asset!("/assets/shakespeare_logo.webp"),
             star_images: vec!["fas fa-star"; 5],
         },
         TestimonialData {
-            quote: "I asked AIbook to write a novel. It wrote a sci-fi epic that somehow included me as the protagonist. I might be living in a simulation!",
-            author_name: "Neo",
-            author_title: "The One",
+            quote: i18n().t("testimonial.1.quote"),
+            author_name: i18n().t("testimonial.1.author_name"),
+            author_title: i18n().t("testimonial.1.author_title"),
             author_image: asset!("/assets/neo.webp"),
             company_logo: asset!("/assets/matrix_logo.webp"),
             star_images: vec!["fas fa-star"; 5],
         },
         TestimonialData {
-            quote: "AIbook practically writes my memoirs for me! Now I can focus on other pressing matters, like conquering the galaxy.",
-            author_name: "Darth Vader",
-            author_title: "Dark Lord of the Sith",
+            quote: i18n().t("testimonial.2.quote"),
+            author_name: i18n().t("testimonial.2.author_name"),
+            author_title: i18n().t("testimonial.2.author_title"),
             author_image: asset!("/assets/darth_vader.webp"),
             company_logo: asset!("/assets/empire_logo.webp"),
             star_images: vec!["fas fa-star"; 5],
@@ -75,11 +77,11 @@ pub fn Testimonial() -> Element {
 
             div { class: "flex flex-col items-center mb-8",
                 h2 { class: "text-4xl font-bold text-center",
-                    "Trusted by ",
-                    span { class: "bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent animate-pulse", "Millions" }
+                    "{i18n().t(\"testimonial.title\")} ",
+                    span { class: "bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent animate-pulse", "{i18n().t(\"testimonial.highlighted_word\")}" }
                 }
 
-                p { class: "mt-2 text-lg dark:text-gray-300 text-gray-700", "Real Reviews from Real Users" }
+                p { class: "mt-2 text-lg dark:text-gray-300 text-gray-700", "{i18n().t(\"testimonial.subtitle\")}" }
             }
 
             div { class: "flex items-center overflow-x-auto space-x-8 p-4",
@@ -90,8 +92,8 @@ pub fn Testimonial() -> Element {
                             blockquote { class: "text-lg font-semibold", "{testimonial.quote}" }
                             AuthorInfo {
                                 author_image: testimonial.author_image,
-                                author_name: testimonial.author_name,
-                                author_title: testimonial.author_title,
+                                author_name: testimonial.author_name.clone(),
+                                author_title: testimonial.author_title.clone(),
                                 company_logo: testimonial.company_logo,
                             }
                         }
@@ -100,8 +102,8 @@ pub fn Testimonial() -> Element {
             }
 
             div { class: "flex justify-center mt-4 space-x-2",
-            for (i, _) in testimonials.iter().enumerate() {
-                        div { class: format!("w-3 h-3 rounded-full {} transition-all duration-300", if current_index() == i { "bg-blue-500" } else { "bg-gray-400" }) }
+                for (i, _) in testimonials.iter().enumerate() {
+                    div { class: format!("w-3 h-3 rounded-full {} transition-all duration-300", if current_index() == i { "bg-blue-500" } else { "bg-gray-400" }) }
                 }
             }
         }
