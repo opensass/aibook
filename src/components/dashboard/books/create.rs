@@ -222,7 +222,23 @@ pub fn CreateBookPanel(user_token: Signal<String>) -> Element {
                     }},
                     error_class: "text-red-500 text-sm mt-1",
                 }
-                SelectField { label: "Model", options: vec!["gemini-pro", "gemini-1.0-pro", "gemini-1.5-pro", "gemini-1.5-flash"], selected: model }
+                SelectField {
+                    label: "Model",
+                    options: vec![
+                        "gemini-1.5-flash",
+                        "gemini-2.5-pro-preview-03-25",
+                        "gemini-2.0-flash",
+                        "gemini-2.0-flash-lite",
+                        "gemini-1.5-flash-8b",
+                        "gemini-1.5-pro",
+                        "text-embedding-004",
+                        "imagen-3.0-generate-002",
+                        "veo-2.0-generate-001",
+                        "gemini-2.0-flash-live-001",
+                        "gemini-2.0-flash-exp-image-generation",
+                    ],
+                    selected: model,
+                }
                 Input {
                     r#type: "number",
                     label: "Subtopics per Chapter",

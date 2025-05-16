@@ -35,6 +35,11 @@ use {
     crate::ai::get_ai,
     crate::db::get_client,
     crate::unsplash::get_unsplash_client,
+    gems::chat::ChatBuilder,
+    gems::messages::Content,
+    gems::messages::Message,
+    gems::models::Model,
+    gems::traits::CTrait,
     http_api_isahc_client::{Client as _, IsahcClient},
     rand::thread_rng,
     rand::Rng,
@@ -244,8 +249,17 @@ pub async fn generate_book_outline(
         language = req.language,
     );
 
+    let parameters = ChatBuilder::default()
+        .model(Model::Flash20)
+        .messages(vec![Message::User {
+            content: Content::Text(outline_prompt.to_string()),
+            name: None,
+        }])
+        .build()?;
+
     let outline = client
-        .generate_content(&outline_prompt)
+        .chat()
+        .generate(parameters)
         .await
         .map_err(ServerFnError::new)?;
 
@@ -356,8 +370,17 @@ pub async fn generate_chapter_content(
         language = req.language,
     );
 
+    let parameters = ChatBuilder::default()
+        .model(Model::Flash20)
+        .messages(vec![Message::User {
+            content: Content::Text(content_prompt.to_string()),
+            name: None,
+        }])
+        .build()?;
+
     let markdown = client
-        .generate_content(&content_prompt)
+        .chat()
+        .generate(parameters)
         .await
         .map_err(ServerFnError::new)?;
 
@@ -374,8 +397,18 @@ pub async fn generate_chapter_content(
         markdown.clone(),
         language = req.language,
     );
+
+    let parameters = ChatBuilder::default()
+        .model(Model::Flash20)
+        .messages(vec![Message::User {
+            content: Content::Text(content_prompt.to_string()),
+            name: None,
+        }])
+        .build()?;
+
     let html = client
-        .generate_content(&content_prompt)
+        .chat()
+        .generate(parameters)
         .await
         .map_err(ServerFnError::new)?
         .trim_start_matches("```html")
@@ -398,6 +431,8 @@ pub async fn get_chapters_for_book(
     let db =
         client.database(&std::env::var("MONGODB_DB_NAME").expect("MONGODB_DB_NAME must be set."));
     let chapter_collection = db.collection::<Chapter>("chapters");
+
+    let mut gemini_client = get_ai("gemini-2.0-flash".to_string()).await.lock().await;
 
     let book_object_id =
         ObjectId::parse_str(&req.book_id).map_err(|_| ServerFnError::new("Invalid book ID"))?;
@@ -425,9 +460,17 @@ pub async fn get_chapters_for_book(
                 language = chapter.language,
             );
 
-            let mut ai_client = get_ai("gemini-pro".to_string()).await.lock().await;
-            let html_content = ai_client
-                .generate_content(&content_prompt)
+            let parameters = ChatBuilder::default()
+                .model(Model::Flash20)
+                .messages(vec![Message::User {
+                    content: Content::Text(content_prompt.to_string()),
+                    name: None,
+                }])
+                .build()?;
+
+            let html_content = gemini_client
+                .chat()
+                .generate(parameters)
                 .await
                 .map_err(ServerFnError::new)?
                 .trim_start_matches("```html")
@@ -482,46 +525,70 @@ async fn update_chapter_content(
 
 #[server]
 pub async fn summarize_text(req: AIRequest) -> Result<SuccessResponse<String>, ServerFnError> {
-    let mut client = get_ai("gemini-pro".to_string()).await.lock().await;
+    let mut client = get_ai("gemini-2.0-flash".to_string()).await.lock().await;
     let prompt = format!("Summarize the following text: '{}'", req.text);
 
-    match client.generate_content(&prompt).await {
+    let parameters = ChatBuilder::default()
+        .model(Model::Flash20)
+        .messages(vec![Message::User {
+            content: Content::Text(prompt.to_string()),
+            name: None,
+        }])
+        .build()?;
+
+    match client.chat().generate(parameters).await {
         Ok(summary) => Ok(SuccessResponse {
             status: "success".into(),
             data: summary.into(),
         }),
-        Err(e) => Err(ServerFnError::new(e.to_string())),
+        Err(err) => Err(ServerFnError::new(err.to_string())),
     }
 }
 
 #[server]
 pub async fn regenerate_text(req: AIRequest) -> Result<SuccessResponse<String>, ServerFnError> {
-    let mut client = get_ai("gemini-pro".to_string()).await.lock().await;
+    let mut client = get_ai("gemini-2.0-flash".to_string()).await.lock().await;
     let prompt = format!("Rephrase the following text: '{}'", req.text);
 
-    match client.generate_content(&prompt).await {
+    let parameters = ChatBuilder::default()
+        .model(Model::Flash20)
+        .messages(vec![Message::User {
+            content: Content::Text(prompt.to_string()),
+            name: None,
+        }])
+        .build()?;
+
+    match client.chat().generate(parameters).await {
         Ok(rephrased) => Ok(SuccessResponse {
             status: "success".into(),
             data: rephrased.into(),
         }),
-        Err(e) => Err(ServerFnError::new(e.to_string())),
+        Err(err) => Err(ServerFnError::new(err.to_string())),
     }
 }
 
 #[server]
 pub async fn extend_text(req: AIRequest) -> Result<SuccessResponse<String>, ServerFnError> {
-    let mut client = get_ai("gemini-pro".to_string()).await.lock().await;
+    let mut client = get_ai("gemini-2.0-flash".to_string()).await.lock().await;
     let prompt = format!(
         "Expand on the following text with additional details: '{}'",
         req.text
     );
 
-    match client.generate_content(&prompt).await {
+    let parameters = ChatBuilder::default()
+        .model(Model::Flash20)
+        .messages(vec![Message::User {
+            content: Content::Text(prompt.to_string()),
+            name: None,
+        }])
+        .build()?;
+
+    match client.chat().generate(parameters).await {
         Ok(extended) => Ok(SuccessResponse {
             status: "success".into(),
             data: extended.into(),
         }),
-        Err(e) => Err(ServerFnError::new(e.to_string())),
+        Err(err) => Err(ServerFnError::new(err.to_string())),
     }
 }
 

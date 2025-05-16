@@ -24,7 +24,10 @@ use chrono::prelude::*;
 use futures_util::TryStreamExt;
 use std::env;
 #[cfg(feature = "server")]
-use {crate::ai::get_ai, crate::db::get_client};
+use {
+    crate::ai::get_ai, crate::db::get_client, gems::chat::ChatBuilder, gems::messages::Content,
+    gems::messages::Message as GMessage, gems::models::Model, gems::traits::CTrait,
+};
 
 #[server]
 pub async fn create_conversation(
@@ -141,7 +144,7 @@ pub async fn send_query_to_gemini(req: SendQueryRequest) -> Result<MessageRespon
     let book_collection = db.collection::<Book>("books");
     let chapters_collection = db.collection::<Chapter>("chapters");
 
-    let mut client = get_ai(req.model.to_string()).await.lock().await;
+    let client = get_ai(req.model.to_string()).await.lock().await;
 
     let book_id =
         ObjectId::parse_str(&req.book).map_err(|_| ServerFnError::new("Invalid book ID"))?;
@@ -198,8 +201,17 @@ pub async fn send_query_to_gemini(req: SendQueryRequest) -> Result<MessageRespon
         user_query = req.query
     );
 
+    let parameters = ChatBuilder::default()
+        .model(Model::Flash20)
+        .messages(vec![GMessage::User {
+            content: Content::Text(system_prompt.to_string()),
+            name: None,
+        }])
+        .build()?;
+
     let content = client
-        .generate_content(&system_prompt)
+        .chat()
+        .generate(parameters)
         .await
         .map_err(ServerFnError::new)?
         .trim_start_matches("```html")

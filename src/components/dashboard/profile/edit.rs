@@ -232,13 +232,17 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 valid_handle: old_password_valid,
                 validate_function: validate_old_password,
                 class: "field mb-6",
-                field_class: "validate-input mb-6",
+                field_class: "relative validate-input mb-6",
                 label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
-                input_class: {if old_password_valid() {
-                    "dark:border-gray-300 dark:bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                } else {
-                    "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                }},
+                input_class: {
+                    if old_password_valid() {
+                        "dark:border-gray-300 dark:bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                    } else {
+                        "border-red-500 bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                    }
+                },
+                eye_active: "cursor-pointer absolute right-4 top-3 text-xl text-gray-600 toggle-button fa fa-eye",
+                eye_disabled: "cursor-pointer absolute right-4 top-3 text-xl text-gray-600 toggle-button fa fa-eye-slash",
                 error_class: "text-red-500 text-sm mt-1",
             }
             ,
@@ -252,13 +256,17 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 valid_handle: new_password_valid,
                 validate_function: validate_new_password,
                 class: "field mb-6",
-                field_class: "validate-input mb-6",
+                field_class: "relative validate-input mb-6",
                 label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
-                input_class: {if new_password_valid() {
-                    "dark:border-gray-300 dark:bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                } else {
-                    "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                }},
+                input_class: {
+                    if new_password_valid() {
+                        "dark:border-gray-300 dark:bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                    } else {
+                        "border-red-500 bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                    }
+                },
+                eye_active: "cursor-pointer absolute right-4 top-3 text-xl text-gray-600 toggle-button fa fa-eye",
+                eye_disabled: "cursor-pointer absolute right-4 top-3 text-xl text-gray-600 toggle-button fa fa-eye-slash",
                 error_class: "text-red-500 text-sm mt-1",
             },
             Input {
@@ -271,13 +279,17 @@ pub fn ProfileForm(props: ProfileDetailsProps) -> Element {
                 valid_handle: confirm_password_valid,
                 validate_function: validate_new_password,
                 class: "field mb-6",
-                field_class: "validate-input mb-6",
+                field_class: "relative validate-input mb-6",
                 label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
-                input_class: {if confirm_password_valid() {
-                    "dark:border-gray-300 dark:bg-gray-900 mt-1 block w/full p-2 border rounded-md shadow-sm"
-                } else {
-                    "border-red-500 bg-gray-900 mt-1 block w-full p-2 border rounded-md shadow-sm"
-                }},
+                input_class: {
+                    if confirm_password_valid() {
+                        "dark:border-gray-300 dark:bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                    } else {
+                        "border-red-500 bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                    }
+                },
+                eye_active: "cursor-pointer absolute right-4 top-3 text-xl text-gray-600 toggle-button fa fa-eye",
+                eye_disabled: "cursor-pointer absolute right-4 top-3 text-xl text-gray-600 toggle-button fa fa-eye-slash",
                 error_class: "text-red-500 text-sm mt-1",
             }
             button {

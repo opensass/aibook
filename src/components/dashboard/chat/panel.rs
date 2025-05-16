@@ -198,7 +198,7 @@ pub fn ChatPanel(conversation_id: Signal<ObjectId>, user_token: Signal<String>) 
                         book: book.id.to_string(),
                         chapter: chapter.id.to_string(),
                         conversation_id: conversation_id(),
-                        model: "gemini-pro".to_string(),
+                        model: "gemini-2.0-flash".to_string(),
                         token: user_token(),
                     })
                     .await;

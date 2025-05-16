@@ -3,6 +3,7 @@ use crate::components::spinner::Spinner;
 use crate::components::spinner::SpinnerSize;
 use crate::components::toast::manager::ToastManager;
 use crate::components::toast::manager::ToastType;
+use crate::pages::login::{validate_email, validate_password};
 use crate::router::Route;
 use crate::server::auth::controller::{about_me, register_user};
 use crate::server::auth::response::RegisterUserSchema;
@@ -10,7 +11,12 @@ use chrono::Duration;
 use dioxus::prelude::*;
 use gloo_storage::SessionStorage;
 use gloo_storage::Storage;
+use input_rs::dioxus::Input;
 use regex::Regex;
+
+pub fn validate_name(field: String) -> bool {
+    !&field.is_empty()
+}
 
 #[component]
 pub fn Register() -> Element {
@@ -30,14 +36,6 @@ pub fn Register() -> Element {
 
     let mut toasts_manager = use_context::<Signal<ToastManager>>();
 
-    let validate_email = |email: &str| {
-        let pattern = Regex::new(r"^[^ ]+@[^ ]+\.[a-z]{2,3}$").unwrap();
-        pattern.is_match(email)
-    };
-
-    let validate_password = |password: &str| !password.is_empty();
-    let validate_name = |name: &str| !name.is_empty();
-
     use_effect(move || {
         spawn(async move {
             let token: String = SessionStorage::get("jwt").unwrap_or_default();
@@ -56,12 +54,9 @@ pub fn Register() -> Element {
     });
 
     let handle_register = move |_| {
-        let name = name().clone();
-        let email = email().clone();
-        let password = password().clone();
         loading.set(true);
 
-        if !validate_email(&email) || password.is_empty() {
+        if !validate_email(email()) || password().is_empty() {
             error_message.set(Some(
                 "Please provide a valid email and password.".to_string(),
             ));
@@ -81,9 +76,9 @@ pub fn Register() -> Element {
 
         spawn(async move {
             match register_user(RegisterUserSchema {
-                name,
-                email,
-                password,
+                name: name(),
+                email: email(),
+                password: password(),
             })
             .await
             {
@@ -130,7 +125,7 @@ pub fn Register() -> Element {
             class: "min-h-screen flex dark:bg-gray-900 dark:text-white bg-white text-gray-900",
             div {
                 class: "md:flex-1 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600",
-                style: "background-image: url('/signup.webp'); background-size: cover; background-position: center;",
+                style: "background-image: url('/assets/signup.webp'); background-size: cover; background-position: center;",
             }
             div {
                 class: "flex-1 flex items-center justify-center p-8",
@@ -165,77 +160,70 @@ pub fn Register() -> Element {
                     // if let Some(error) = &error_message() {
                     //     p { class: "text-red-600 mb-4", "{error}" }
                     // }
-                    div { class: "mb-4",
-                        input {
-                            class: format!(
-                                "mt-1 block w-full p-2 border rounded-md shadow-sm {} dark:bg-gray-900",
-                                if name_valid() { "border-gray-300" } else { "border-red-500"
-                            }),
-                            r#type: "text",
-                            placeholder: "Enter your name",
-                            value: "{name}",
-                            required: true,
-                            oninput: move |e| {
-                                let value = e.value().clone();
-                                name.set(value.clone());
-                                name_valid.set(validate_name(&value));
+                    Input {
+                        r#type: "text",
+                        label: "Full Name",
+                        handle: name,
+                        placeholder: "Enter your name",
+                        error_message: "Full name can't be blank!",
+                        required: true,
+                        valid_handle: name_valid,
+                        validate_function: validate_name,
+                        class: "mt-1 block w-full shadow-sm dark:bg-gray-900",
+                        field_class: "relative validate-input mb-6",
+                        label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
+                        input_class: {
+                            if name_valid() {
+                                "dark:border-gray-300 dark:bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                            } else {
+                                "border-red-500 bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
                             }
-                        }
-                        if !name_valid() {
-                            p { class: "text-red-500 text-sm mt-1", "Name can't be blank" }
-                        }
+                        },
+                        error_class: "text-red-500 text-sm",
                     }
-                    div { class: "mb-4",
-                        input {
-                            class: format!(
-                                "mt-1 block w-full p-2 border rounded-md shadow-sm {} dark:bg-gray-900",
-                                if email_valid() { "border-gray-300" } else { "border-red-500"
-                            }),
-                            r#type: "text",
-                            placeholder: "Email Address",
-                            value: "{email}",
-                            required: true,
-                            oninput: move |e| {
-                                let value = e.value().clone();
-                                email.set(value.clone());
-                                email_valid.set(validate_email(&value));
+                    Input {
+                        r#type: "text",
+                        label: "Email Address",
+                        handle: email,
+                        placeholder: "Email Address",
+                        error_message: "Email address can't be blank!",
+                        required: true,
+                        valid_handle: email_valid,
+                        validate_function: validate_email,
+                        class: "mt-1 block w-full shadow-sm dark:bg-gray-900",
+                        field_class: "relative validate-input mb-6",
+                        label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
+                        input_class: {
+                            if email_valid() {
+                                "dark:border-gray-300 dark:bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                            } else {
+                                "border-red-500 bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
                             }
-                        }
-                        if !email_valid() {
-                            p { class: "text-red-500 text-sm mt-1", "Enter a valid email address" }
-                        }
+                        },
+                        error_class: "text-red-500 text-sm",
                     }
-                    div { class: "mb-4",
-                        div { class: "relative",
-                            input {
-                                class: format!(
-                                    "mt-1 block w-full p-2 border rounded-md shadow-sm {} dark:bg-gray-900",
-                                    if password_valid() { "border-gray-300" } else { "border-red-500"
-                                }),
-                                r#type: if show_password() { "text" } else { "password" },
-                                placeholder: "Password",
-                                value: "{password}",
-                                required: true,
-                                oninput: move |e| {
-                                    let value = e.value().clone();
-                                    password.set(value.clone());
-                                    password_valid.set(validate_password(&value));
-                                }
+                    Input {
+                        r#type: "password",
+                        label: "Password",
+                        handle: password,
+                        placeholder: "Password",
+                        error_message: "Password can't be blank!",
+                        required: true,
+                        valid_handle: password_valid,
+                        validate_function: validate_password,
+                        class: "mt-1 block w-full shadow-sm dark:bg-gray-900",
+                        field_class: "relative validate-input mb-6",
+                        label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
+                        input_class: {
+                            if password_valid() {
+                                "dark:border-gray-300 dark:bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                            } else {
+                                "border-red-500 bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
                             }
-                            button {
-                                onclick: move |_| show_password.set(!show_password()),
-                                r#type: "button",
-                                class: "absolute inset-y-0 right-0 pr-3 text-gray-500",
-                                if show_password() {
-                                    i { class: "fas fa-eye text-2xl" },
-                                } else {
-                                    i { class: "fas fa-eye-slash text-2xl" },
-                                }
-                            }
-                        }
-                        if !password_valid() {
-                            p { class: "text-red-500 text-sm mt-1", "Password can't be blank" }
-                        }
+                        },
+                        eye_active: "cursor-pointer absolute right-4 top-3 text-xl text-gray-600 toggle-button fa fa-eye",
+                        eye_disabled: "cursor-pointer absolute right-4 top-3 text-xl text-gray-600 toggle-button fa fa-eye-slash",
+                        error_class: "text-red-500 text-sm",
                     }
                     button {
                         class: "flex items-center text-center justify-center space-x-2 w-full py-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md",

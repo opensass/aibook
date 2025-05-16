@@ -1,5 +1,5 @@
 # install cargo chef
-FROM rust:1.85 AS chef
+FROM rust:1.86 AS chef
 RUN apt-get update && apt-get install -y \
     pkg-config \
     libssl-dev \
@@ -35,4 +35,3 @@ EXPOSE 8080
 EXPOSE 443
 
 ENTRYPOINT ["/usr/local/bin/web/server"]
-

@@ -10,11 +10,21 @@ use chrono::Duration;
 use dioxus::prelude::*;
 use gloo_storage::SessionStorage;
 use gloo_storage::Storage;
+use input_rs::dioxus::Input;
 use regex::Regex;
 
 fn extract_token(cookie_str: &str) -> Option<String> {
     let re = Regex::new(r"token=([^;]+)").unwrap();
     re.captures(cookie_str).map(|caps| caps[1].to_string())
+}
+
+pub fn validate_password(field: String) -> bool {
+    !&field.is_empty()
+}
+
+pub fn validate_email(email: String) -> bool {
+    let pattern = Regex::new(r"^[^ ]+@[^ ]+\.[a-z]{2,3}$").unwrap();
+    pattern.is_match(&email)
 }
 
 #[component]
@@ -32,13 +42,6 @@ pub fn Login() -> Element {
     let mut remember_me = use_signal(|| false);
 
     let mut loading = use_signal(|| false);
-
-    let validate_email = |email: &str| {
-        let pattern = Regex::new(r"^[^ ]+@[^ ]+\.[a-z]{2,3}$").unwrap();
-        pattern.is_match(email)
-    };
-
-    let validate_password = |password: &str| !password.is_empty();
 
     use_effect(move || {
         spawn(async move {
@@ -59,11 +62,9 @@ pub fn Login() -> Element {
     });
 
     let handle_login = move |_| {
-        let email_value = email().clone();
-        let password_value = password().clone();
         loading.set(true);
 
-        if !validate_email(&email_value) || password_value.is_empty() {
+        if !validate_email(email()) || password().is_empty() {
             error_message.set(Some(
                 "Please provide a valid email and password.".to_string(),
             ));
@@ -73,8 +74,8 @@ pub fn Login() -> Element {
         spawn({
             let navigator = navigator.clone();
             // let mut error_message = error_message.clone();
-            let email = email_value.clone();
-            let password = password_value.clone();
+            let email = email();
+            let password = password();
             async move {
                 match login_user(LoginUserSchema { email, password }).await {
                     Ok(data) => match extract_token(&data.data.token) {
@@ -193,57 +194,49 @@ pub fn Login() -> Element {
                     // if let Some(error) = &error_message() {
                     //     p { class: "text-red-600 mb-4", "{error}" }
                     // }
-                    div { class: "mb-4",
-                        input {
-                            class: format!(
-                                "mt-1 block w-full p-2 border rounded-md shadow-sm {} dark:bg-gray-900",
-                                if email_valid() { "border-gray-300" } else { "border-red-500"
-                            }),
-                            r#type: "text",
-                            placeholder: "Email Address",
-                            value: "{email}",
-                            required: true,
-                            oninput: move |e| {
-                                let value = e.value().clone();
-                                email.set(value.clone());
-                                email_valid.set(validate_email(&value));
+                    Input {
+                        r#type: "text",
+                        label: "Email Address",
+                        handle: email,
+                        placeholder: "Email Address",
+                        error_message: "Email address can't be blank!",
+                        required: true,
+                        valid_handle: email_valid,
+                        validate_function: validate_email,
+                        class: "mt-1 block w-full shadow-sm dark:bg-gray-900",
+                        field_class: "relative validate-input mb-6",
+                        label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
+                        input_class: {
+                            if email_valid() {
+                                "dark:border-gray-300 dark:bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                            } else {
+                                "border-red-500 bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
                             }
-                        }
-                        if !email_valid() {
-                            p { class: "text-red-500 text-sm mt-1", "Enter a valid email address" }
-                        }
+                        },
+                        error_class: "text-red-500 text-sm",
                     }
-                    div { class: "mb-4",
-                        div { class: "relative",
-                            input {
-                                class: format!(
-                                    "mt-1 block w-full p-2 border rounded-md shadow-sm {} dark:bg-gray-900",
-                                    if password_valid() { "border-gray-300" } else { "border-red-500"
-                                }),
-                                r#type: if show_password() { "text" } else { "password" },
-                                placeholder: "Password",
-                                value: "{password}",
-                                required: true,
-                                oninput: move |e| {
-                                    let value = e.value().clone();
-                                    password.set(value.clone());
-                                    password_valid.set(validate_password(&value));
-                                }
+                    Input {
+                        r#type: "password",
+                        label: "Password",
+                        handle: password,
+                        placeholder: "Password",
+                        error_message: "Password can't be blank!",
+                        required: true,
+                        valid_handle: password_valid,
+                        validate_function: validate_password,
+                        class: "mt-1 block w-full shadow-sm dark:bg-gray-900",
+                        field_class: "relative validate-input mb-6",
+                        label_class: "block text-sm font-medium dark:text-gray-300 text-gray-700",
+                        input_class: {
+                            if password_valid() {
+                                "dark:border-gray-300 dark:bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
+                            } else {
+                                "border-red-500 bg-gray-900 h-12 block w-full px-4 py-2 border rounded-md shadow-sm"
                             }
-                            button {
-                                onclick: move |_| show_password.set(!show_password()),
-                                r#type: "button",
-                                class: "absolute inset-y-0 right-0 pr-3 text-gray-500",
-                                if show_password() {
-                                    i { class: "fas fa-eye text-2xl" },
-                                } else {
-                                    i { class: "fas fa-eye-slash text-2xl" },
-                                }
-                            }
-                        }
-                        if !password_valid() {
-                            p { class: "text-red-500 text-sm mt-1", "Password can't be blank" }
-                        }
+                        },
+                        eye_active: "cursor-pointer absolute right-4 top-3 text-xl text-gray-600 toggle-button fa fa-eye",
+                        eye_disabled: "cursor-pointer absolute right-4 top-3 text-xl text-gray-600 toggle-button fa fa-eye-slash",
+                        error_class: "text-red-500 text-sm",
                     }
                     div { class: "flex items-center justify-between mb-4",
                         label {
@@ -276,7 +269,7 @@ pub fn Login() -> Element {
 
             div {
                 class: "md:flex-1 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600",
-                style: "background-image: url('/signin.webp'); background-size: cover; background-position: center;",
+                style: "background-image: url('/assets/signin.webp'); background-size: cover; background-position: center;",
             }
         }
     }
