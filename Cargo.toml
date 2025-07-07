@@ -29,6 +29,8 @@ tower-http = { version = "0.6.1", features = ["cors"], optional = true }
 web-sys = { version = "0.3.72", features = ["Selection", "Window"] }
 dioxus-web = { version = "0.6.3", features = ["hydrate"], optional = true }
 async-stripe = { version = "0.39.1", default-feature = false, features = ["runtime-tokio-hyper-rustls", "billing"], optional = true }
+redis = { version = "0.32.3", features = ["tokio-comp", "aio"], optional = true }
+reqwest = { version = "0.12.22", optional = true }
 futures-util = { version = "0.3.31" }
 dotenv = { version = "0.15.0" }
 serde_json = "1.0.133"
@@ -39,7 +41,7 @@ gloo-storage = "0.3.0"
 input-rs = { version = "0.2.4", features = ["dio"] }
 dioxus-logger = "0.6.2"
 theme = { version = "0.0.3", features = ["dio"] }
-i18nrs = { version = "0.1.6", features = ["dio"] }
+i18nrs = { version = "0.1.7", features = ["dio", "dio-ssr"] }
 
 [features]
 default = []
@@ -58,7 +60,9 @@ server = [
     "axum-extra",
     "rand_core",
     "gems",
-    "async-stripe"
+    "reqwest",
+    "async-stripe",
+    "redis",
 ]
 web = ["dioxus/web", "dioxus-web"]
 

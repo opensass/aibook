@@ -7,6 +7,8 @@ pub mod i18n;
 pub(crate) mod pages;
 #[cfg(feature = "server")]
 pub mod pay;
+#[cfg(feature = "server")]
+pub(crate) mod redis;
 pub mod router;
 pub(crate) mod server;
 pub mod theme;
