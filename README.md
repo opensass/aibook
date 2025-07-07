@@ -86,6 +86,7 @@ cp .env.example .env
 > WEBSITE_URL=https://opensass.org
 > STRIPE_PRICE_ONE=price_1...
 > STRIPE_PRICE_TWO=price_1...
+> REDIS_URL=redis://default:...:10938
 > ```
 >
 > If you're missing any of these keys, check the service's developer portal to generate them.
@@ -93,6 +94,10 @@ cp .env.example .env
 ### 🥑 Set Up MongoDB
 
 Follow [our quick guide](./MongoDB.md) to set up your MongoDB database and connect it to your project!
+
+### ☁️ Set Up Upstash Redis
+
+Follow [our quick guide](./Redis.md) to set up your Upstash Redis database for rate limiting!
 
 ### 🔐 Generate JWT Secret Key
 

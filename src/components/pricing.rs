@@ -49,7 +49,7 @@ pub fn Pricing() -> Element {
             description: i18n().t("pricing.monthly.description"),
             features: get_features("pricing.monthly.features"),
             highlight: true,
-            plan_id: Some("price_1QO1"),
+            plan_id: Some(env!("STRIPE_PRICE_ONE")),
         },
         PricingOption {
             title: i18n().t("pricing.yearly.title"),
@@ -57,7 +57,7 @@ pub fn Pricing() -> Element {
             description: i18n().t("pricing.yearly.description"),
             features: get_features("pricing.yearly.features"),
             highlight: false,
-            plan_id: Some("price_1QO1"),
+            plan_id: Some(env!("STRIPE_PRICE_TWO")),
         },
     ];
 

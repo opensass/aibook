@@ -19,6 +19,7 @@ use crate::server::common::response::SuccessResponse;
 #[cfg(feature = "server")]
 use {
     crate::db::get_client,
+    crate::redis::{fetch_public_ip, get_redis_client},
     argon2::{password_hash::SaltString, Argon2, PasswordHash, PasswordHasher, PasswordVerifier},
     axum_extra::extract::cookie::{Cookie, SameSite},
     jsonwebtoken::{encode, DecodingKey, EncodingKey, Header, Validation},
@@ -75,6 +76,16 @@ pub async fn register_user(
 pub async fn login_user(
     body: LoginUserSchema,
 ) -> Result<SuccessResponse<AuthResponse>, ServerFnError> {
+    // rate limit
+    let ip = fetch_public_ip().await.unwrap();
+    let rl = get_redis_client().await.lock().await;
+
+    match rl.check(&ip).await {
+        Ok(true) => Ok(()),
+        Ok(false) => Err(ServerFnError::new("Rate-limit exceeded")),
+        Err(e) => Err(ServerFnError::new(format!("Redis error: {e}"))),
+    };
+
     let client = get_client().await;
     let db =
         client.database(&std::env::var("MONGODB_DB_NAME").expect("MONGODB_DB_NAME must be set."));

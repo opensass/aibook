@@ -9,6 +9,7 @@ pub fn I18nToggle() -> Element {
     rsx! {
         select {
             class: "border rounded-md p-2",
+            value: {language_state()},
             onchange: move |event| {
                 let value = event.value();
                 language_state.set(value.clone());
